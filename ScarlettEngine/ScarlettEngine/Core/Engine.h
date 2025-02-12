@@ -1,11 +1,10 @@
 #pragma once
 
-#include <memory>
-
 namespace Scarlett
 {
 
 class Window;
+class VulkanRendererEditor;
 
 class Engine
 {
@@ -20,7 +19,7 @@ public:
 
     void InitEngine();
     void Run() const;
-    void DestroyEngine() const;
+    void DestroyEngine();
 
 private:
     static Engine* mInstance;
@@ -28,6 +27,8 @@ private:
     Window* mMainWindow;
 
     bool mRunning;
+
+    VulkanRendererEditor* mVulkRenderer = nullptr;
 };
 
 Engine* CreateEngine();

@@ -58,7 +58,7 @@
       <PrecompiledHeaderFile>ScarlettEnginePch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>SCARLETT_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)ScarlettEngine\ScarlettEngine;$(SolutionDir)ScarlettEngine\ScarlettEngine\Src;$(SolutionDir)ScarlettEngine\ScarlettEngine\deps\include;$(SolutionDir)deps\include;E:\VulkanSDK\1.3.290.0\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ScarlettEngine\ScarlettEngine;$(SolutionDir)ScarlettEngine\ScarlettEngine\Src;$(SolutionDir)ScarlettEngine\ScarlettEngine\deps\include;$(SolutionDir)deps\include;$(SolutionDir)deps\imgui;E:\VulkanSDK\1.3.290.0\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
@@ -80,7 +80,7 @@
       <PrecompiledHeaderFile>ScarlettEnginePch.h</PrecompiledHeaderFile>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>SCARLETT_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(SolutionDir)ScarlettEngine\ScarlettEngine;$(SolutionDir)ScarlettEngine\ScarlettEngine\Src;$(SolutionDir)ScarlettEngine\ScarlettEngine\deps\include;$(SolutionDir)deps\include;E:\VulkanSDK\1.3.290.0\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)ScarlettEngine\ScarlettEngine;$(SolutionDir)ScarlettEngine\ScarlettEngine\Src;$(SolutionDir)ScarlettEngine\ScarlettEngine\deps\include;$(SolutionDir)deps\include;$(SolutionDir)deps\imgui;E:\VulkanSDK\1.3.290.0\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -105,9 +105,17 @@
     <ClInclude Include="Core\Log.h" />
     <ClInclude Include="Core\Window\Window.h" />
     <ClInclude Include="Core\Window\WindowManager.h" />
+    <ClInclude Include="Rendering\Renderer.h" />
+    <ClInclude Include="Rendering\SpriteInfoStruct.h" />
+    <ClInclude Include="Rendering\SquareSprite.h" />
     <ClInclude Include="Rendering\Vulkan\Device.h" />
-    <ClInclude Include="Rendering\Vulkan\Renderer.h" />
+    <ClInclude Include="Rendering\Vulkan\Mesh.h" />
+    <ClInclude Include="Rendering\Vulkan\Pipeline.h" />
     <ClInclude Include="Rendering\Vulkan\SwapChain.h" />
+    <ClInclude Include="Rendering\Vulkan\Utilities.h" />
+    <ClInclude Include="Rendering\Vulkan\VertexBuffer.h" />
+    <ClInclude Include="Rendering\Vulkan\VulkanRenderer.h" />
+    <ClInclude Include="Rendering\Vulkan\VulkanRendererEditor.h" />
     <ClInclude Include="Rendering\Vulkan\VulkanUtils.h" />
     <ClInclude Include="Src\EntryPoint.h" />
     <ClInclude Include="Src\PrimitiveTypes.h" />
@@ -121,13 +129,23 @@
     <ClCompile Include="Core\Log.cpp" />
     <ClCompile Include="Core\Window\Window.cpp" />
     <ClCompile Include="Core\Window\WindowManager.cpp" />
+    <ClCompile Include="Rendering\SquareSprite.cpp" />
     <ClCompile Include="Rendering\Vulkan\Device.cpp" />
-    <ClCompile Include="Rendering\Vulkan\Renderer.cpp" />
+    <ClCompile Include="Rendering\Vulkan\Mesh.cpp" />
+    <ClCompile Include="Rendering\Vulkan\Pipeline.cpp" />
     <ClCompile Include="Rendering\Vulkan\SwapChain.cpp" />
+    <ClCompile Include="Rendering\Vulkan\VertexBuffer.cpp" />
+    <ClCompile Include="Rendering\Vulkan\VulkanRenderer.cpp" />
+    <ClCompile Include="Rendering\Vulkan\VulkanRendererEditor.cpp" />
     <ClCompile Include="Src\ScarlettEnginePch.cpp">
       <PrecompiledHeader>Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="deps\include\vkbootstrap\VkBootstrap.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\deps\ImGui\ImGui.vcxproj">
+      <Project>{C0FF640D-2C14-8DBE-F595-301E616989EF}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

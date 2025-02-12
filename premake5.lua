@@ -8,7 +8,9 @@ workspace "Scarlett"
     }
     
 outputName = "%{cfg.buildcfg}"
+VulkanPath = os.getenv('VULKAN_SDK')
     
 include "ScarlettEngine/"
 include "Scarlett/"
+include "deps/ImGui/"
     

@@ -45,7 +45,6 @@ Window* WindowManager::CreateWindowInternal(const WindowProperties& windowProper
     glfwWindowHint(GLFW_RESIZABLE, windowProperties.resizable);
 
     GLFWwindow* window = glfwCreateWindow(static_cast<int>(windowProperties.width), static_cast<int>(windowProperties.height), windowProperties.title.data(), nullptr, nullptr);
-    //glfwMakeContextCurrent(window);
 
     SCARLETT_DLOG("{0} x {1} Window Created.", windowProperties.width, windowProperties.height);
 

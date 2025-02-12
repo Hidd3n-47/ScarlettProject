@@ -30,9 +30,10 @@ project "ScarlettEngine"
     {
 		"$(SolutionDir)%{prj.name}/%{prj.name}/",
 		"$(SolutionDir)%{prj.name}/%{prj.name}/Src",
-		
 		"$(SolutionDir)%{prj.name}/%{prj.name}/deps/include/",
+		
 		"$(SolutionDir)deps/include/",
+		"$(SolutionDir)deps/imgui/",
         "%{VulkanPath}/Include/"
     }
 
@@ -44,6 +45,7 @@ project "ScarlettEngine"
 
     links 
     {
+		"ImGui",
 		"glfw3_mt.lib",
         "vulkan-1.lib"
     }

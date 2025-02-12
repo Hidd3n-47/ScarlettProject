@@ -23,22 +23,22 @@ struct WindowProperties
     WindowProperties() = default;
     ~WindowProperties() = default;
 
-    WindowProperties(const WindowProperties&) = default;
-    WindowProperties(WindowProperties&&) = default;
-    WindowProperties& operator=(WindowProperties&&) = default;
-    WindowProperties& operator=(const WindowProperties&) = default;
+    WindowProperties(const WindowProperties&)               = default;
+    WindowProperties(WindowProperties&&)                    = default;
+    WindowProperties& operator=(WindowProperties&&)         = default;
+    WindowProperties& operator=(const WindowProperties&)    = default;
 
     /** The text displayed in the titlebar. */
     std::string_view title = "Scarlett Engine";
 
     /** The width of the window.            */
-    uint32  width = 1920;
+    uint32  width       = 1920;
     /** The height of the window.           */
-    uint32  height = 1080;
+    uint32  height      = 1080;
     /** If the window is resizable.         */
-    bool    resizable = false;
+    bool    resizable   = false;
     /** If the window contains a titlebar.  */
-    bool    titleBar = true;
+    bool    titleBar    = true;
 
     /** The API used to render to the window. */
     WindowRenderApi renderApi = WindowRenderApi::NO_API;

@@ -1,0 +1,231 @@
+#include "ScarlettEnginepch.h"
+#include "VulkanRenderer.h"
+
+#include <stdexcept>
+
+#ifdef SCARLETT_UI_ENABLED
+//#include <backends/imgui_impl_glfw.h>
+//#include <backends/imgui_impl_vulkan.h>
+#endif // SCARLETT_UI_ENABLED.
+
+#define STB_IMAGE_IMPLEMENTATION
+#include <stb_image/stb_image.h>
+
+#include "VulkanUtils.h"
+#include "Rendering/SquareSprite.h"
+#include "Rendering/SpriteInfoStruct.h"
+#include "Core/Window/Window.h"
+
+namespace Scarlett
+{
+
+void VulkanRenderer::Init(const Window* windowRef)
+{
+    mWindowRef = windowRef;
+
+    try
+    {
+        mDevice.Init(windowRef);
+        CreatePipelineLayout();
+
+        RecreateSwapChain(mWindowRef->GetWidth(), mWindowRef->GetHeight());
+        CreatePipeline();
+
+        mSquare = new SquareSprite(&mDevice);
+        mSquare->mScale = glm::vec2(0.3f);
+        mSquare->mRotation = 45.0f;
+        mSquare->mPosition = glm::vec2(-0.6f, 0.3f);
+
+        mSquare2 = new SquareSprite(&mDevice);
+        mSquare2->mScale = glm::vec2(0.4f);
+        mSquare2->mPosition = glm::vec2(0.3f, -0.2f);
+        mSquare2->mSpriteInfo.color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+
+        CreateCommandBuffers();
+
+    }
+    catch(const std::runtime_error& e)
+    {
+        SCARLETT_FLOG("Error: {0}", e.what());
+    }
+}
+
+void VulkanRenderer::Destroy()
+{
+    vkDeviceWaitIdle(mDevice.mDevice);
+
+    delete mSquare;
+    delete mSquare2;
+
+    FreeCommandBuffers();
+
+    SCARLETT_ASSERT(mPipeline && "Trying to destroy a pipeline that was not created.");
+    mPipeline->Destroy();
+    delete mPipeline;
+    mPipeline = nullptr;
+    vkDestroyPipelineLayout(mDevice.GetDevice(), mPipelineLayout, nullptr);
+
+    SCARLETT_ASSERT(mSwapChain && "Trying to destroy a swapchain that was not created.");
+    delete mSwapChain;
+    mSwapChain= nullptr;
+
+    mDevice.Destroy();
+}
+
+void VulkanRenderer::BeginRender()
+{
+    const VkResult result = mSwapChain->AcquireNextImage(&mNextImageIndex);
+
+    if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)
+    {
+        throw std::runtime_error("Failed to acquire swap chain image");
+    }
+
+    constexpr VkCommandBufferBeginInfo beginInfo
+    {
+        .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO
+    };
+
+    VK_CHECK(vkBeginCommandBuffer(mCommandBuffers[mNextImageIndex], &beginInfo), "Failed to begin recording Vulkan Command Buffer");
+
+    const VkRect2D renderArea
+    {
+        .offset = { 0, 0 },
+        .extent = mSwapChain->GetSwapChainExtent()
+    };
+
+    std::array<VkClearValue, 2> clearValues;
+    clearValues[0].color = { { 0.1f, 0.1f, 0.1f, 1.0f } };
+    clearValues[1].depthStencil = { 1.0f, 0 };
+
+    const VkRenderPassBeginInfo renderPassInfo
+    {
+        .sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
+        .renderPass = mSwapChain->GetRenderPass(),
+        .framebuffer = mSwapChain->GetFrameBuffer(static_cast<int>(mNextImageIndex)),
+        .renderArea = renderArea,
+        .clearValueCount = static_cast<uint32>(clearValues.size()),
+        .pClearValues = clearValues.data()
+    };
+
+    vkCmdBeginRenderPass(mCommandBuffers[mNextImageIndex], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+
+    mPipeline->Bind(mCommandBuffers[mNextImageIndex]);
+
+}
+
+void VulkanRenderer::Render()
+{
+    static int frames = 0;
+    frames++;
+    mSquare2->mRotation = (float)frames / 100.0f;
+
+    mSquare->Draw(mCommandBuffers[mNextImageIndex], mPipelineLayout);
+    mSquare2->Draw(mCommandBuffers[mNextImageIndex], mPipelineLayout);
+
+    RecordCommandBuffer(mNextImageIndex);
+
+}
+
+void VulkanRenderer::EndRender()
+{
+    vkCmdEndRenderPass(mCommandBuffers[mNextImageIndex]);
+
+    VK_CHECK(vkEndCommandBuffer(mCommandBuffers[mNextImageIndex]), "Failed to end recording Vulkan Command Buffer.");
+
+    VK_CHECK(mSwapChain->SubmitCommandBuffers(&mCommandBuffers[mNextImageIndex], &mNextImageIndex), "Failed to present Vulkan Swap Chain Image");
+}
+
+void VulkanRenderer::OnWindowResize(const uint32 width, const uint32 height)
+{
+    if (width == 0 || height == 0) { return; }
+
+    RecreateSwapChain(width, height);
+
+    CreatePipeline();
+}
+
+void VulkanRenderer::CreatePipelineLayout()
+{
+    VkPushConstantRange pushConstantRange
+    {
+        .stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
+        .offset = 0,
+        .size = sizeof(SpriteInfoStruct)
+    };
+
+    VkPipelineLayoutCreateInfo pipelineLayoutCreateInfo
+    {
+        .sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,
+        .setLayoutCount             = 0,
+        .pSetLayouts                = nullptr,
+        .pushConstantRangeCount     = 1,
+        .pPushConstantRanges        = &pushConstantRange,
+    };
+
+    VK_CHECK(vkCreatePipelineLayout(mDevice.GetDevice(), &pipelineLayoutCreateInfo, nullptr, &mPipelineLayout), "Failed to create Vulkan Pipeline Layout.");
+}
+
+void VulkanRenderer::CreatePipeline()
+{
+    PipelineConfigInfo pipelineConfig{};
+    Pipeline::DefaultPipelineConfigInfo(pipelineConfig, mSwapChain->GetWidth(), mSwapChain->GetHeight());
+
+    pipelineConfig.renderPass = mSwapChain->GetRenderPass();
+    pipelineConfig.pipelineLayout = mPipelineLayout;
+
+    if(mPipeline)
+    {
+        mPipeline->Destroy();
+        delete mPipeline;
+    }
+    mPipeline = new Pipeline();
+
+    mPipeline->Init(&mDevice, "E:/Programming/Scarlett/ScarlettEngine/Rendering/Shaders/vert.spv", "E:/Programming/Scarlett/ScarlettEngine/Rendering/Shaders/frag.spv", pipelineConfig);
+}
+
+void VulkanRenderer::CreateCommandBuffers()
+{
+    mCommandBuffers.resize(mSwapChain->GetImageCount());
+
+    VkCommandBufferAllocateInfo commandBufferAllocInfo
+    {
+        .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
+        .commandPool            = mDevice.GetCommandPool(),
+        .level                  = VK_COMMAND_BUFFER_LEVEL_PRIMARY,
+        .commandBufferCount     = static_cast<uint32>(mCommandBuffers.size()),
+    };
+
+    VK_CHECK(vkAllocateCommandBuffers(mDevice.mDevice, &commandBufferAllocInfo, mCommandBuffers.data()), "Failed to allocate Vulkan Command Buffer");
+}
+
+void VulkanRenderer::RecreateSwapChain(const uint32 width, const uint32 height)
+{
+    vkDeviceWaitIdle(mDevice.GetDevice());
+
+    const bool previousSwapChainExists = mSwapChain;
+
+    mSwapChain = new SwapChain(&mDevice, { width, height }, mSwapChain);
+
+    if(mSwapChain->GetImageCount() != mCommandBuffers.size() && previousSwapChainExists)
+    {
+        FreeCommandBuffers();
+        CreateCommandBuffers();
+    }
+}
+
+void VulkanRenderer::RecordCommandBuffer(const uint32 imageIndex) const
+{
+    mPipeline->Bind(mCommandBuffers[imageIndex]);
+
+    
+
+}
+
+void VulkanRenderer::FreeCommandBuffers()
+{
+    vkFreeCommandBuffers(mDevice.GetDevice(), mDevice.GetCommandPool(), static_cast<uint32>(mCommandBuffers.size()), mCommandBuffers.data());
+    mCommandBuffers.clear();
+}
+
+} // Namespace Scarlett.
