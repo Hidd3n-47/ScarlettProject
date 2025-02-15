@@ -17,13 +17,11 @@ void Pipeline::Init(Device* device, const std::string& vertFilepath, const std::
 
 void Pipeline::Destroy()
 {
-    vkDestroyShaderModule(mDevice->GetDevice(), mFragmentShaderModule, nullptr);
-    vkDestroyShaderModule(mDevice->GetDevice(), mVertexShaderModule, nullptr);
-
     vkDestroyPipeline(mDevice->GetDevice(), mGraphicsPipeline, nullptr);
+    mGraphicsPipeline = nullptr;
 }
 
-void Pipeline::Bind(VkCommandBuffer commandBuffer) const
+void Pipeline::Bind(const VkCommandBuffer commandBuffer) const
 {
     vkCmdBindPipeline(commandBuffer, VK_PIPELINE_BIND_POINT_GRAPHICS, mGraphicsPipeline);
 }
@@ -115,8 +113,8 @@ vector<char> Pipeline::ReadFile(const std::string& filepath)
 
 void Pipeline::CreateGraphicsPipeline(const std::string& vertFilepath, const std::string& fragFilepath, const PipelineConfigInfo& configInfo)
 {
-    vector<char> vert = ReadFile(vertFilepath);
-    vector<char> frag = ReadFile(fragFilepath);
+    const vector<char> vert = ReadFile(vertFilepath);
+    const vector<char> frag = ReadFile(fragFilepath);
 
     CreateShaderModule(vert, &mVertexShaderModule);
     CreateShaderModule(frag, &mFragmentShaderModule);

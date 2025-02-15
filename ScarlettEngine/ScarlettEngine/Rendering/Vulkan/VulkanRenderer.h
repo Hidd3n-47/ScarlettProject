@@ -53,6 +53,7 @@ private:
     // Temp.
     SquareSprite* mSquare;
     SquareSprite* mSquare2;
+    float mClearColor[3] = { 0.1f, 0.1f, 0.1f };
 };
 
 } // Namespace Scarlett.

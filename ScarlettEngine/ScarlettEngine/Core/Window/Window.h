@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Core/Events/Event.h"
+
 struct GLFWwindow;
 
 namespace Scarlett
@@ -29,7 +31,7 @@ struct WindowProperties
     WindowProperties& operator=(const WindowProperties&)    = default;
 
     /** The text displayed in the titlebar. */
-    std::string_view title = "Scarlett Engine";
+    std::string title = "Scarlett Engine";
 
     /** The width of the window.            */
     uint32  width       = 1920;
@@ -39,6 +41,9 @@ struct WindowProperties
     bool    resizable   = false;
     /** If the window contains a titlebar.  */
     bool    titleBar    = true;
+
+    /** A function pointer to a callback method used to process events. */
+    std::function<void(Event&)> eventCallback;
 
     /** The API used to render to the window. */
     WindowRenderApi renderApi = WindowRenderApi::NO_API;
@@ -80,6 +85,11 @@ public:
      * @return Properties of the window.
      */
     [[nodiscard]] inline WindowProperties*  GetProperties()             { return &mWindowProperties; }
+
+    /**
+     * @brief Set the function pointer for event callback.
+     */
+    inline void SetEventCallback(const std::function<void(Event&)>& callback) { mWindowProperties.eventCallback = callback; }
 private:
     GLFWwindow*         mWindowHandle;
 

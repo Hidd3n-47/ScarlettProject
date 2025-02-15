@@ -4,15 +4,38 @@
 #include <imgui/imgui_impl_glfw.h>
 #include <imgui/imgui_impl_vulkan.h>
 
-//#include "Rendering/Vulkan/Device.h"
+#include "VulkanUtils.h"
 #include "Core/Window/Window.h"
+#include "Rendering/SquareSprite.h"
 
 namespace Scarlett
 {
 
+#ifdef SCARLETT_EDITOR_ENABLED
+
+static ImVec4 HexToRgba(int a, int b, int c)
+{
+    return { a / 255.0f, b / 255.0f, c / 255.0f, 1.0f };
+}
+
+static ImVec4 Dark      = HexToRgba(0x17, 0x17, 0x17); // #171717FF
+static ImVec4 Medium    = HexToRgba(0x2A, 0x2A, 0x2A); // #2A2A2AFF
+static ImVec4 Light     = HexToRgba(0xA9, 0xA9, 0xA9);
+static ImVec4 OffWhite  = HexToRgba(0xF5, 0xF5, 0xF5);
+
+
+
 void VulkanRendererEditor::Init(const Window* windowRef)
 {
     VulkanRenderer::Init(windowRef);
+
+    mSwapChain = new SwapChain(&mDevice, { windowRef->GetWidth(), windowRef->GetHeight() }, mSwapChain);
+
+ /*   if (mSwapChain->GetImageCount() != mCommandBuffers.size() && previousSwapChainExists)
+    {
+        FreeCommandBuffers();
+        CreateCommandBuffers();
+    }*/
 
     const VkDescriptorPoolSize poolSizes[] =
     {
@@ -48,20 +71,26 @@ void VulkanRendererEditor::Init(const Window* windowRef)
     ImGui_ImplGlfw_InitForVulkan(static_cast<GLFWwindow*>(mWindowRef->GetNativeWindow()), true);
 
     ImGui_ImplVulkan_InitInfo initInfo = {};
-    initInfo.Instance              = mDevice.mInstance;
-    initInfo.PhysicalDevice        = mDevice.mPhysicalDevice;
-    initInfo.Device                = mDevice.mDevice;
-    initInfo.QueueFamily           = mDevice.mQueueFamilyIndices.graphicsFamily;
-    initInfo.Queue                 = mDevice.mGraphicsQueue;
-    initInfo.PipelineCache         = VK_NULL_HANDLE;
-    initInfo.DescriptorPool        = mImGuiPool;
-    initInfo.RenderPass = mSwapChain->GetRenderPass(); // Todo put on own renderpass.
-    initInfo.Subpass               = 0;
-    initInfo.MinImageCount         = 2;
-    initInfo.ImageCount            = 2;
-    initInfo.MSAASamples           = VK_SAMPLE_COUNT_1_BIT;
-    initInfo.Allocator             = nullptr;
-    initInfo.CheckVkResultFn       = nullptr;
+    initInfo.Instance               = mDevice.mInstance;
+    initInfo.PhysicalDevice         = mDevice.mPhysicalDevice;
+    initInfo.Device                 = mDevice.mDevice;
+    initInfo.QueueFamily            = mDevice.mQueueFamilyIndices.graphicsFamily;
+    initInfo.Queue                  = mDevice.mGraphicsQueue;
+    initInfo.PipelineCache          = VK_NULL_HANDLE;
+    initInfo.DescriptorPool         = mImGuiPool;
+    initInfo.Subpass                = 0;
+    initInfo.MinImageCount          = 2;
+    initInfo.ImageCount             = 2;
+    initInfo.MSAASamples            = VK_SAMPLE_COUNT_1_BIT;
+    initInfo.Allocator              = nullptr;
+    initInfo.CheckVkResultFn        = nullptr;
+
+#ifdef SCARLETT_EDITOR_ENABLED
+    initInfo.RenderPass = mSwapChain->GetEditorRenderPass();
+#else
+    initInfo.RenderPass = mSwapChain->GetRenderPass();
+#endif // SCARLETT_EDITOR_ENABLED.
+
 
     ImGui::StyleColorsDark();
     io.Fonts->AddFontDefault();
@@ -70,16 +99,14 @@ void VulkanRendererEditor::Init(const Window* windowRef)
 
     ImGui_ImplVulkan_CreateFontsTexture();
 
-    /*ImGuiStyle& style = ImGui::GetStyle();
-    style.Alpha = 1.0;
-    style.WindowRounding = 3;
-    style.GrabRounding = 1;
-    style.GrabMinSize = 20;
-    style.FrameRounding = 3;*/
+    ImGuiStyle& style = ImGui::GetStyle();
+    style.Alpha             = 1.0f;
+    style.WindowRounding    = 0.0f;
+    style.FrameRounding     = 0.0f;
 
     // style.Colors[ImGuiCol_Text] = ImVec4(0.00f, 1.00f, 1.00f, 1.00f);
     // style.Colors[ImGuiCol_TextDisabled] = ImVec4(0.00f, 0.40f, 0.41f, 1.00f);
-    // style.Colors[ImGuiCol_WindowBg] = ImVec4(0.00f, 0.00f, 0.00f, 1.00f);
+     style.Colors[ImGuiCol_WindowBg] = Dark;
     // style.Colors[ImGuiCol_Border] = ImVec4(0.00f, 1.00f, 1.00f, 0.65f);
     // style.Colors[ImGuiCol_BorderShadow] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
     // style.Colors[ImGuiCol_FrameBg] = ImVec4(0.44f, 0.80f, 0.80f, 0.18f);
@@ -113,10 +140,31 @@ void VulkanRendererEditor::Init(const Window* windowRef)
     // style.Colors[ImGuiCol_TabActive] = ImVec4(0.00f, 0.60f, 0.61f, 0.80f);
     // style.Colors[ImGuiCol_Tab] = ImVec4(0.00f, 0.40f, 0.41f, 0.40f);
     // style.Colors[ImGuiCol_TabUnfocused] = ImVec4(0.00f, 0.40f, 0.41f, 1.00f);
+
+    VkSamplerCreateInfo samplerCreateInfo = {};
+    samplerCreateInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
+    samplerCreateInfo.magFilter = VK_FILTER_LINEAR;
+    samplerCreateInfo.minFilter = VK_FILTER_LINEAR;
+    samplerCreateInfo.addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+    samplerCreateInfo.addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+    samplerCreateInfo.addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT;
+    samplerCreateInfo.anisotropyEnable = VK_FALSE;
+    samplerCreateInfo.maxAnisotropy = 1.0f;
+    samplerCreateInfo.borderColor = VK_BORDER_COLOR_INT_OPAQUE_BLACK;
+    samplerCreateInfo.unnormalizedCoordinates = VK_FALSE;
+    samplerCreateInfo.compareEnable = VK_FALSE;
+    samplerCreateInfo.compareOp = VK_COMPARE_OP_ALWAYS;
+    samplerCreateInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
+
+    vkCreateSampler(mDevice.mDevice, &samplerCreateInfo, nullptr, &sampler);
 }
 
 void VulkanRendererEditor::Destroy()
 {
+    vkDeviceWaitIdle(mDevice.mDevice);
+
+    vkDestroySampler(mDevice.mDevice, sampler, nullptr);
+
     ImGui_ImplVulkan_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
@@ -128,31 +176,139 @@ void VulkanRendererEditor::Destroy()
 
 void VulkanRendererEditor::BeginRender()
 {
-    ImGui_ImplVulkan_NewFrame();
-    ImGui_ImplGlfw_NewFrame();
-    ImGui::NewFrame();
-
     VulkanRenderer::BeginRender();
 }
 
 void VulkanRendererEditor::Render()
 {
     VulkanRenderer::Render();
-
-    bool show = true;
-    ImGui::ShowDemoWindow(&show);
 }
 
 void VulkanRendererEditor::EndRender()
 {
+    VulkanRenderer::EndRender();
+
+    BeginRenderEditor();
+    RenderEditor();
+    EndRenderEditor();
+}
+
+void VulkanRendererEditor::BeginRenderEditor()
+{
+    const VkRect2D renderArea
+    {
+        .offset = { 0, 0 },
+        .extent = mSwapChain->GetSwapChainExtent()
+    };
+
+    std::array<VkClearValue, 1> clearValues;
+    clearValues[0].color = { { 0.1f, 0.1f, 0.1f, 1.0f } };
+
+    const VkRenderPassBeginInfo renderPassInfoEditor
+    {
+        .sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
+        .renderPass         = mSwapChain->GetEditorRenderPass(),
+        .framebuffer        = mSwapChain->GetEditorFrameBuffer(static_cast<int>(mNextImageIndex)),
+        .renderArea         = renderArea,
+        .clearValueCount    = static_cast<uint32>(clearValues.size()),
+        .pClearValues       = clearValues.data()
+    };
+
+    vkCmdBeginRenderPass(mCommandBuffers[mNextImageIndex], &renderPassInfoEditor, VK_SUBPASS_CONTENTS_INLINE);
+
+    ImGui_ImplVulkan_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+}
+
+void VulkanRendererEditor::RenderEditor()
+{
+    ImGui::DockSpaceOverViewport();
+
+    bool show = true;
+    ImGui::ShowDemoWindow(&show);
+
+    RenderPropertiesPanel();
+
+    ImGui::Begin("Console");
+
+    ImGui::End();
+
+
+    ImGui::Begin("Scene");
+
+    ImGui::End();
+
+    ImGui::Begin("Viewport");
+
+    static int num = 0;
+    num++;
+
+
+    textureID[textureIndex] = ImGui_ImplVulkan_AddTexture(
+                sampler,                 // VkSampler
+                mSwapChain->GetViewportImageView(mNextImageIndex),               // VkImageView
+                VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL  // Image layout for reading
+            );
+
+
+    ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+    ImGui::Image((ImTextureID)textureID[textureIndex], viewportPanelSize);
+
+    textureIndex = (textureIndex + 1) % 3;
+    if (textureID[textureIndex])
+    {
+        ImGui_ImplVulkan_RemoveTexture(textureID[textureIndex]);
+    }
+
+    ImGui::End();
+}
+
+void VulkanRendererEditor::EndRenderEditor()
+{
     ImGui::Render();
     ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), mCommandBuffers[mNextImageIndex]);
-
-    VulkanRenderer::EndRender();
 
     ImGui::EndFrame();
     ImGui::UpdatePlatformWindows();
     ImGui::RenderPlatformWindowsDefault();
+
+    vkCmdEndRenderPass(mCommandBuffers[mNextImageIndex]);
+
+    VK_CHECK(vkEndCommandBuffer(mCommandBuffers[mNextImageIndex]), "Failed to end recording Vulkan Command Buffer.");
+
+    VK_CHECK(mSwapChain->SubmitCommandBuffers(&mCommandBuffers[mNextImageIndex], &mNextImageIndex), "Failed to present Vulkan Swap Chain Image");
 }
+
+void VulkanRendererEditor::RenderPropertiesPanel()
+{
+    //ImGui::PushStyleColor(ImGuiCol_WindowBg, Medium);
+    ImGui::Begin("Properties");
+
+    if (ImGui::CollapsingHeader("Transform Blue"))
+    {
+        float position[2] = { mSquare->mPosition.x, mSquare->mPosition.y };
+        ImGui::DragFloat2("Translation##0", position, 0.1f);
+        mSquare->mPosition = { position[0], position[1] };
+    }
+
+    if (ImGui::CollapsingHeader("Transform Red"))
+    {
+        float position[2] = { mSquare2->mPosition.x, mSquare2->mPosition.y };
+        ImGui::DragFloat2("Translation##1", position, 0.1f);
+        mSquare2->mPosition = { position[0], position[1] };
+    }
+
+
+    if (ImGui::CollapsingHeader("Background Color"))
+    {
+        ImGui::ColorPicker3("##Background Color Picker", mClearColor);
+    }
+
+    ImGui::End();
+    //ImGui::PopStyleColor();
+}
+
+#endif // SCARLETT_EDITOR_ENABLED.
 
 } // Namespace Scarlett.

@@ -5,6 +5,10 @@
 namespace Scarlett
 {
 
+/**
+ * @class WindowManager: A class used to manage the creation and destruction of windows
+ * as well as the initialization and termination of the API used to create windows.
+ */
 class WindowManager
 {
 public:

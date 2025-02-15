@@ -28,12 +28,12 @@ void WindowManager::InitApi()
 
 void WindowManager::TerminateApi()
 {
-    //glfwTerminate();
+    glfwTerminate();
 
     SCARLETT_DLOG("Terminated GLFW (Window API).");
 }
 
-Window* WindowManager::CreateWindowInternal(const WindowProperties& windowProperties)
+Window* WindowManager::CreateWindowInternal(const WindowProperties& windowProperties /* = WindowProperties() */)
 {
     SCARLETT_ASSERT(mInitialized && "Initialize Window API before creating the window.");
 
@@ -50,6 +50,28 @@ Window* WindowManager::CreateWindowInternal(const WindowProperties& windowProper
 
     Window* windowHandle = new Window(window, windowProperties);
     glfwSetWindowUserPointer(window, windowHandle->GetProperties());
+
+    glfwSetWindowCloseCallback(window, [](GLFWwindow* win)
+    {
+        const WindowProperties& data = *static_cast<WindowProperties*>(glfwGetWindowUserPointer(win));
+
+        if (data.eventCallback)
+        {
+            WindowClosedEvent event;
+            data.eventCallback(event);
+        }
+    });
+
+    glfwSetCursorPosCallback(window, [](GLFWwindow* win, double x, double y)
+    {
+        WindowProperties& data = *static_cast<WindowProperties*>(glfwGetWindowUserPointer(win));
+
+        if (data.eventCallback)
+        {
+            MouseMovedEvent event(static_cast<float>(x), static_cast<float>(y));
+            data.eventCallback(event);
+        }
+    });
 
     return windowHandle;
 }

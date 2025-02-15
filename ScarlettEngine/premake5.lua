@@ -55,7 +55,7 @@ project "ScarlettEngine"
 
     filter "configurations:Dev"
         runtime "Debug"
-        defines "SCARLETT_DEBUG"
+        defines { "SCARLETT_DEBUG", "SCARLETT_EDITOR_ENABLED" }
         symbols "on"
 
     filter "configurations:Release"

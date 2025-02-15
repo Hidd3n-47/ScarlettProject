@@ -13,7 +13,6 @@ inline int main(int argc, char** argv)
     engine->Run();
     engine->DestroyEngine();
 
-
     return 0;
 }
 

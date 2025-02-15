@@ -400,3 +400,7 @@ FodyWeavers.xsd
 # Build Binaries and Intermediates
 bin/
 bin-int/
+
+# Solution and project files.
+*.sln
+*.vcxproj

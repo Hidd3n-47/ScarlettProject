@@ -11,11 +11,30 @@ void Engine::InitEngine()
 {
     Log::Init();
 
-    WindowManager::InitApi();
-    mMainWindow = WindowManager::CreateWindowInternal();
+    std::string windowConfiguration;
+#if defined(SCARLETT_DEBUG)
+    windowConfiguration = " - Dev";
+#elif defined(SCARLETT_RELEASE)
+    windowConfiguration = " - Release";
+#else
+#error No valid configuration to add to window title.
+#endif
 
-    //Renderer::Init(mMainWindow);
+    WindowManager::InitApi();
+
+    WindowProperties winProps;
+    winProps.title += windowConfiguration;
+
+    mMainWindow = WindowManager::CreateWindowInternal(winProps);
+
+    mMainWindow->SetEventCallback(SCARLETT_BIND_FUNCTION(Engine::OnEvent));
+
+#ifdef SCARLETT_EDITOR_ENABLED
     mVulkRenderer = new VulkanRendererEditor();
+#else
+    mVulkRenderer = new VulkanRenderer();
+#endif // SCARLETT_EDITOR_ENABLED.
+
     mVulkRenderer->Init(mMainWindow);
 
     SCARLETT_DLOG("Engine Initialized");
@@ -47,6 +66,18 @@ void Engine::DestroyEngine()
     WindowManager::TerminateApi();
 
     SCARLETT_DLOG("Engine Destoryed.");
+}
+
+void Engine::OnEvent(Event& e)
+{
+    EventDispatcher dispatcher(e);
+    dispatcher.Dispatch<WindowClosedEvent>(SCARLETT_BIND_FUNCTION(Engine::OnWindowClose));
+}
+
+bool Engine::OnWindowClose(const WindowClosedEvent& e)
+{
+    mRunning = false;
+    return true;
 }
 
 } // Namespace Scarlett.

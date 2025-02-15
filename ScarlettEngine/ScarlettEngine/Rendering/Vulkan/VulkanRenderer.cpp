@@ -42,7 +42,6 @@ void VulkanRenderer::Init(const Window* windowRef)
         mSquare2->mSpriteInfo.color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
 
         CreateCommandBuffers();
-
     }
     catch(const std::runtime_error& e)
     {
@@ -59,7 +58,6 @@ void VulkanRenderer::Destroy()
 
     FreeCommandBuffers();
 
-    SCARLETT_ASSERT(mPipeline && "Trying to destroy a pipeline that was not created.");
     mPipeline->Destroy();
     delete mPipeline;
     mPipeline = nullptr;
@@ -71,6 +69,8 @@ void VulkanRenderer::Destroy()
 
     mDevice.Destroy();
 }
+
+#ifdef SCARLETT_EDITOR_ENABLED
 
 void VulkanRenderer::BeginRender()
 {
@@ -109,13 +109,56 @@ void VulkanRenderer::BeginRender()
     };
 
     vkCmdBeginRenderPass(mCommandBuffers[mNextImageIndex], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-
-    mPipeline->Bind(mCommandBuffers[mNextImageIndex]);
-
 }
+
+#else
+
+void VulkanRenderer::BeginRender()
+{
+    const VkResult result = mSwapChain->AcquireNextImage(&mNextImageIndex);
+
+    if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)
+    {
+        throw std::runtime_error("Failed to acquire swap chain image");
+    }
+
+    constexpr VkCommandBufferBeginInfo beginInfo
+    {
+        .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO
+    };
+
+    VK_CHECK(vkBeginCommandBuffer(mCommandBuffers[mNextImageIndex], &beginInfo), "Failed to begin recording Vulkan Command Buffer");
+
+    const VkRect2D renderArea
+    {
+        .offset = { 0, 0 },
+        .extent = mSwapChain->GetSwapChainExtent()
+    };
+
+    std::array<VkClearValue, 2> clearValues;
+    clearValues[0].color = { { 0.1f, 0.1f, 0.1f, 1.0f } };
+    clearValues[1].depthStencil = { 1.0f, 0 };
+
+    const VkRenderPassBeginInfo renderPassInfo
+    {
+        .sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
+        .renderPass         = mSwapChain->GetRenderPass(),
+        .framebuffer        = mSwapChain->GetFrameBuffer(static_cast<int>(mNextImageIndex)),
+        .renderArea         = renderArea,
+        .clearValueCount    = static_cast<uint32>(clearValues.size()),
+        .pClearValues       = clearValues.data()
+    };
+
+    vkCmdBeginRenderPass(mCommandBuffers[mNextImageIndex], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
+}
+
+#endif // SCARLETT_EDITOR_ENABLED.
+
 
 void VulkanRenderer::Render()
 {
+    mPipeline->Bind(mCommandBuffers[mNextImageIndex]);
+
     static int frames = 0;
     frames++;
     mSquare2->mRotation = (float)frames / 100.0f;
@@ -124,16 +167,17 @@ void VulkanRenderer::Render()
     mSquare2->Draw(mCommandBuffers[mNextImageIndex], mPipelineLayout);
 
     RecordCommandBuffer(mNextImageIndex);
-
 }
 
 void VulkanRenderer::EndRender()
 {
     vkCmdEndRenderPass(mCommandBuffers[mNextImageIndex]);
 
+#ifndef SCARLETT_EDITOR_ENABLED
     VK_CHECK(vkEndCommandBuffer(mCommandBuffers[mNextImageIndex]), "Failed to end recording Vulkan Command Buffer.");
 
     VK_CHECK(mSwapChain->SubmitCommandBuffers(&mCommandBuffers[mNextImageIndex], &mNextImageIndex), "Failed to present Vulkan Swap Chain Image");
+#endif // SCARLETT_EDITOR_ENABLED.
 }
 
 void VulkanRenderer::OnWindowResize(const uint32 width, const uint32 height)
@@ -147,14 +191,14 @@ void VulkanRenderer::OnWindowResize(const uint32 width, const uint32 height)
 
 void VulkanRenderer::CreatePipelineLayout()
 {
-    VkPushConstantRange pushConstantRange
+    const VkPushConstantRange pushConstantRange
     {
         .stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
         .offset = 0,
         .size = sizeof(SpriteInfoStruct)
     };
 
-    VkPipelineLayoutCreateInfo pipelineLayoutCreateInfo
+    const VkPipelineLayoutCreateInfo pipelineLayoutCreateInfo
     {
         .sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,
         .setLayoutCount             = 0,
@@ -181,14 +225,14 @@ void VulkanRenderer::CreatePipeline()
     }
     mPipeline = new Pipeline();
 
-    mPipeline->Init(&mDevice, "E:/Programming/Scarlett/ScarlettEngine/Rendering/Shaders/vert.spv", "E:/Programming/Scarlett/ScarlettEngine/Rendering/Shaders/frag.spv", pipelineConfig);
+    mPipeline->Init(&mDevice, "E:/Programming/ScarlettProject/ScarlettEngine/ScarlettEngine/Rendering/Shaders/vert.spv", "E:/Programming/ScarlettProject/ScarlettEngine/ScarlettEngine/Rendering/Shaders/frag.spv", pipelineConfig);
 }
 
 void VulkanRenderer::CreateCommandBuffers()
 {
     mCommandBuffers.resize(mSwapChain->GetImageCount());
 
-    VkCommandBufferAllocateInfo commandBufferAllocInfo
+    const VkCommandBufferAllocateInfo commandBufferAllocInfo
     {
         .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
         .commandPool            = mDevice.GetCommandPool(),

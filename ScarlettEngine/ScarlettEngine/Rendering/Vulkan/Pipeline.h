@@ -45,22 +45,23 @@ public:
     void Init(Device* device, const std::string& vertFilepath, const std::string& fragFilepath, const PipelineConfigInfo& configInfo);
     void Destroy();
 
-    void Bind(VkCommandBuffer commandBuffer) const;
+    void Bind(const VkCommandBuffer commandBuffer) const;
 
     [[nodiscard]] VkPipeline GetGraphicsPipeline() const { return mGraphicsPipeline; }
 
     static void DefaultPipelineConfigInfo(PipelineConfigInfo& configInfo, const uint32 width, const uint32 height);
 private:
+    Device*         mDevice;
+    VkPipeline      mGraphicsPipeline;
+    VkShaderModule  mVertexShaderModule;
+    VkShaderModule  mFragmentShaderModule;
+
+    // Todo christian make this not return a copy vector.
     static vector<char> ReadFile(const std::string& filepath);
 
     void CreateGraphicsPipeline(const std::string& vertFilepath, const std::string& fragFilepath, const PipelineConfigInfo& configInfo);
 
     void CreateShaderModule(const vector<char>& code, VkShaderModule* shaderModule) const;
-
-    Device*         mDevice;
-    VkPipeline      mGraphicsPipeline;
-    VkShaderModule  mVertexShaderModule;
-    VkShaderModule  mFragmentShaderModule;
 };
 
 } // Namespace Scarlett.

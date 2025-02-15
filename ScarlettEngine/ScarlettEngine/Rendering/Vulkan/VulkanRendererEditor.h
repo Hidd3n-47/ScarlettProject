@@ -5,6 +5,8 @@
 namespace Scarlett
 {
 
+#ifdef SCARLETT_EDITOR_ENABLED
+
 class VulkanRendererEditor final : VulkanRenderer
 {
 public:
@@ -22,8 +24,21 @@ public:
     void BeginRender() override;
     void Render() override;
     void EndRender() override;
+
+    void BeginRenderEditor();
+    void RenderEditor();
+    void EndRenderEditor();
 private:
     VkDescriptorPool mImGuiPool;
+    VkSampler sampler;
+    VkDescriptorSet textureID[3];
+    uint32 textureIndex;
+
+    vector<VkDescriptorSet> mViewportTextures;
+
+    void RenderPropertiesPanel();
 };
+
+#endif // SCARLETT_EDITOR_ENABLED.
 
 } // Namespace Scarlett.

@@ -35,29 +35,15 @@ public:
 
     static constexpr int MAX_IMAGES_PER_FRAME = 2;
 private:
-    void Init(const SwapChain* previousSwapChain);
-    void Destroy();
+    Device*                     mDevice;
+    VkSwapchainKHR              mSwapChain;
 
-    void CreateSwapChain(const SwapChain* previousSwapChain);
-    void CreateImageViews();
-    void CreateRenderPass();
-    void CreateDepthResources();
-    void CreateFrameBuffers();
-    void CreateSyncObjects();
+    VkFormat                    mSwapChainImageFormat;
+    VkExtent2D                  mExtent;
+    VkExtent2D                  mWindowExtent;
 
-    [[nodiscard]] static VkSurfaceFormatKHR     ChooseSwapSurfaceFormat(const vector<VkSurfaceFormatKHR>& availableFormats);
-    [[nodiscard]] static VkPresentModeKHR       ChooseSwapPresentMode(const vector<VkPresentModeKHR>& availablePresentModes);
-    [[nodiscard]] VkExtent2D                    ChooseSwapChainExtent(const VkSurfaceCapabilitiesKHR& capabilities) const;
-
-    Device*         mDevice;
-    VkSwapchainKHR  mSwapChain;
-
-    VkFormat         mSwapChainImageFormat;
-    VkExtent2D       mExtent;
-    VkExtent2D       mWindowExtent;
-
-    vector<VkFramebuffer>   mSwapChainFrameBuffers;
-    VkRenderPass            mRenderPass;
+    vector<VkFramebuffer>       mSwapChainFrameBuffers;
+    VkRenderPass                mRenderPass;
 
     vector<VkImage>             mDepthImages;
     vector<VkDeviceMemory>      mDepthImageMemory;
@@ -65,12 +51,44 @@ private:
     vector<VkImage>             mSwapChainImages;
     vector<VkImageView>         mSwapChainImageViews;
 
-    vector<VkSemaphore>     mImageAvailableSemaphores;
-    vector<VkSemaphore>     mRenderFinishedSemaphores;
-    vector<VkFence>         mInFlightFences;
-    vector<VkFence>         mImagesInFlight;
+    vector<VkSemaphore>         mImageAvailableSemaphores;
+    vector<VkSemaphore>         mRenderFinishedSemaphores;
+    vector<VkFence>             mInFlightFences;
+    vector<VkFence>             mImagesInFlight;
 
     size_t mCurrentFrame = 0;
+
+    void Init(const SwapChain* previousSwapChain);
+    void Destroy();
+
+    void CreateSwapChain(const SwapChain* previousSwapChain);
+    void CreateImageViews();
+    void CreateSwapChainRenderPass();
+    void CreateDepthResources();
+    void CreateSwapChainFrameBuffers();
+    void CreateSyncObjects();
+
+    void CreateRenderPass(const bool hasDepthAttachment, const VkImageLayout finalImageLayout, VkRenderPass* renderPass) const;
+    void CreateFrameBuffer(const VkRenderPass renderPass, const VkImageView* attachments, const uint32 attachmentCount, VkFramebuffer* frameBuffer) const;
+
+    [[nodiscard]] static VkSurfaceFormatKHR     ChooseSwapSurfaceFormat(const vector<VkSurfaceFormatKHR>& availableFormats);
+    [[nodiscard]] static VkPresentModeKHR       ChooseSwapPresentMode(const vector<VkPresentModeKHR>& availablePresentModes);
+    [[nodiscard]] VkExtent2D                    ChooseSwapChainExtent(const VkSurfaceCapabilitiesKHR& capabilities) const;
+
+#ifdef SCARLETT_EDITOR_ENABLED
+public:
+    [[nodiscard]] inline VkImage            GetViewportImage(const uint32 index)        const { return mViewportImage[index]; }
+    [[nodiscard]] inline VkImageView        GetViewportImageView(const uint32 index)    const { return mViewportImageView[index]; }
+    [[nodiscard]] inline VkFramebuffer      GetEditorFrameBuffer(const int index)       const { return mEditorSwapChainFrameBuffers[index]; }
+    [[nodiscard]] inline VkRenderPass       GetEditorRenderPass()                       const { return mEditorRenderPass; }
+private:
+    VkRenderPass            mEditorRenderPass;
+    vector<VkFramebuffer>   mEditorSwapChainFrameBuffers;
+
+    vector<VkImage>         mViewportImage;
+    vector<VkDeviceMemory>  mViewportImageMemory;
+    vector<VkImageView>     mViewportImageView;
+#endif // SCARLETT_EDITOR_ENABLED.
 };
 
 } // Namespace Scarlett.
