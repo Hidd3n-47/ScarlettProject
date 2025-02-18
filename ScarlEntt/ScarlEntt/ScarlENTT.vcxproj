@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
-    <ProjectConfiguration Include="Debug|x64">
-      <Configuration>Debug</Configuration>
+    <ProjectConfiguration Include="Dev|x64">
+      <Configuration>Dev</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
     <ProjectConfiguration Include="Release|x64">
@@ -18,7 +18,7 @@
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Dev|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
@@ -33,26 +33,26 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Dev|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>..\bin\Debug-x64\ScarlEntt\</OutDir>
-    <IntDir>..\bin-int\Debug-x64\ScarlEntt\</IntDir>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Dev|x64'">
+    <OutDir>$(SolutionDir)\bin\Dev\ScarlEntt\</OutDir>
+    <IntDir>$(SolutionDir)\bin-int\Dev\ScarlEntt\</IntDir>
     <TargetName>ScarlEntt</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>..\bin\Release-x64\ScarlEntt\</OutDir>
-    <IntDir>..\bin-int\Release-x64\ScarlEntt\</IntDir>
+    <OutDir>$(SolutionDir)\bin\Release\ScarlEntt\</OutDir>
+    <IntDir>$(SolutionDir)\bin-int\Release\ScarlEntt\</IntDir>
     <TargetName>ScarlEntt</TargetName>
     <TargetExt>.lib</TargetExt>
   </PropertyGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Dev|x64'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>ScarlEnttpch.h</PrecompiledHeaderFile>
@@ -61,7 +61,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)Scarlett;$(SolutionDir)ScarlEntt\ScarlEntt;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
-      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
@@ -69,10 +69,6 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
-    <PostBuildEvent>
-      <Command>IF EXIST ..\bin\Debug-x64\ScarlEntt\ScarlEntt.lib\ (xcopy /Q /E /Y /I ..\bin\Debug-x64\ScarlEntt\ScarlEntt.lib ..\bin\Debug-x64\ScarlEnttTest &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Debug-x64\ScarlEntt\ScarlEntt.lib ..\bin\Debug-x64\ScarlEnttTest &gt; nul)
-IF EXIST ..\bin\Debug-x64\ScarlEntt\ScarlEntt.lib\ (xcopy /Q /E /Y /I ..\bin\Debug-x64\ScarlEntt\ScarlEntt.lib ..\bin\Debug-x64\ScarlettDevOps &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Debug-x64\ScarlEntt\ScarlEntt.lib ..\bin\Debug-x64\ScarlettDevOps &gt; nul)</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -86,7 +82,7 @@ IF EXIST ..\bin\Debug-x64\ScarlEntt\ScarlEntt.lib\ (xcopy /Q /E /Y /I ..\bin\Deb
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <MinimalRebuild>false</MinimalRebuild>
       <StringPooling>true</StringPooling>
-      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <ExternalWarningLevel>Level3</ExternalWarningLevel>
     </ClCompile>
@@ -95,10 +91,6 @@ IF EXIST ..\bin\Debug-x64\ScarlEntt\ScarlEntt.lib\ (xcopy /Q /E /Y /I ..\bin\Deb
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
-    <PostBuildEvent>
-      <Command>IF EXIST ..\bin\Release-x64\ScarlEntt\ScarlEntt.lib\ (xcopy /Q /E /Y /I ..\bin\Release-x64\ScarlEntt\ScarlEntt.lib ..\bin\Release-x64\ScarlEnttTest &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Release-x64\ScarlEntt\ScarlEntt.lib ..\bin\Release-x64\ScarlEnttTest &gt; nul)
-IF EXIST ..\bin\Release-x64\ScarlEntt\ScarlEntt.lib\ (xcopy /Q /E /Y /I ..\bin\Release-x64\ScarlEntt\ScarlEntt.lib ..\bin\Release-x64\ScarlettDevOps &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Release-x64\ScarlEntt\ScarlEntt.lib ..\bin\Release-x64\ScarlettDevOps &gt; nul)</Command>
-    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="ScarlEntt\ComponentArray.h" />

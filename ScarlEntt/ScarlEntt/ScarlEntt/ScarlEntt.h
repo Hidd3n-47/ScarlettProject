@@ -8,4 +8,4 @@ typedef uint64_t ComponentId;
 constexpr EntityId InvalidEntityId = static_cast<EntityId>(1) << 63;
 
 // TODO (Christian) Invalid ID.
-// Todo (Christian) max entities and component types etc.
+// Todo (Christian) max mEntities and component types etc.

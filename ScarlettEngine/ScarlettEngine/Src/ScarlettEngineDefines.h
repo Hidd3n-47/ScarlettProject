@@ -2,6 +2,8 @@
 
 #ifdef SCARLETT_DEBUG
 
+#include <ScarlettLogger/Log.h>
+
 #define SCARLETT_TLOG(...)      Scarlett::Log::GetLogger()->trace(__VA_ARGS__)      // Trace Log.
 #define SCARLETT_DLOG(...)      Scarlett::Log::GetLogger()->debug(__VA_ARGS__)      // Debug Log.
 #define SCARLETT_ILOG(...)      Scarlett::Log::GetLogger()->info(__VA_ARGS__)       // Info Log.

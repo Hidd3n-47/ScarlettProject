@@ -8,9 +8,17 @@ workspace "Scarlett"
     }
     
 outputName = "%{cfg.buildcfg}"
+outputNameTests = "%{cfg.buildcfg}/Tests"
 VulkanPath = os.getenv('VULKAN_SDK')
     
 include "ScarlettEngine/"
 include "Scarlett/"
-include "deps/ImGui/"
+include "ScarlEntt/"
     
+-- Dependencies directories.
+include "deps/ImGui/"
+include "deps/scarlettLogger/"
+
+-- Test Directories.
+include "Tests/ScarlettTestProject/"
+include "Tests/ScarlEnttTests/"

@@ -70,8 +70,6 @@ void VulkanRenderer::Destroy()
     mDevice.Destroy();
 }
 
-#ifdef SCARLETT_EDITOR_ENABLED
-
 void VulkanRenderer::BeginRender()
 {
     const VkResult result = mSwapChain->AcquireNextImage(&mNextImageIndex);
@@ -95,7 +93,7 @@ void VulkanRenderer::BeginRender()
     };
 
     std::array<VkClearValue, 2> clearValues;
-    clearValues[0].color = { { 0.1f, 0.1f, 0.1f, 1.0f } };
+    clearValues[0].color = { { mClearColor[0], mClearColor[1], mClearColor[2], 1.0f} };
     clearValues[1].depthStencil = { 1.0f, 0 };
 
     const VkRenderPassBeginInfo renderPassInfo
@@ -110,50 +108,6 @@ void VulkanRenderer::BeginRender()
 
     vkCmdBeginRenderPass(mCommandBuffers[mNextImageIndex], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
 }
-
-#else
-
-void VulkanRenderer::BeginRender()
-{
-    const VkResult result = mSwapChain->AcquireNextImage(&mNextImageIndex);
-
-    if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)
-    {
-        throw std::runtime_error("Failed to acquire swap chain image");
-    }
-
-    constexpr VkCommandBufferBeginInfo beginInfo
-    {
-        .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO
-    };
-
-    VK_CHECK(vkBeginCommandBuffer(mCommandBuffers[mNextImageIndex], &beginInfo), "Failed to begin recording Vulkan Command Buffer");
-
-    const VkRect2D renderArea
-    {
-        .offset = { 0, 0 },
-        .extent = mSwapChain->GetSwapChainExtent()
-    };
-
-    std::array<VkClearValue, 2> clearValues;
-    clearValues[0].color = { { 0.1f, 0.1f, 0.1f, 1.0f } };
-    clearValues[1].depthStencil = { 1.0f, 0 };
-
-    const VkRenderPassBeginInfo renderPassInfo
-    {
-        .sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
-        .renderPass         = mSwapChain->GetRenderPass(),
-        .framebuffer        = mSwapChain->GetFrameBuffer(static_cast<int>(mNextImageIndex)),
-        .renderArea         = renderArea,
-        .clearValueCount    = static_cast<uint32>(clearValues.size()),
-        .pClearValues       = clearValues.data()
-    };
-
-    vkCmdBeginRenderPass(mCommandBuffers[mNextImageIndex], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-}
-
-#endif // SCARLETT_EDITOR_ENABLED.
-
 
 void VulkanRenderer::Render()
 {

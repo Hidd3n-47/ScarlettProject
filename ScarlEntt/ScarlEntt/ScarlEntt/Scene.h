@@ -10,9 +10,9 @@ class EntityHandle;
 
 // Todo Christian Update the documentation of Scene when known.
 /**
-* The __Scene__ that all entities and components are associated with.
-* The definition of a scene is still in development.
-* Idea is that a world will consist of multiple __Scenes__, and each __Scene__ be a "level" with its own entities and components.
+* The __Scene__ that all mEntities and components are associated with.
+* The definition of a mScene is still in development.
+* Idea is that a mWorld will consist of multiple __Scenes__, and each __Scene__ be a "level" with its own mEntities and components.
 */
 class Scene
 {
@@ -37,13 +37,13 @@ public:
     void DestroyEntity(EntityId& entity);
 
     /**
-     * Get the number of entities that are currently active in the scene.
+     * Get the number of mEntities that are currently active in the mScene.
      * @return Returns the number of active/alive entities in the scene.
      */
     inline EntityId GetActiveEntitiesCount() const { return mNextFreeEntity - mDeletedEntities; }
 
     /**
-     * Gets if the passed in _entity_ is active/alive in the scene.
+     * Gets if the passed in _entity_ is active/alive in the mScene.
      * @param entity: The ID of the entity being requested if active.
      * @return Returns the number of active entities in the scene.
      */

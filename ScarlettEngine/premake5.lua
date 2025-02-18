@@ -34,6 +34,9 @@ project "ScarlettEngine"
 		
 		"$(SolutionDir)deps/include/",
 		"$(SolutionDir)deps/imgui/",
+		"$(SolutionDir)deps/scarlettLogger/",
+		"$(SolutionDir)deps/scarlettLogger/deps/",
+		
         "%{VulkanPath}/Include/"
     }
 
@@ -45,6 +48,7 @@ project "ScarlettEngine"
 
     links 
     {
+		"ScarlettLogger",
 		"ImGui",
 		"glfw3_mt.lib",
         "vulkan-1.lib"

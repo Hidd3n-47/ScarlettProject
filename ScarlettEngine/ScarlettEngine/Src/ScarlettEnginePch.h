@@ -10,6 +10,7 @@
 #include <fstream>
 #include <sstream>
 
+#include <array>
 #include <vector>
 
 #include <set>
@@ -17,6 +18,5 @@
 
 #include <cstdint>
 
-#include "Core/Log.h"
 #include "Src/PrimitiveTypes.h"
 #include "Src/ScarlettEngineDefines.h"

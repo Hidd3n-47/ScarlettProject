@@ -56,7 +56,7 @@ inline T* EntityHandle::AddComponent()
     const char* componentType = typeid(T).name();
     // Todo Christian change to SCARLENTT_ASSERT.
     // Todo remove check here as we don't want to have to remake the set each time we make the handle.
-    //assert(!mComponents.contains(componentType) && "Failed to add component to entity as it already has this component type.");
+    //assert(!mComponents.contains(componentType) && "Failed to add component to mEntity as it already has this component type.");
 
     //mComponents.insert(componentType);
 
@@ -89,7 +89,7 @@ inline void EntityHandle::RemoveComponent()
 {
     const char* componentType = typeid(T).name();
     // Todo Christian change to SCARLENTT_ASSERT.
-    //assert(mComponents.contains(componentType) && "Failed to remove component from entity as it does not have this component type.");
+    //assert(mComponents.contains(componentType) && "Failed to remove component from mEntity as it does not have this component type.");
     // Todo remove check here as we don't want to have to remake the set each time we make the handle.
 
 

@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include <spdlog/spdlog.h>
 
 namespace  Scarlett
@@ -13,12 +15,11 @@ namespace  Scarlett
 class Log
 {
 public:
-    static void Init();
+    static void Init(const bool timeStampAndNameOnLog = true, const std::string& loggerName = "Scarlett");
 
     inline static std::shared_ptr<spdlog::logger>& GetLogger() { return mSpd; }
 
 private:
     static std::shared_ptr<spdlog::logger> mSpd;
 };
-
 } // Namespace Scarlett.

@@ -13,7 +13,7 @@ public:
     ~ComponentManager();
 
     /**
-    * Register the component to the world registry.
+    * Register the component to the mWorld registry.
     * __Note: All components need to be registered before they can be used.__
     */
     template <typename T>
