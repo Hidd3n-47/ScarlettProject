@@ -5,11 +5,15 @@
 
 #include "Test.h"
 
-#define BIND_FUNCTION(fn)[this](auto&&... args) -> decltype(auto) { return this->fn(std::forward<decltype(args)>(args)...); }
-
 namespace Scarlett
 {
-
+/**
+ * @class TestRegistry:
+ * A class used to register test methods for when running unit tests. <br/>
+ * In order to have a project for unit tests, link to this and then <br/>
+ * have a local class that inherits from@code TestRegistry@endcode and <br/>
+ * implement external@code CreateTestEnvironment@endcode to return local class. <br/>
+ */
 class TestRegistry
 {
 public:
@@ -21,12 +25,31 @@ public:
     TestRegistry& operator=(TestRegistry&&)         = delete;
     TestRegistry& operator=(const TestRegistry&)    = delete;
 
+    /**
+     * Initialize the test environment.
+     */
     void Init();
+    /**
+     * 'Run' all registered tasks.
+     */
     void RunTests();
 
+    /**
+     * Initialize the test session.<br/>
+     * Override this method to implement session specific variables such as the session name.
+     */
     virtual void InitTestSession()  = 0;
+    /**
+     * Register the tests for the session.
+     */
     virtual void RegisterTests()    = 0;
 
+    /**
+     * Add a test case to the test session.
+     * @param category The category that the test is a part of.
+     * @param testName The name of the specific test.
+     * @param testPassed If the test passed or failed.
+     */
     inline void AddTestCase(const std::string_view category, const std::string_view testName, const bool testPassed) { mTests[category].emplace_back(testName, testPassed); }
 
 protected:

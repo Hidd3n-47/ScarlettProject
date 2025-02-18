@@ -12,14 +12,8 @@ void Log::Init(const bool timeStampAndNameOnLog /* = true */, const std::string&
     mSpd = spdlog::stdout_color_mt(loggerName);
     spdlog::set_level(spdlog::level::trace);
 
-    if (timeStampAndNameOnLog)
-    {
-        spdlog::set_pattern("%^[%T] %n: %v%$");
-    }
-    else
-    {
-        spdlog::set_pattern("%^%v%$");
-    }
+    const std::string pattern = timeStampAndNameOnLog ? "%^[%T] %n: %v%$" : "%^%v%$";
+    spdlog::set_pattern(pattern);
 }
 
 } // Namespace Scarlett.
