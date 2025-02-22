@@ -396,6 +396,7 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+.idea/
 
 # Build Binaries and Intermediates
 bin/
@@ -405,3 +406,5 @@ bin-int/
 *.sln
 *.vcxproj
 *.vcxproj.*
+
+p4config.txt

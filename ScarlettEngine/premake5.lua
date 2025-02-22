@@ -11,8 +11,6 @@ project "ScarlettEngine"
 
     pchheader "ScarlettEnginePch.h"
     pchsource "%{prj.name}/Src/ScarlettEnginePch.cpp"
-	
-	VulkanPath = os.getenv('VULKAN_SDK')
     
     files
     {
