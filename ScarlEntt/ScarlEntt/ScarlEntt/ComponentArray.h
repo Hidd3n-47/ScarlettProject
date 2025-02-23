@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "EntityManager.h"
+
 namespace ScarlEntt
 {
 
@@ -78,6 +80,10 @@ private:
     std::unordered_map<EntityId, ComponentId> mEntityToComponentMap;
     std::unordered_map<ComponentId, EntityId> mComponentToEntityMap;
 };
+
+/*
+  ======================================================================================================================================================
+                                                                                                                                                        */
 
 // Todo Christian Make this return a component ref as this could be stale if a
 // vector resize occurs after adding/getting the component.

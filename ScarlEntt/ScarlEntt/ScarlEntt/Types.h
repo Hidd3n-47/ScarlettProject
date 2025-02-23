@@ -2,6 +2,8 @@
 
 namespace ScarlEntt
 {
+typedef uint32_t uint32;
+
 typedef uint32_t EntityId;
 typedef uint32_t ComponentId;
 } // Namespace Entity

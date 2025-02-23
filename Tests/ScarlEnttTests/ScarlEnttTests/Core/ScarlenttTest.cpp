@@ -2,12 +2,14 @@
 #include <ScarlettTestProject/Core/TestRegistry.h>
 
 #include "Tests/EntityTesting.h"
+#include "Tests/EntityHandleTesting.h"
 #include "Tests/ComponentTesting.h"
+#include "Tests/SystemTesting.h"
 
 namespace Scarlett
 {
 
-class ScarlenttTest : public TestRegistry
+class ScarlEnttTest final : public TestRegistry
 {
 public:
     inline void InitTestSession() override
@@ -17,15 +19,17 @@ public:
 
     inline void RegisterTests() override
     {
-        EntityTesting                   entityTesting(this);
-        ComponentTesting                componentTesting(this);
+        EntityTesting           entityTesting(this);
+        EntityHandleTesting     entityHandleTesting(this);
+        ComponentTesting        componentTesting(this);
+        SystemTesting           systemTesting(this);
     }
 
 };
 
 Scarlett::TestRegistry* Scarlett::CreateTestEnvironment()
 {
-    return new ScarlenttTest();
+    return new ScarlEnttTest();
 }
 
 } // Namespace Scarlett.

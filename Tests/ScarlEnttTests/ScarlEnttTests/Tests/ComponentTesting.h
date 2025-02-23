@@ -209,16 +209,16 @@ public:
 
         passed &= componentManager.GetComponent<ComponentC>(ent3)->value == true;
 
-        ScarlEntt::ComponentArray<ComponentA>* componentsA = componentManager.GetComponentArray<ComponentA>();
-        ScarlEntt::ComponentArray<ComponentB>* componentsB = componentManager.GetComponentArray<ComponentB>();
-        ScarlEntt::ComponentArray<ComponentC>* componentsC = componentManager.GetComponentArray<ComponentC>();
+        ScarlEntt::ComponentArray<ComponentA>& componentsA = componentManager.GetComponentArray<ComponentA>();
+        ScarlEntt::ComponentArray<ComponentB>& componentsB = componentManager.GetComponentArray<ComponentB>();
+        ScarlEntt::ComponentArray<ComponentC>& componentsC = componentManager.GetComponentArray<ComponentC>();
 
-        passed &= (*componentsA)[0].value == 100;
-        passed &= (*componentsA)[1].value == 3;
+        passed &= componentsA[0].value == 100;
+        passed &= componentsA[1].value == 3;
 
-        passed &= (*componentsB)[0].value == 1.0f;
+        passed &= componentsB[0].value == 1.0f;
 
-        passed &= (*componentsC)[0].value == true;
+        passed &= componentsC[0].value == true;
 
         return passed;
     }
@@ -239,32 +239,32 @@ public:
             componentManager.AddComponent<ComponentA>(entities[i], static_cast<int>(i));
         }
 
-        ScarlEntt::ComponentArray<ComponentA>* componentsA = componentManager.GetComponentArray<ComponentA>();
+        ScarlEntt::ComponentArray<ComponentA>& componentsA = componentManager.GetComponentArray<ComponentA>();
 
         // Test iterating over components.
-        for (ScarlEntt::ComponentId i {0}; i < componentsA->Size(); ++i)
+        for (ScarlEntt::ComponentId i {0}; i < componentsA.Size(); ++i)
         {
-            passed &= (*componentsA)[i].value == static_cast<int>(i);
+            passed &= componentsA[i].value == static_cast<int>(i);
         }
 
         // Iterate over components and change value by multiplying by 10.
-        for (ScarlEntt::ComponentId i {0}; i < componentsA->Size(); ++i)
+        for (ScarlEntt::ComponentId i {0}; i < componentsA.Size(); ++i)
         {
-            (*componentsA)[i].value *= 10;
+            componentsA[i].value *= 10;
         }
 
         // Test that components are iterated by reference.
-        for (ScarlEntt::ComponentId i {0}; i < componentsA->Size(); ++i)
+        for (ScarlEntt::ComponentId i {0}; i < componentsA.Size(); ++i)
         {
-            passed &= (*componentsA)[i].value == static_cast<int>(i) * 10;
+            passed &= componentsA[i].value == static_cast<int>(i) * 10;
         }
 
         componentManager.RemoveComponent<ComponentA>(entities[std::size(entities) - 1]);
 
-        passed &= componentsA->Size() == 9;
-        for (ScarlEntt::ComponentId i {0}; i < componentsA->Size(); ++i)
+        passed &= componentsA.Size() == 9;
+        for (ScarlEntt::ComponentId i {0}; i < componentsA.Size(); ++i)
         {
-            passed &= (*componentsA)[i].value == static_cast<int>(i) * 10;
+            passed &= componentsA[i].value == static_cast<int>(i) * 10;
         }
 
         return passed;
