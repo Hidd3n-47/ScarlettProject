@@ -48,9 +48,9 @@ public:
      * Add a test case to the test session.
      * @param category The category that the test is a part of.
      * @param testName The name of the specific test.
-     * @param testPassed If the test passed or failed.
+     * @param test A function pointer to the test.
      */
-    inline void AddTestCase(const std::string_view category, const std::string_view testName, const bool testPassed) { mTests[category].emplace_back(testName, testPassed); }
+    inline void AddTestCase(const std::string_view category, const std::string_view testName, const std::function<bool()>& test) { mTests[category].emplace_back(testName, test); }
 
 protected:
     std::string_view mTestSessionName;

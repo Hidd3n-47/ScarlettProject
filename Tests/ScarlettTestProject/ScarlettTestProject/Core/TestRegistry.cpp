@@ -31,7 +31,7 @@ void TestRegistry::RunTests()
             ++totalTestsRun;
             const Test& test = tests[i];
 
-            if (test.GetTestPassed())
+            if (test.Run())
             {
                 Log::GetLogger()->info("| {0} / {1} | Test Passed: \"{2}\"", i + 1, tests.size(), test.GetTestName());
 

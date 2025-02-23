@@ -1,60 +1,84 @@
-#pragma once
+﻿#pragma once
+
+// todo Christian try and use scarlentt version of assert over this.
+#include <cassert>
 
 #include "ComponentArray.h"
+#include "ScarlEntt.h"
 
-// Todo Christian: Take a look at returning the actual components and not pointers to things.
 namespace ScarlEntt
 {
 
+/**
+ * @class ComponentManager: The owner of the components and instance used to create/destroy and register components.<br/>
+ * Components need to be registered before adding or removing.<br/>
+ * Once registered, the component manager handles adding/removing/retrieving components for a particular entity.
+ */
 class ComponentManager
 {
 public:
     ComponentManager() = default;
     ~ComponentManager();
 
+    ComponentManager(const ComponentManager&)               = delete;
+    ComponentManager(ComponentManager&&)                    = delete;
+    ComponentManager& operator=(ComponentManager&&)         = delete;
+    ComponentManager& operator=(const ComponentManager&)    = delete;
+
     /**
-    * Register the component to the mWorld registry.
+    * @brief Register the component to the mWorld registry.<br/>
     * __Note: All components need to be registered before they can be used.__
     */
-    template <typename T>
+    template <typename ComponentType>
     void RegisterComponent();
 
     /**
-     * Get the array of a specific component type.
-     * @see ComponentArray
-     * @return Returns the component array of a specific component type.
-     */
-    template<typename T>
-    ComponentArray<T>* GetComponentArray();
+    * @brief Get the array of a specific component type.<br/>
+    * @see ComponentArray
+    * @return Returns the component array of a specific component type.
+    */
+    template<typename ComponentType>
+    ComponentArray<ComponentType>* GetComponentArray();
 
     /**
-     * Add a component to a specific _entity_.
-     * @param entityId: The entity ID for which we are adding the component to.
-     */
-    template <typename T>
-    T* AddComponent(EntityId entityId);
+    * @brief Add a component to an entity.
+    * @tparam ComponentType The class of the Component
+    * @tparam Args Arguments that are passed to the ComponentType constructor to construct a component with initial values.
+    * @param entityId The ID of the entity the component is being added to.
+    * @param args The arguments used to initialize the component.
+    * @return A reference to the created component.
+    */
+    template <typename ComponentType, typename... Args>
+    ComponentType* AddComponent(const EntityId entityId, Args&&... args);
 
     /**
-     * Retrieve a pointer to a component of a specific _entity_.
-     * Note that this is a raw pointer and should not be cached due to memory potentially changing on __RemoveComponent__.
-     * @param entityId: The entity ID for which we are requesting the component.
-     * @return Returns the __component__ if found, __nullptr__ otherwise.
+     * @brief Add a passed in component to the entity.<br/>
+     * Note: The ownership of the __component__ is passed to the ComponentManager once called, therefore cannot be used after adding to Entity.
+     * @tparam ComponentType The class of the Component.
+     * @param entityId The ID of the entity the component is being added to.
+     * @param component The component that is being added to the component array. Ownership of this component is passed over to ComponentManger after function call.
+     * @return A reference to the created component.
      */
-    template <typename T>
-    T* GetComponent(EntityId entityId);
+    template <typename ComponentType>
+    ComponentType* AddComponent(const EntityId entityId, const ComponentType& component);
 
-    template <typename T>
-    EntityId GetEntityIdFromComponentId(ComponentId componentId);
-    
     /**
-     * Remove a component (if found) of a specific _entity_.
-     * @param entityId: The entity ID for which we are removing the component.
-     */
-    template <typename T>
+    * Retrieve a pointer to a component of a specific _entity_. <br/>
+    * Note that this is a raw pointer and should not be cached due to memory potentially changing.
+    * @param entityId: The entity ID for which we are requesting the component.
+    * @return Returns the __component__ if found, __nullptr__ otherwise.
+    */
+    template <typename ComponentType>
+    ComponentType* GetComponent(const EntityId entityId);
+
+    /**
+    * Remove a component (if found) of a specific _entity_.
+    * @param entityId: The entity ID for which we are removing the component.
+    */
+    template <typename ComponentType>
     void RemoveComponent(EntityId entityId);
-
 private:
-    std::unordered_map<const char*, IComponentArray*> mComponents;
+    unordered_map<const char*, IComponentArray*> mComponents;
 };
 
 /*
@@ -63,51 +87,48 @@ private:
 
 inline ComponentManager::~ComponentManager()
 {
-    for (auto it : mComponents)
+    for (const auto [componentTypeName, componentArray] : mComponents)
     {
-        delete it.second;
+        delete componentArray;
     }
 }
 
-template <typename T>
+template <typename ComponentType>
 inline void ComponentManager::RegisterComponent()
 {
-    // Todo (Christian): Implements asserts to ensure not registered and that it can be registered.
-    // TODO (Christian): Why is SCARLENTT_ASSERT not working? it is not defining it? doesnt appear to be circular includes, just seems that SCARLENTT_DEBUG is not defined for this file ??? 
-    const char* id = typeid(T).name();
+    const char* id = typeid(ComponentType).name();
     SCARLENTT_ASSERT(!mComponents.contains(id) && "Registering component type more than once.");
-    assert(!mComponents.contains(id) && "Registering component type more than once.");
+    assert(!mComponents.contains(id) && "Registering component type more than once."); // todo remove.
 
-    mComponents[id] = new ComponentArray<T>();
+    mComponents[id] = new ComponentArray<ComponentType>();
 }
 
-template<typename T>
-inline ComponentArray<T>* ComponentManager::GetComponentArray()
+template<typename ComponentType>
+inline ComponentArray<ComponentType>* ComponentManager::GetComponentArray()
 {
-    const char* id = typeid(T).name();
+    const char* id = typeid(ComponentType).name();
+    SCARLENTT_ASSERT(mComponents.contains(id) && "Component not registered before use.");
+    assert(mComponents.contains(id) && "Component not registered before use."); // todo remove.
 
-    // TODO Christian: change assert based off comment above with SCARLENTT_ASSERT not working correctly.
-    assert(mComponents.contains(id) && "Component not registered before use.");
-
-    return static_cast<ComponentArray<T>*>(mComponents[id]);
+    return static_cast<ComponentArray<ComponentType>*>(mComponents[id]);
 }
 
-template <typename T>
-inline T* ComponentManager::AddComponent(EntityId entityId)
+template <typename ComponentType, typename... Args>
+inline ComponentType* ComponentManager::AddComponent(const EntityId entityId, Args&&... args)
 {
-    return GetComponentArray<T>()->AddComponent(entityId);
+    return GetComponentArray<ComponentType>()->AddComponent(entityId, args...);
 }
 
-template <typename T>
-inline T* ComponentManager::GetComponent(EntityId entityId)
+template <typename ComponentType>
+inline ComponentType* ComponentManager::AddComponent(const EntityId entityId, const ComponentType& component)
 {
-    return GetComponentArray<T>()->GetComponent(entityId);
+    return GetComponentArray<ComponentType>()->AddComponent(entityId, component);
 }
 
-template <typename T>
-EntityId ComponentManager::GetEntityIdFromComponentId(ComponentId componentId)
+template <typename ComponentType>
+inline ComponentType* ComponentManager::GetComponent(const EntityId entityId)
 {
-    return GetComponentArray<T>()->GetEntityIdFromComponentId(componentId);
+    return GetComponentArray<ComponentType>()->GetComponent(entityId);
 }
 
 template <typename T>
@@ -116,4 +137,4 @@ inline void ComponentManager::RemoveComponent(EntityId entityId)
     GetComponentArray<T>()->RemoveComponent(entityId);
 }
 
-} // Namespace ScarlEntt.
+} // Namespace ScarlEntt

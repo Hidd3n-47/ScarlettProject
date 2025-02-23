@@ -1,176 +1,150 @@
-#pragma once
-#include "ScarlEnttpch.h"
+﻿#pragma once
 
 namespace ScarlEntt
 {
 
 /**
- * Interface for component arrays.
+ * @class IComponentArray: Interface for component arrays.
  */
 class IComponentArray
 {
 public:
-    virtual ~IComponentArray() = default;
+    IComponentArray()               = default;
+    virtual ~IComponentArray()      = default;
+
+    IComponentArray(const IComponentArray&)               = delete;
+    IComponentArray(IComponentArray&&)                    = delete;
+    IComponentArray& operator=(IComponentArray&&)         = delete;
+    IComponentArray& operator=(const IComponentArray&)    = delete;
 };
 
 /**
- * The array of components to ensure that components are in contiguous memory.
+ * @class ComponentArray: The array of components to ensure that components are in contiguous memory.
  */
-template <typename Component>
-class ComponentArray : public IComponentArray
+template <typename ComponentType>
+class ComponentArray final : public IComponentArray
 {
 public:
-    ComponentArray();
-    ~ComponentArray() override;
+    ComponentArray()            = default;
+    ~ComponentArray() override  = default;
+
+    ComponentArray(const ComponentArray&)               = delete;
+    ComponentArray(ComponentArray&&)                    = delete;
+    ComponentArray& operator=(ComponentArray&&)         = delete;
+    ComponentArray& operator=(const ComponentArray&)    = delete;
 
     /**
-     * Allocate a _component_ from the __ComponentArray__ to the _entity_.
-     * @param entityId: The ID of the entity the component is being allocated to.
-     * @return Returns the _component_ that has been allocated to the _entity_
+     * @brief Add a component to an entity.
+     * @tparam Args Arguments that are passed to the ComponentType constructor to construct a component with initial values.
+     * @param entityId The ID of the entity that the component is being attached to.
+     * @param args The arguments used to initialize the component.
+     * @return A reference to the created component.
      */
-    Component* AddComponent(EntityId entityId);
+    template <typename ... Args>
+    ComponentType* AddComponent(const EntityId entityId, Args&& ...args);
 
     /**
-     * Gets the specific component, if any, that has been allocated to the _entity_
-     * @param entityId: The ID of the entity the component has been requested for.
-     * @return Returns the _component_ allocated to the entity, nullptr if it has not been allocated.
+     * @brief Add a component to an entity. The ownership of the passed in component is passed to the ComponentManager.
+     * @param entityId The entity ID that the component is being attached to.
+     * @param component The component that is being added to the entity.
+     * @return A reference to the added component.
      */
-    Component* GetComponent(EntityId entityId);
+    ComponentType* AddComponent(const EntityId entityId, const ComponentType& component);
 
     /**
-     * Deallocates a _component_ from the __ComponentArray__ from the _entity_.
-     * @param entityId: The ID of the entity the component is being deallocated from.
-     */
-    void RemoveComponent(EntityId entityId);
+    * @brief Removes a _component_ from the __ComponentArray__ from the _entity_.
+    * @param entityId: The ID of the entity the component is being removed from.
+    */
+    void RemoveComponent(const EntityId entityId);
 
     /**
-     * Gets the count of _components_ from the __ComponentArray__ that are currently allocated and active.
-     * @return The number of components from the component array that are currently allocated and active.
-     */
-    inline ComponentId GetComponentCount() const { return mNextFreeIndex; }
+    * @brief Gets the specific component, if any, that has been allocated to the _entity_
+    * @param entityId: The ID of the entity the component has been requested for.
+    * @return Returns the _component_ allocated to the entity, nullptr if it has not been allocated.
+    */
+    ComponentType* GetComponent(const EntityId entityId);
 
-    //Todo Christian: include a way to use iterator for component array instead of directly accessing each element by index.
+    [[nodiscard]] ComponentId Size() const { return static_cast<ComponentId>(mComponentArray.size()); }
+
     /**
-     * Access the __component__ at the passed in index.
+     * @brief Access the __component__ at the passed in index.
      * @param index: The index of the component requested for.
      * @return The component at the passed in index.
      */
-    Component* operator[](ComponentId index) const;
-
-    // Todo Christian: Do we need this sort of iterator for the array.
-    // Does this break cache efficiency?
-    class iterator
-    {
-    public:
-        inline iterator(Component* array, ComponentId index, ComponentId count)
-            : mArray(array)
-            , mIndex(index)
-            , mCount(count)
-        {
-            // Empty.
-        }
-
-        inline Component* value() { return &mArray[mIndex]; }
-        inline ComponentId index() const { return mIndex; }
-        
-        inline bool operator==(const iterator& other) const
-        {
-            return mArray == other.mArray && mIndex == other.mIndex && mCount == other.mCount;
-        }
-
-        inline iterator& operator++()
-        {
-            ++mIndex;
-            return *this;
-        }
-    private:
-        Component* mArray;
-        ComponentId mIndex;
-        ComponentId mCount;
-    };
-    inline iterator begin() const
-    {
-        return iterator(mComponents, 0, mNextFreeIndex);
-    }
-    inline iterator end() const
-    {
-        return iterator(mComponents, mNextFreeIndex, mNextFreeIndex);
-    }
+    ComponentType& operator[](ComponentId index);
 private:
-    Component* mComponents;
-    ComponentId mNextFreeIndex = 0;
+    vector<ComponentType> mComponentArray;
 
     std::unordered_map<EntityId, ComponentId> mEntityToComponentMap;
     std::unordered_map<ComponentId, EntityId> mComponentToEntityMap;
-
-    static const int MAX_COMPONENTS = 1000;
 };
 
-/*
-  ======================================================================================================================================================
-                                                                                                                                                        */
-
-template <typename Component>
-inline ComponentArray<Component>::ComponentArray()
-    : mComponents{ new Component[MAX_COMPONENTS] }
+// Todo Christian Make this return a component ref as this could be stale if a
+// vector resize occurs after adding/getting the component.
+template <typename ComponentType>
+template <typename ... Args>
+inline ComponentType* ComponentArray<ComponentType>::AddComponent(const EntityId entityId, Args&& ...args)
 {
-    // Empty.
+    assert(EntityManager::IsAlive(entityId) && "Entity is invalid and hence cannot add a component to."); // todo change assert.
+
+    const ComponentId componentId = static_cast<ComponentId>(mComponentArray.size());
+
+    mEntityToComponentMap[entityId] = componentId;
+    mComponentToEntityMap[componentId] = entityId;
+
+    mComponentArray.emplace_back(ComponentType{args...});
+    return &mComponentArray.back();
 }
 
-template <typename Component>
-inline ComponentArray<Component>::~ComponentArray()
+template <typename ComponentType>
+inline ComponentType* ComponentArray<ComponentType>::AddComponent(const EntityId entityId, const ComponentType& component)
 {
-    delete[] mComponents;
+    assert(EntityManager::IsAlive(entityId) && "Entity is invalid and hence cannot add a component to."); // todo change assert.
+
+    const ComponentId componentId = static_cast<ComponentId>(mComponentArray.size());
+
+    mEntityToComponentMap[entityId] = componentId;
+    mComponentToEntityMap[componentId] = entityId;
+
+    return &mComponentArray.emplace_back(std::move(component));
 }
 
-template <typename Component>
-inline Component* ComponentArray<Component>::AddComponent(EntityId entityId)
+template <typename ComponentType>
+inline void ComponentArray<ComponentType>::RemoveComponent(const EntityId entityId)
 {
-    // TODO Christian Assert here if errors.
+    assert(EntityManager::IsAlive(entityId) && "Entity is invalid and hence cannot remove a component from."); // todo change assert.
 
-    mEntityToComponentMap[entityId] = mNextFreeIndex;
+    const ComponentId lastComponentId       = static_cast<ComponentId>(mComponentArray.size()) - 1;
+    const EntityId lastComponentEntity      = mComponentToEntityMap[lastComponentId];
+    const ComponentId removedComponentId    = mEntityToComponentMap[entityId];
 
-    mComponentToEntityMap[mNextFreeIndex] = entityId;
+    mComponentArray[removedComponentId]         = std::move(mComponentArray.back());
+    mEntityToComponentMap[lastComponentEntity]  = removedComponentId;
+    mComponentToEntityMap[removedComponentId]   = lastComponentEntity;
 
-    return &mComponents[mNextFreeIndex++];
+    mEntityToComponentMap.erase(entityId);
+    mComponentArray.pop_back();
 }
 
-template <typename Component>
-inline Component* ComponentArray<Component>::GetComponent(EntityId entityId)
+template <typename ComponentType>
+inline ComponentType* ComponentArray<ComponentType>::GetComponent(const EntityId entityId)
 {
-    // TODO Christian Assert here if errors.
+    assert(EntityManager::IsAlive(entityId) && "Entity is invalid and hence cannot retrieve a component."); // todo change assert.
+
     if (!mEntityToComponentMap.contains(entityId))
     {
         return nullptr;
     }
 
-    return &mComponents[mEntityToComponentMap[entityId]];
+    return &mComponentArray[mEntityToComponentMap[entityId]];
 }
 
-template <typename Component>
-inline void ComponentArray<Component>::RemoveComponent(EntityId entityId)
-{
-    // TODO (Christian): Implement asserts.
-
-    const ComponentId lastComponent = mNextFreeIndex - 1;
-    const EntityId lastComponentEntity = mComponentToEntityMap[lastComponent];
-    const ComponentId removedComponentId = mEntityToComponentMap[entityId];
-
-    mComponents[removedComponentId] = mComponents[lastComponent];
-    mEntityToComponentMap[lastComponentEntity] = removedComponentId;
-    mComponentToEntityMap[removedComponentId] = lastComponentEntity;
-
-    mEntityToComponentMap.erase(entityId);
-
-    --mNextFreeIndex;
-}
-
-template <typename Component>
-inline Component* ComponentArray<Component>::operator[](ComponentId index) const
+template <typename ComponentType>
+inline ComponentType& ComponentArray<ComponentType>::operator[](ComponentId index)
 {
     // Todo Christian: Add checks on index.
 
-    return &mComponents[index];
+    return mComponentArray[index];
 }
 
-} // Namespace ScarlEntt.
+} // Namespace ScarlEntt

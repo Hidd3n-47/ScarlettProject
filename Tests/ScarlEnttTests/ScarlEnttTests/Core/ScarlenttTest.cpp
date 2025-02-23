@@ -3,7 +3,6 @@
 
 #include "Tests/EntityTesting.h"
 #include "Tests/ComponentTesting.h"
-#include "Tests/ComponentTestingWithHandles.h"
 
 namespace Scarlett
 {
@@ -20,7 +19,6 @@ public:
     {
         EntityTesting                   entityTesting(this);
         ComponentTesting                componentTesting(this);
-        ComponentTestingWithHandles     componentTestingWithHandles(this);
     }
 
 };

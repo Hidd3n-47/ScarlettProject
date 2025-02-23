@@ -1,11 +1,7 @@
 #pragma once
 
-#include <cstdint>
-
-typedef uint64_t EntityId;
-typedef uint64_t ComponentId;
-
-constexpr EntityId InvalidEntityId = static_cast<EntityId>(1) << 63;
-
-// TODO (Christian) Invalid ID.
-// Todo (Christian) max mEntities and component types etc.
+#ifdef SCARLENTT_DEBUG
+#define SCARLENTT_ASSERT(x) assert(x)
+#else // IF SCARLETT_DEBUG.
+#define SCARLENTT_ASSERT(x)
+#endif // IF NOT SCARLETT_DEBUG.

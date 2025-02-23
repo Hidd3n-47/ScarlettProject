@@ -1,5 +1,6 @@
 #pragma once
 
+#include <functional>
 #include <string_view>
 
 namespace Scarlett
@@ -15,23 +16,23 @@ public:
     /**
      * Create a test.
      * @param testName The name of the test.
-     * @param testPassed If the test passed or not.
+     * @param test A function pointer to the test method.
      */
-    inline Test(const std::string_view testName, const bool testPassed)
+    //inline Test(const std::string_view testName, const bool testPassed)
+    inline Test(const std::string_view testName, const std::function<bool()>& test)
         : mTestName(testName)
-        , mPassed(testPassed)
+        , mTest(test)
     { /* Empty. */ }
 
-    ~Test() = default;
-
     /** Get if the test passed or not. */
-    [[nodiscard]] inline bool GetTestPassed() const { return mPassed; }
+    //[[nodiscard]] inline bool GetTestPassed() const { return mPassed; }
+    [[nodiscard]] inline bool Run() const { return mTest();}
 
     /** Get the name of the test. */
     [[nodiscard]] inline std::string_view GetTestName() const { return mTestName; }
 private:
-    const std::string_view      mTestName;
-    const bool                  mPassed;
+    std::string_view            mTestName;
+    std::function<bool()>       mTest;
 };
 
 } // Namespace Scarlett.
