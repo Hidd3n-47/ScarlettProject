@@ -12,7 +12,6 @@
 #include <stb_image/stb_image.h>
 
 #include "VulkanUtils.h"
-#include "Rendering/SquareSprite.h"
 #include "Rendering/SpriteInfoStruct.h"
 #include "Core/Window/Window.h"
 
