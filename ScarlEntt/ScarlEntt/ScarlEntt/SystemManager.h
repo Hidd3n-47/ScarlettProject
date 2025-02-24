@@ -34,10 +34,11 @@ public:
      * @brief Register a system. Registering a system adds it the update queue with required priority.
      * @tparam System The class of the System that is being registered. Note that this class must inherit from@code ISystem@endcode.
      * @param componentManagerRef A pointer (reference) for the component array. This is so that the system can get the@code ComponentArray@endcode of interested components.
+     * @param properties The properties used to initialize the system.
      * @param priority The priority that the system is updated at. The lower the priority, the sooner it will be updated, i.e. priority 0 will be updated before priority 1.
      */
     template <typename System>
-    void RegisterSystem(ComponentManager* componentManagerRef, const uint32 priority);
+    void RegisterSystem(Scene* sceneRef, ComponentManager* componentManagerRef, ISystemProperties* properties, const uint32 priority);
 private:
     std::map<uint32, vector<ISystem*>> mSystems;
 };
@@ -47,10 +48,10 @@ private:
                                                                                                                                                         */
 
 template <typename System>
-inline void SystemManager::RegisterSystem(ComponentManager* componentManagerRef, const uint32 priority)
+inline void SystemManager::RegisterSystem(Scene* sceneRef, ComponentManager* componentManagerRef, ISystemProperties* properties, const uint32 priority)
 {
-    mSystems[priority].emplace_back(new System(componentManagerRef));
-    mSystems[priority].back()->InitSystem();
+    mSystems[priority].emplace_back(new System(sceneRef, componentManagerRef));
+    mSystems[priority].back()->InitSystem(properties);
 }
 
 } // Namespace ScarlEntt.

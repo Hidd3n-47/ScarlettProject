@@ -3,7 +3,17 @@
 namespace ScarlEntt
 {
 
+class Scene;
 class ComponentManager;
+
+// Todo Christian: Is this needed or the best way to do it?
+/**
+ * @class ISystemProperties: An interface for properties that are to be passed into<br/>
+ * the system during initialization. The properties can be used in the implemented <br/>
+ * @code InitSystem@endcode of the system by using a re-interpret cast to the correct <br/>
+ * type of property.
+ */
+struct ISystemProperties { };
 
 /**
  * @class ISystem: An interface for a system that is registered.<br/>
@@ -21,12 +31,13 @@ public:
     ISystem& operator=(ISystem&&)       = delete;
     ISystem& operator=(const ISystem&)  = delete;
 
-    virtual void InitSystem()       = 0;
+    virtual void InitSystem(ISystemProperties* properties = nullptr) = 0;
     virtual void UpdateSystem()     = 0;
     virtual void DestroySystem()    = 0;
 
 protected:
-    ComponentManager* mComponentManagerRef;
+    Scene*              mSceneRef; // Todo Christian: Should the SystemManager be coupled to the scene.
+    ComponentManager*   mComponentManagerRef;
 };
 
 } // Namespace ScarlEntt

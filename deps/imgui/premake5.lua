@@ -2,7 +2,7 @@ project "ImGui"
     kind "StaticLib"
     language "C++"
     staticruntime "on"
-	cppdialect "C++17"
+    cppdialect "C++17"
 
     targetdir("$(SolutionDir)/bin/" .. outputName .. "/%{prj.name}")
     objdir("$(SolutionDir)/bin-int/" .. outputName .. "/%{prj.name}")
@@ -15,12 +15,12 @@ project "ImGui"
 
     includedirs
     {
-		"$(SolutionDir)deps/include/",
+        "$(SolutionDir)deps/include/",
         "%{VulkanPath}/Include/"
     }
-	
-    removefiles 
-    { 
+
+    removefiles
+    {
         "%{prj.name}/backends/**.h",
         "%{prj.name}/backends/**.cpp"
     }

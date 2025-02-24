@@ -1,9 +1,13 @@
 #include "ScarlettEnginePch.h"
 #include "Engine.h"
 
-#include "ScarlettLogger/Log.h"
+#include <ScarlEntt/Scene.h>
+#include <ScarlettLogger/Log.h>
+
 #include "Core/Window/WindowManager.h"
 #include "Rendering/Vulkan/VulkanRendererEditor.h"
+
+#include "Components/Transform.h"
 
 namespace Scarlett
 {
@@ -39,6 +43,14 @@ void Engine::InitEngine()
     mVulkRenderer->Init(mMainWindow);
 
     SCARLETT_DLOG("Engine Initialized");
+    mScene = new ScarlEntt::Scene();
+
+    mScene->RegisterComponent<Transform>();
+
+    auto square1 = mScene->CreateEntity();
+    square1.AddComponent<Transform>();
+    auto square2 = mScene->CreateEntity();
+    square2.AddComponent<Transform>();
 
     // Everything initialized okay, so we can run the engine.
     mRunning = true;
@@ -58,7 +70,9 @@ void Engine::Run() const
 
 void Engine::DestroyEngine()
 {
-    //Renderer::Destroy();
+    delete mScene;
+    mScene = nullptr;
+
     mVulkRenderer->Destroy();
     delete mVulkRenderer;
     mVulkRenderer = nullptr;

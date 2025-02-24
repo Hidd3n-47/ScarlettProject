@@ -3,8 +3,8 @@ project "ScarlEntt"
     location "ScarlEntt"
     kind "StaticLib"
     language "C++"
-	staticruntime "on"
-	cppdialect "C++20"
+    staticruntime "on"
+    cppdialect "C++20"
 
     targetdir("$(SolutionDir)/bin/" .. outputName .. "/%{prj.name}")
     objdir("$(SolutionDir)/bin-int/" .. outputName .. "/%{prj.name}")

@@ -25,9 +25,9 @@ public:
     void Render() override;
     void EndRender() override;
 
-    void BeginRenderEditor();
+    void BeginRenderEditor() const;
     void RenderEditor();
-    void EndRenderEditor();
+    void EndRenderEditor() const;
 private:
     VkDescriptorPool mImGuiPool;
     VkSampler sampler;

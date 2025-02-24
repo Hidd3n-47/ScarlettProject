@@ -10,8 +10,6 @@
 namespace Scarlett
 {
 
-class SquareSprite;
-
 class VulkanRenderer : Renderer
 {
     friend class VulkanRendererEditor;
@@ -51,8 +49,6 @@ private:
     uint32 mNextImageIndex;
 
     // Temp.
-    SquareSprite* mSquare;
-    SquareSprite* mSquare2;
     float mClearColor[3] = { 0.1f, 0.1f, 0.1f };
 };
 

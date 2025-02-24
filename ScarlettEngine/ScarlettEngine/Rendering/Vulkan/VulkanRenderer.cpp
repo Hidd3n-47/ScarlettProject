@@ -31,16 +31,6 @@ void VulkanRenderer::Init(const Window* windowRef)
         RecreateSwapChain(mWindowRef->GetWidth(), mWindowRef->GetHeight());
         CreatePipeline();
 
-        mSquare = new SquareSprite(&mDevice);
-        mSquare->mScale = glm::vec2(0.3f);
-        mSquare->mRotation = 45.0f;
-        mSquare->mPosition = glm::vec2(-0.6f, 0.3f);
-
-        mSquare2 = new SquareSprite(&mDevice);
-        mSquare2->mScale = glm::vec2(0.4f);
-        mSquare2->mPosition = glm::vec2(0.3f, -0.2f);
-        mSquare2->mSpriteInfo.color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
-
         CreateCommandBuffers();
     }
     catch(const std::runtime_error& e)
@@ -52,9 +42,6 @@ void VulkanRenderer::Init(const Window* windowRef)
 void VulkanRenderer::Destroy()
 {
     vkDeviceWaitIdle(mDevice.mDevice);
-
-    delete mSquare;
-    delete mSquare2;
 
     FreeCommandBuffers();
 
@@ -112,13 +99,6 @@ void VulkanRenderer::BeginRender()
 void VulkanRenderer::Render()
 {
     mPipeline->Bind(mCommandBuffers[mNextImageIndex]);
-
-    static int frames = 0;
-    frames++;
-    mSquare2->mRotation = (float)frames / 100.0f;
-
-    mSquare->Draw(mCommandBuffers[mNextImageIndex], mPipelineLayout);
-    mSquare2->Draw(mCommandBuffers[mNextImageIndex], mPipelineLayout);
 
     RecordCommandBuffer(mNextImageIndex);
 }
@@ -215,9 +195,6 @@ void VulkanRenderer::RecreateSwapChain(const uint32 width, const uint32 height)
 void VulkanRenderer::RecordCommandBuffer(const uint32 imageIndex) const
 {
     mPipeline->Bind(mCommandBuffers[imageIndex]);
-
-    
-
 }
 
 void VulkanRenderer::FreeCommandBuffers()

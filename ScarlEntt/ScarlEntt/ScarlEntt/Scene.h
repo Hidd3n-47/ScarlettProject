@@ -46,10 +46,19 @@ public:
     /**
     * @brief Register a system. Registering a system adds it the update queue with required priority.
     * @tparam System The class of the System that is being registered. Note that this class must inherit from@code ISystem@endcode.
+    * @param properties The properties used to initialize the system. @see ISystemProperties.
     * @param priority The priority that the system is updated at. The lower the priority, the sooner it will be updated, i.e. priority 0 will be updated before priority 1.
     */
     template <typename System>
-    inline void RegisterSystem(const uint32 priority = std::numeric_limits<uint32>::max()) { mSystemManager.RegisterSystem<System>(&mComponentManager, priority); }
+    inline void RegisterSystem(ISystemProperties* properties, const uint32 priority = std::numeric_limits<uint32>::max()) { mSystemManager.RegisterSystem<System>(this, &mComponentManager, properties, priority); }
+
+    /**
+    * @brief Register a system. Registering a system adds it the update queue with required priority.
+    * @tparam System The class of the System that is being registered. Note that this class must inherit from@code ISystem@endcode.
+    * @param priority The priority that the system is updated at. The lower the priority, the sooner it will be updated, i.e. priority 0 will be updated before priority 1.
+    */
+    template <typename System>
+    inline void RegisterSystem(const uint32 priority = std::numeric_limits<uint32>::max()) { this, mSystemManager.RegisterSystem<System>(this, &mComponentManager, nullptr, priority); }
 
     /**
     * @brief Get a reference to the@code ComponentManager@endcode of the scene.

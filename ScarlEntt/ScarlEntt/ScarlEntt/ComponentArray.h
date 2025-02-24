@@ -66,6 +66,14 @@ public:
     */
     ComponentType* GetComponent(const EntityId entityId);
 
+    // Todo Christian: Find a better way to do this.
+    [[nodiscard]] const vector<EntityId>& GetCorrespondingEntityId() const { return mCorrespondingEntityId;}
+
+    /**
+     * Get the size of the components in the component array.<br/>
+     * The size is the active number of components.
+     * @return The number of components in the component array.
+     */
     [[nodiscard]] ComponentId Size() const { return static_cast<ComponentId>(mComponentArray.size()); }
 
     /**
@@ -74,8 +82,15 @@ public:
      * @return The component at the passed in index.
      */
     ComponentType& operator[](ComponentId index);
+    /**
+     * @brief Access the __component__ at the passed in index.
+     * @param index: The index of the component requested for.
+     * @return The component at the passed in index.
+     */
+    const ComponentType& operator[](ComponentId index) const;
 private:
-    vector<ComponentType> mComponentArray;
+    vector<ComponentType>   mComponentArray;
+    vector<EntityId>        mCorrespondingEntityId;
 
     std::unordered_map<EntityId, ComponentId> mEntityToComponentMap;
     std::unordered_map<ComponentId, EntityId> mComponentToEntityMap;
@@ -99,6 +114,7 @@ inline ComponentType* ComponentArray<ComponentType>::AddComponent(const EntityId
     mComponentToEntityMap[componentId] = entityId;
 
     mComponentArray.emplace_back(ComponentType{args...});
+    mCorrespondingEntityId.emplace_back(entityId);
     return &mComponentArray.back();
 }
 
@@ -112,6 +128,7 @@ inline ComponentType* ComponentArray<ComponentType>::AddComponent(const EntityId
     mEntityToComponentMap[entityId] = componentId;
     mComponentToEntityMap[componentId] = entityId;
 
+    mCorrespondingEntityId.emplace_back(entityId);
     return &mComponentArray.emplace_back(std::move(component));
 }
 
@@ -125,11 +142,13 @@ inline void ComponentArray<ComponentType>::RemoveComponent(const EntityId entity
     const ComponentId removedComponentId    = mEntityToComponentMap[entityId];
 
     mComponentArray[removedComponentId]         = std::move(mComponentArray.back());
+    mCorrespondingEntityId[removedComponentId]  = mCorrespondingEntityId.back();
     mEntityToComponentMap[lastComponentEntity]  = removedComponentId;
     mComponentToEntityMap[removedComponentId]   = lastComponentEntity;
 
     mEntityToComponentMap.erase(entityId);
     mComponentArray.pop_back();
+    mCorrespondingEntityId.pop_back();
 }
 
 template <typename ComponentType>
@@ -147,6 +166,14 @@ inline ComponentType* ComponentArray<ComponentType>::GetComponent(const EntityId
 
 template <typename ComponentType>
 inline ComponentType& ComponentArray<ComponentType>::operator[](ComponentId index)
+{
+    // Todo Christian: Add checks on index.
+
+    return mComponentArray[index];
+}
+
+template <typename ComponentType>
+inline const ComponentType& ComponentArray<ComponentType>::operator[](ComponentId index) const
 {
     // Todo Christian: Add checks on index.
 

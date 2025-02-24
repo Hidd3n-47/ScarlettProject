@@ -2,6 +2,11 @@
 
 #include "Events/Event.h"
 
+namespace ScarlEntt
+{
+class Scene;
+}
+
 namespace Scarlett
 {
 
@@ -39,6 +44,8 @@ private:
 #else
     VulkanRenderer* mVulkRenderer = nullptr;
 #endif // SCARLETT_EDITOR_ENABLED.
+
+    ScarlEntt::Scene* mScene;
 };
 
 Engine* CreateEngine();

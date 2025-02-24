@@ -6,7 +6,6 @@
 
 #include "VulkanUtils.h"
 #include "Core/Window/Window.h"
-#include "Rendering/SquareSprite.h"
 
 namespace Scarlett
 {
@@ -22,8 +21,6 @@ static ImVec4 Dark      = HexToRgba(0x17, 0x17, 0x17); // #171717FF
 static ImVec4 Medium    = HexToRgba(0x2A, 0x2A, 0x2A); // #2A2A2AFF
 static ImVec4 Light     = HexToRgba(0xA9, 0xA9, 0xA9);
 static ImVec4 OffWhite  = HexToRgba(0xF5, 0xF5, 0xF5);
-
-
 
 void VulkanRendererEditor::Init(const Window* windowRef)
 {
@@ -193,7 +190,7 @@ void VulkanRendererEditor::EndRender()
     EndRenderEditor();
 }
 
-void VulkanRendererEditor::BeginRenderEditor()
+void VulkanRendererEditor::BeginRenderEditor() const
 {
     const VkRect2D renderArea
     {
@@ -245,14 +242,9 @@ void VulkanRendererEditor::RenderEditor()
     num++;
 
 
-    textureID[textureIndex] = ImGui_ImplVulkan_AddTexture(
-                sampler,                 // VkSampler
-                mSwapChain->GetViewportImageView(mNextImageIndex),               // VkImageView
-                VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL  // Image layout for reading
-            );
+    textureID[textureIndex] = ImGui_ImplVulkan_AddTexture(sampler, mSwapChain->GetViewportImageView(mNextImageIndex), VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
-
-    ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
+    const ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
     ImGui::Image((ImTextureID)textureID[textureIndex], viewportPanelSize);
 
     textureIndex = (textureIndex + 1) % 3;
@@ -264,7 +256,7 @@ void VulkanRendererEditor::RenderEditor()
     ImGui::End();
 }
 
-void VulkanRendererEditor::EndRenderEditor()
+void VulkanRendererEditor::EndRenderEditor() const
 {
     ImGui::Render();
     ImGui_ImplVulkan_RenderDrawData(ImGui::GetDrawData(), mCommandBuffers[mNextImageIndex]);
@@ -284,21 +276,6 @@ void VulkanRendererEditor::RenderPropertiesPanel()
 {
     //ImGui::PushStyleColor(ImGuiCol_WindowBg, Medium);
     ImGui::Begin("Properties");
-
-    if (ImGui::CollapsingHeader("Transform Blue"))
-    {
-        float position[2] = { mSquare->mPosition.x, mSquare->mPosition.y };
-        ImGui::DragFloat2("Translation##0", position, 0.1f);
-        mSquare->mPosition = { position[0], position[1] };
-    }
-
-    if (ImGui::CollapsingHeader("Transform Red"))
-    {
-        float position[2] = { mSquare2->mPosition.x, mSquare2->mPosition.y };
-        ImGui::DragFloat2("Translation##1", position, 0.1f);
-        mSquare2->mPosition = { position[0], position[1] };
-    }
-
 
     if (ImGui::CollapsingHeader("Background Color"))
     {

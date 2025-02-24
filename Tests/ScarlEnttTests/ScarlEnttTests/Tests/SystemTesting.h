@@ -7,10 +7,14 @@
 #include "Components.h"
 
 class SystemChangeComponentA_Value;
-
 class SystemLowerPriority;
-
 class SystemHigherPriority;
+class SystemWithInitialParameters;
+
+struct SystemWithInitialParametersProperties : public ScarlEntt::ISystemProperties
+{
+    int value = 100;
+};
 
 class SystemTesting
 {
@@ -25,6 +29,8 @@ public:
                                   SystemUpdateWorksCorrectlyForOneTick_WithPriorities);
         testRegistry->AddTestCase("System Testing", "SystemUpdateWorksCorrectlyForThreeTick_WithPriorities",
                                   SystemUpdateWorksCorrectlyForThreeTick_WithPriorities);
+        testRegistry->AddTestCase("System Testing", "SystemInitializedWithProperties",
+                                  SystemInitializedWithProperties);
     }
 
     inline static bool SystemUpdateWorksCorrectlyForOneTick()
@@ -93,7 +99,7 @@ public:
         ScarlEntt::Scene scene;
 
         scene.RegisterSystem<SystemLowerPriority>(1);
-        scene.RegisterSystem<SystemHigherPriority>(0);
+        scene.RegisterSystem<SystemHigherPriority>(uint32_t{0});
         scene.RegisterComponent<ComponentMatrix>();
 
         for (ScarlEntt::EntityId i{0}; i < 3; ++i)
@@ -130,7 +136,7 @@ public:
         ScarlEntt::Scene scene;
 
         scene.RegisterSystem<SystemLowerPriority>(1);
-        scene.RegisterSystem<SystemHigherPriority>(0);
+        scene.RegisterSystem<SystemHigherPriority>(uint32_t{0});
         scene.RegisterComponent<ComponentMatrix>();
 
         for (ScarlEntt::EntityId i{0}; i < 3; ++i)
@@ -161,17 +167,46 @@ public:
 
         return passed;
     }
+
+    inline static bool SystemInitializedWithProperties()
+    {
+        bool passed = true;
+
+        ScarlEntt::Scene scene;
+
+        SystemWithInitialParametersProperties properties{};
+        scene.RegisterSystem<SystemWithInitialParameters>(&properties, 0);
+        scene.RegisterComponent<ComponentA>();
+
+        for (ScarlEntt::EntityId i{0}; i < 5; ++i)
+        {
+            ScarlEntt::EntityHandle entity = scene.CreateEntity();
+            entity.AddComponent<ComponentA>(0);
+        }
+
+        scene.Update();
+
+        auto& components = scene.GetComponentManager()->GetComponentArray<ComponentA>();
+
+        for (ScarlEntt::ComponentId i{0}; i < components.Size(); ++i)
+        {
+            passed &= components[i].value == 100;
+        }
+
+        return passed;
+    }
 };
 
 class SystemChangeComponentA_Value final : public ScarlEntt::ISystem
 {
 public:
-    explicit inline SystemChangeComponentA_Value(ScarlEntt::ComponentManager* componentManagerRef)
+    explicit inline SystemChangeComponentA_Value(ScarlEntt::Scene* sceneRef, ScarlEntt::ComponentManager* componentManagerRef)
     {
+        mSceneRef = sceneRef;
         mComponentManagerRef = componentManagerRef;
     }
 
-    inline void InitSystem() override {  }
+    inline void InitSystem(ScarlEntt::ISystemProperties*) override {  }
 
     inline void UpdateSystem() override
     {
@@ -189,12 +224,13 @@ public:
 class SystemLowerPriority final : public ScarlEntt::ISystem
 {
 public:
-    explicit inline SystemLowerPriority(ScarlEntt::ComponentManager* componentManagerRef)
+    explicit inline SystemLowerPriority(ScarlEntt::Scene* sceneRef, ScarlEntt::ComponentManager* componentManagerRef)
     {
+        mSceneRef = sceneRef;
         mComponentManagerRef = componentManagerRef;
     }
 
-    inline void InitSystem() override
+    inline void InitSystem(ScarlEntt::ISystemProperties*) override
     {
         mMatrix = { { { 1.0f, 2.0f}, { 3.0f, 4.0f} } };
     }
@@ -218,12 +254,13 @@ private:
 class SystemHigherPriority final : public ScarlEntt::ISystem
 {
 public:
-    explicit inline SystemHigherPriority(ScarlEntt::ComponentManager* componentManagerRef)
+    explicit inline SystemHigherPriority(ScarlEntt::Scene* sceneRef, ScarlEntt::ComponentManager* componentManagerRef)
     {
+        mSceneRef = sceneRef;
         mComponentManagerRef = componentManagerRef;
     }
 
-    inline void InitSystem() override
+    inline void InitSystem(ScarlEntt::ISystemProperties*) override
     {
         mMatrix = { { { 4.0f, 3.0f}, { 2.0f, 1.0f} } };
     }
@@ -242,4 +279,34 @@ public:
 
 private:
     ComponentMatrix mMatrix;
+};
+
+class SystemWithInitialParameters final : public ScarlEntt::ISystem
+{
+public:
+    explicit inline SystemWithInitialParameters(ScarlEntt::Scene* sceneRef, ScarlEntt::ComponentManager* componentManagerRef)
+    {
+        mSceneRef = sceneRef;
+        mComponentManagerRef = componentManagerRef;
+    }
+
+    inline void InitSystem(ScarlEntt::ISystemProperties* properties) override
+    {
+        mInitialValue = reinterpret_cast<SystemWithInitialParametersProperties*>(properties)->value;
+    }
+
+    inline void UpdateSystem() override
+    {
+        auto& componentArray = mComponentManagerRef->GetComponentArray<ComponentA>();
+
+        for (ScarlEntt::ComponentId i{0}; i < componentArray.Size(); ++i)
+        {
+            componentArray[i].value = mInitialValue;
+        }
+    }
+
+    inline void DestroySystem() override { }
+
+private:
+    int mInitialValue = -1;
 };

@@ -3,9 +3,9 @@ project "Scarlett"
     location "Scarlett"
     kind "ConsoleApp"
     language "C++"
-	staticruntime "on"
-	cppdialect "C++20"
-    
+    staticruntime "on"
+    cppdialect "C++20"
+
     targetdir("$(SolutionDir)/bin/" .. outputName .. "/%{prj.name}")
     objdir("$(SolutionDir)/bin-int/" .. outputName .. "/%{prj.name}")
 
@@ -15,15 +15,15 @@ project "Scarlett"
         "%{prj.name}/**.cpp"
     }
 
-    removefiles 
-    { 
+    removefiles
+    {
         "%{prj.name}/deps/**.h",
         "%{prj.name}/deps/**.cpp"
     }
-    
+
     includedirs
     {
-		"$(SolutionDir)ScarlettEngine/"
+        "$(SolutionDir)ScarlettEngine/"
     }
 
     links
@@ -41,7 +41,7 @@ project "Scarlett"
     filter "configurations:Dev"
         defines "SCARLETT_DEBUG"
         symbols "On"
-		runtime "Debug"
+        runtime "Debug"
 
     filter "configurations:Release"
         defines "SCARLETT_RELEASE"
