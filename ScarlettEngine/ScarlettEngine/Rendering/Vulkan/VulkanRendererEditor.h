@@ -7,7 +7,7 @@ namespace Scarlett
 
 #ifdef SCARLETT_EDITOR_ENABLED
 
-class VulkanRendererEditor final : VulkanRenderer
+class VulkanRendererEditor final : public VulkanRenderer
 {
 public:
     VulkanRendererEditor() = default;
@@ -29,12 +29,10 @@ public:
     void RenderEditor();
     void EndRenderEditor() const;
 private:
-    VkDescriptorPool mImGuiPool;
-    VkSampler sampler;
-    VkDescriptorSet textureID[3];
-    uint32 textureIndex;
-
-    vector<VkDescriptorSet> mViewportTextures;
+    VkDescriptorPool        mImGuiPool;
+    VkSampler               mSampler;
+    VkDescriptorSet         mViewportTexture[3];
+    uint32                  mCurrentTextureIndex;
 
     void RenderPropertiesPanel();
 };

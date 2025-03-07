@@ -407,4 +407,8 @@ bin-int/
 *.vcxproj
 *.vcxproj.*
 
+# ImGui ini files
+imgui.ini
+
+# Perforce
 p4config.txt

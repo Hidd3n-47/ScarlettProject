@@ -17,6 +17,9 @@
 
 namespace Scarlett
 {
+#ifndef SCARLETT_EDITOR_ENABLED
+        std::unique_ptr<Renderer> Renderer::mInstance = std::make_unique<VulkanRenderer>();
+#endif // SCARLETT_EDITOR_ENABLED.
 
 void VulkanRenderer::Init(const Window* windowRef)
 {
@@ -98,12 +101,12 @@ void VulkanRenderer::BeginRender()
 void VulkanRenderer::Render()
 {
     mPipeline->Bind(mCommandBuffers[mNextImageIndex]);
-
     RecordCommandBuffer(mNextImageIndex);
 }
 
 void VulkanRenderer::EndRender()
 {
+
     vkCmdEndRenderPass(mCommandBuffers[mNextImageIndex]);
 
 #ifndef SCARLETT_EDITOR_ENABLED

@@ -39,12 +39,6 @@ private:
     void OnEvent(Event& e);
     bool OnWindowClose(const WindowClosedEvent& e);
 
-#ifdef SCARLETT_EDITOR_ENABLED
-    VulkanRendererEditor* mVulkRenderer = nullptr;
-#else
-    VulkanRenderer* mVulkRenderer = nullptr;
-#endif // SCARLETT_EDITOR_ENABLED.
-
     ScarlEntt::Scene* mScene;
 };
 

@@ -8,6 +8,8 @@
 #include "Rendering/Vulkan/VulkanRendererEditor.h"
 
 #include "Components/Transform.h"
+#include "Components/SquareSprite.h"
+#include "Systems/SquareSpriteSystem.h"
 
 namespace Scarlett
 {
@@ -34,23 +36,22 @@ void Engine::InitEngine()
 
     mMainWindow->SetEventCallback(SCARLETT_BIND_FUNCTION(Engine::OnEvent));
 
-#ifdef SCARLETT_EDITOR_ENABLED
-    mVulkRenderer = new VulkanRendererEditor();
-#else
-    mVulkRenderer = new VulkanRenderer();
-#endif // SCARLETT_EDITOR_ENABLED.
-
-    mVulkRenderer->Init(mMainWindow);
+    Renderer::Instance().Init(mMainWindow);
 
     SCARLETT_DLOG("Engine Initialized");
     mScene = new ScarlEntt::Scene();
 
+    SquareSpriteSystemProperties properties;
+    properties.device = Renderer::Instance().GetDevice();
+    mScene->RegisterSystem<SquareSpriteSystem>(&properties);
     mScene->RegisterComponent<Transform>();
-
+    mScene->RegisterComponent<SquareSprite>();
     auto square1 = mScene->CreateEntity();
-    square1.AddComponent<Transform>();
+    square1.AddComponent<Transform>()->translation = glm::vec3(0.5f, 0.0f, 0.0f);
+    square1.AddComponent<SquareSprite>()->color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
     auto square2 = mScene->CreateEntity();
-    square2.AddComponent<Transform>();
+    square2.AddComponent<Transform>()->translation = glm::vec3(-0.5f, 0.0f, 0.0f);
+    square2.AddComponent<SquareSprite>()->color = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
 
     // Everything initialized okay, so we can run the engine.
     mRunning = true;
@@ -62,9 +63,12 @@ void Engine::Run() const
     {
         mMainWindow->Update();
 
-        mVulkRenderer->BeginRender();
-        mVulkRenderer->Render();
-        mVulkRenderer->EndRender();
+        Renderer::Instance().BeginRender();
+        Renderer::Instance().Render();
+        // Todo restructure renderer BeginRender and EndRender so systems can update pre-render. \
+        // Probably will happen when changing to command based renderering.
+        mScene->Update();
+        Renderer::Instance().EndRender();
     }
 }
 
@@ -73,14 +77,12 @@ void Engine::DestroyEngine()
     delete mScene;
     mScene = nullptr;
 
-    mVulkRenderer->Destroy();
-    delete mVulkRenderer;
-    mVulkRenderer = nullptr;
+    Renderer::Instance().Destroy();
 
     WindowManager::DestroyWindow(mMainWindow);
     WindowManager::TerminateApi();
 
-    SCARLETT_DLOG("Engine Destoryed.");
+    SCARLETT_DLOG("Engine Destroyed.");
 }
 
 void Engine::OnEvent(Event& e)

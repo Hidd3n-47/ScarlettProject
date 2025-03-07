@@ -12,6 +12,8 @@ namespace Scarlett
 
 #ifdef SCARLETT_EDITOR_ENABLED
 
+std::unique_ptr<Renderer> Renderer::mInstance = std::make_unique<VulkanRendererEditor>();
+
 static ImVec4 HexToRgba(int a, int b, int c)
 {
     return { a / 255.0f, b / 255.0f, c / 255.0f, 1.0f };
@@ -153,14 +155,14 @@ void VulkanRendererEditor::Init(const Window* windowRef)
     samplerCreateInfo.compareOp = VK_COMPARE_OP_ALWAYS;
     samplerCreateInfo.mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR;
 
-    vkCreateSampler(mDevice.mDevice, &samplerCreateInfo, nullptr, &sampler);
+    vkCreateSampler(mDevice.mDevice, &samplerCreateInfo, nullptr, &mSampler);
 }
 
 void VulkanRendererEditor::Destroy()
 {
     vkDeviceWaitIdle(mDevice.mDevice);
 
-    vkDestroySampler(mDevice.mDevice, sampler, nullptr);
+    vkDestroySampler(mDevice.mDevice, mSampler, nullptr);
 
     ImGui_ImplVulkan_Shutdown();
     ImGui_ImplGlfw_Shutdown();
@@ -242,15 +244,15 @@ void VulkanRendererEditor::RenderEditor()
     num++;
 
 
-    textureID[textureIndex] = ImGui_ImplVulkan_AddTexture(sampler, mSwapChain->GetViewportImageView(mNextImageIndex), VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
+    mViewportTexture[mCurrentTextureIndex] = ImGui_ImplVulkan_AddTexture(mSampler, mSwapChain->GetViewportImageView(mNextImageIndex), VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
 
     const ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-    ImGui::Image((ImTextureID)textureID[textureIndex], viewportPanelSize);
+    ImGui::Image((ImTextureID)mViewportTexture[mCurrentTextureIndex], viewportPanelSize);
 
-    textureIndex = (textureIndex + 1) % 3;
-    if (textureID[textureIndex])
+    mCurrentTextureIndex = (mCurrentTextureIndex + 1) % 3;
+    if (mViewportTexture[mCurrentTextureIndex])
     {
-        ImGui_ImplVulkan_RemoveTexture(textureID[textureIndex]);
+        ImGui_ImplVulkan_RemoveTexture(mViewportTexture[mCurrentTextureIndex]);
     }
 
     ImGui::End();

@@ -17,6 +17,7 @@ VertexBuffer::VertexBuffer(Device* device, const uint64 bufferSize, const void* 
 
 VertexBuffer::~VertexBuffer()
 {
+    vkDeviceWaitIdle(mDevice->GetDevice());
     vkDestroyBuffer(mDevice->GetDevice(), mVertexBuffer, nullptr);
     vkFreeMemory(mDevice->GetDevice(), mVertexBufferMemory, nullptr);
 }

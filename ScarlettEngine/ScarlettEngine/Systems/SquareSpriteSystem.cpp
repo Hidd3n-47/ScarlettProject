@@ -1,15 +1,15 @@
 ﻿#include "ScarlettEnginePch.h"
 #include "SquareSpriteSystem.h"
 
+#include <ScarlEntt/Scene.h>
 #include <ScarlEntt/EntityHandle.h>
-#include <ScarlEntt/ComponentManager.h>
 
 #include "Rendering/Vulkan/Mesh.h"
 #include "Rendering/SpriteInfoStruct.h"
 
 #include "Components/Transform.h"
 #include "Components/SquareSprite.h"
-
+#include "Rendering/Renderer.h"
 
 namespace Scarlett
 {
@@ -42,8 +42,8 @@ void SquareSpriteSystem::InitSystem(ScarlEntt::ISystemProperties* properties)
 
 void SquareSpriteSystem::UpdateSystem()
 {
-    VkCommandBuffer commandBuffer;
-    VkPipelineLayout pipelineLayout;
+    const VkCommandBuffer commandBuffer = Renderer::Instance().GetCommandBuffer();
+    const VkPipelineLayout pipelineLayout = Renderer::Instance().GetPipelineLayout();
 
     const auto& squareSprites = mComponentManagerRef->GetComponentArray<SquareSprite>();
     const auto& entityIds = squareSprites.GetCorrespondingEntityId();
