@@ -2,7 +2,6 @@
 #include "Engine.h"
 
 #include <ScarlEntt/Scene.h>
-#include <ScarlettLogger/Log.h>
 
 #include "Core/Window/WindowManager.h"
 #include "Rendering/Vulkan/VulkanRendererEditor.h"
@@ -46,12 +45,29 @@ void Engine::InitEngine()
     mScene->RegisterSystem<SquareSpriteSystem>(&properties);
     mScene->RegisterComponent<Transform>();
     mScene->RegisterComponent<SquareSprite>();
+
     auto square1 = mScene->CreateEntity();
-    square1.AddComponent<Transform>()->translation = glm::vec3(0.5f, 0.0f, 0.0f);
+    square1.AddComponent<Transform>()->translation = glm::vec3(0.5f, 0.0f, 0.4f);
     square1.AddComponent<SquareSprite>()->color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+
     auto square2 = mScene->CreateEntity();
-    square2.AddComponent<Transform>()->translation = glm::vec3(-0.5f, 0.0f, 0.0f);
+    square2.AddComponent<Transform>()->translation = glm::vec3(-0.5f, 0.0f, 0.2f);
     square2.AddComponent<SquareSprite>()->color = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
+
+    auto square3 = mScene->CreateEntity();
+    square3.AddComponent<Transform>()->translation = glm::vec3(0.0f, -0.5f, 0.3f);
+    square3.AddComponent<SquareSprite>()->color = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
+
+    auto square4 = mScene->CreateEntity();
+    square4.AddComponent<Transform>()->translation = glm::vec3(0.0f, 0.5f, 0.1f);
+    square4.AddComponent<SquareSprite>()->color = glm::vec4(1.0f, 0.0f, 1.0f, 1.0f);
+
+    auto square5 = mScene->CreateEntity();
+    auto transform = square5.AddComponent<Transform>();
+    transform->translation = glm::vec3(0.0f, 0.0f, 0.0f);
+    transform->scale = glm::vec3(0.5f, 1.f, 1.0f);
+    transform->rotation = glm::vec3(0.0f, 0.0f, 45.0f);
+    square5.AddComponent<SquareSprite>()->color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 
     // Everything initialized okay, so we can run the engine.
     mRunning = true;
@@ -65,7 +81,7 @@ void Engine::Run() const
 
         Renderer::Instance().BeginRender();
         Renderer::Instance().Render();
-        // Todo restructure renderer BeginRender and EndRender so systems can update pre-render. \
+        // Todo restructure renderer BeginRender and EndRender so systems can update pre-render.
         // Probably will happen when changing to command based renderering.
         mScene->Update();
         Renderer::Instance().EndRender();

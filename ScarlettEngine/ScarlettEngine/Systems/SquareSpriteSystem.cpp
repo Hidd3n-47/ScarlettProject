@@ -64,7 +64,7 @@ void SquareSpriteSystem::UpdateSystem()
         const SpriteInfoStruct info
         {
             .color = squareSprites[i].color,
-            .model = trans * rotat * scale
+            .model = trans * scale * rotat
         };
 
         vkCmdPushConstants(commandBuffer, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SpriteInfoStruct), &info);

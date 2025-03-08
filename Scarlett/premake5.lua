@@ -3,22 +3,16 @@ project "Scarlett"
     location "Scarlett"
     kind "ConsoleApp"
     language "C++"
-    staticruntime "on"
+    staticruntime "On"
     cppdialect "C++20"
 
-    targetdir("$(SolutionDir)/bin/" .. outputName .. "/%{prj.name}")
-    objdir("$(SolutionDir)/bin-int/" .. outputName .. "/%{prj.name}")
+    targetdir(outputPath .. "%{prj.name}")
+    objdir(outputIntPath .. "%{prj.name}")
 
     files
     {
         "%{prj.name}/**.h",
         "%{prj.name}/**.cpp"
-    }
-
-    removefiles
-    {
-        "%{prj.name}/deps/**.h",
-        "%{prj.name}/deps/**.cpp"
     }
 
     includedirs
@@ -29,10 +23,6 @@ project "Scarlett"
     links
     {
         "ScarlettEngine"
-    }
-
-     postbuildcommands
-    {
     }
 
     filter "system:windows"

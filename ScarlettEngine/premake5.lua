@@ -6,8 +6,8 @@ project "ScarlettEngine"
     staticruntime "on"
     cppdialect "C++20"
 
-    targetdir("$(SolutionDir)/bin/" .. outputName .. "/%{prj.name}")
-    objdir("$(SolutionDir)/bin-int/" .. outputName .. "/%{prj.name}")
+    targetdir(outputPath .. "%{prj.name}")
+    objdir(outputIntPath .. "%{prj.name}")
 
     pchheader "ScarlettEnginePch.h"
     pchsource "%{prj.name}/Src/ScarlettEnginePch.cpp"
@@ -18,18 +18,14 @@ project "ScarlettEngine"
         "%{prj.name}/**.cpp",
     }
 
-   files
-    {
-        --"$(SolutionDir)deps/include/vkbootstrap/**.h",
-        --"$(SolutionDir)deps/include/vkbootstrap/**.cpp",
-    }
-
     includedirs
     {
         "$(SolutionDir)%{prj.name}/%{prj.name}/",
         "$(SolutionDir)%{prj.name}/%{prj.name}/Src",
         "$(SolutionDir)%{prj.name}/%{prj.name}/deps/include/",
 
+        "$(SolutionDir)ScarlettEditor/",
+        "$(SolutionDir)ScarlettEditor/ScarlettEditor",
         "$(SolutionDir)ScarlEntt/ScarlEntt/",
         "$(SolutionDir)deps/include/",
         "$(SolutionDir)deps/imgui/",
@@ -48,6 +44,7 @@ project "ScarlettEngine"
     links
     {
         "ScarlettLogger",
+        "ScarlettEditor",
         "ScarlEntt",
         "ImGui",
         "glfw3_mt.lib",

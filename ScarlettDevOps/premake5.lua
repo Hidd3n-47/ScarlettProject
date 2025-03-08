@@ -4,9 +4,9 @@ project "ScarlettDevOps"
     kind "WindowedApp"
     entrypoint "mainCRTStartup"
     language "C++"
-    
-    targetdir("bin/" .. outputName .. "/%{prj.name}")
-    objdir("bin-int/" .. outputName .. "/%{prj.name}")
+
+    targetdir(outputPath .. "%{prj.name}")
+    objdir(outputIntPath .. "%{prj.name}")
 
     files
     {
@@ -14,24 +14,24 @@ project "ScarlettDevOps"
         "%{prj.name}/**.cpp"
     }
 
-    removefiles 
-    { 
+    removefiles
+    {
         "%{prj.name}/deps/**.h",
-        "%{prj.name}/deps/**.cpp", 
+        "%{prj.name}/deps/**.cpp",
     }
-    
+
     includedirs
     {
         "$(SolutionDir)ScarlEntt/",
         "$(SolutionDir)ScarlettDevOps/",
         "$(SolutionDir)ScarlettDevOps/src/",
-        "$(SolutionDir)/deps/ImGui_SDL/",
-        "$(SolutionDir)/deps/Include/"
+        "$(SolutionDir)deps/ImGui_SDL/",
+        "$(SolutionDir)deps/Include/"
     }
 
     libdirs
     {
-        "$(SolutionDir)/deps/Lib/"
+        "$(SolutionDir)deps/Lib/"
     }
 
     links
@@ -42,7 +42,7 @@ project "ScarlettDevOps"
 
     prebuildcommands
     {
-        ("{COPY} %[$(SolutionDir)/deps/Lib/SDL2.dll] %[$(SolutionDir)bin/%{outputName}/ScarlettDevOps/]")
+        ("{COPY} %[$(SolutionDir)deps/Lib/SDL2.dll] %[".. outputPath .. "/ScarlettDevOps/]")
     }
 
     filter "system:windows"

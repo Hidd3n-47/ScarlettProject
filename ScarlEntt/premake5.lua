@@ -3,11 +3,11 @@ project "ScarlEntt"
     location "ScarlEntt"
     kind "StaticLib"
     language "C++"
-    staticruntime "on"
+    staticruntime "On"
     cppdialect "C++20"
 
-    targetdir("$(SolutionDir)/bin/" .. outputName .. "/%{prj.name}")
-    objdir("$(SolutionDir)/bin-int/" .. outputName .. "/%{prj.name}")
+    targetdir(outputPath .. "%{prj.name}")
+    objdir(outputIntPath .. "%{prj.name}")
 
     pchheader "ScarlEnttpch.h"
     pchsource "%{prj.name}/ScarlEntt/ScarlEnttpch.cpp"
