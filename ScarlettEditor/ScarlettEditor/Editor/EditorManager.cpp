@@ -1,7 +1,11 @@
 ﻿#include "ScarlettEditorPch.h"
 #include "EditorManager.h"
 
+#include <ScarlEntt/Scene.h>
+
 #include "Src/ScarlettEditorDefines.h"
+
+#include "Views/EditorView.h"
 
 namespace ScarlettEditor
 {
@@ -86,41 +90,19 @@ void EditorManager::Destroy()
     EDITOR_ILOG("Editor Destroyed.");
 }
 
-void EditorManager::RenderUi(const ImTextureID viewportTexture)
+void EditorManager::RenderUi(ScarlEntt::Scene* currentScene, const ImTextureID viewportTexture)
 {
-    ImGui::DockSpaceOverViewport();
+    mCurrentScene = currentScene;
+    mViewportTexture = viewportTexture;
 
-    bool show = true;
-    ImGui::ShowDemoWindow(&show);
-
-    ImGui::Begin("Properties");
-
-    if (ImGui::CollapsingHeader("Background Color"))
+    if (mCurrentView == nullptr)
     {
-
+        mCurrentView = new EditorView();
     }
 
-    ImGui::End();
+    ((EditorView*)mCurrentView)->SetCurrentScene(currentScene);
 
-    ImGui::Begin("Console");
-
-    ImGui::End();
-
-
-    ImGui::Begin("Scene");
-
-    ImGui::End();
-
-    ImGui::Begin("Viewport");
-
-    static int num = 0;
-    num++;
-
-    const ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
-    ImGui::Image(viewportTexture, viewportPanelSize);
-
-    ImGui::End();
-
+    mCurrentView->Render();
 }
 
 } // Namespace ScarlettEditor.

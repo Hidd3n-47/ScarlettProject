@@ -43,7 +43,7 @@ public:
      * @return A reference to the created component.
      */
     template <typename ... Args>
-    ComponentType* AddComponent(const EntityId entityId, Args&& ...args);
+    [[maybe_unused]] ComponentType* AddComponent(const EntityId entityId, Args&& ...args);
 
     /**
      * @brief Add a component to an entity. The ownership of the passed in component is passed to the ComponentManager.
@@ -51,7 +51,7 @@ public:
      * @param component The component that is being added to the entity.
      * @return A reference to the added component.
      */
-    ComponentType* AddComponent(const EntityId entityId, const ComponentType& component);
+    [[maybe_unused]] ComponentType* AddComponent(const EntityId entityId, const ComponentType& component);
 
     /**
     * @brief Removes a _component_ from the __ComponentArray__ from the _entity_.
@@ -64,7 +64,7 @@ public:
     * @param entityId: The ID of the entity the component has been requested for.
     * @return Returns the _component_ allocated to the entity, nullptr if it has not been allocated.
     */
-    ComponentType* GetComponent(const EntityId entityId);
+    [[nodiscard]] ComponentType* GetComponent(const EntityId entityId);
 
     // Todo Christian: Find a better way to do this.
     [[nodiscard]] const vector<EntityId>& GetCorrespondingEntityId() const { return mCorrespondingEntityId;}
@@ -81,7 +81,7 @@ public:
      * @param index: The index of the component requested for.
      * @return The component at the passed in index.
      */
-    ComponentType& operator[](ComponentId index);
+    [[nodiscard]] ComponentType& operator[](ComponentId index);
     /**
      * @brief Access the __component__ at the passed in index.
      * @param index: The index of the component requested for.

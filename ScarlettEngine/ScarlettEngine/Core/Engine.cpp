@@ -6,15 +6,21 @@
 #include "Core/Window/WindowManager.h"
 #include "Rendering/Vulkan/VulkanRendererEditor.h"
 
-#include "Components/Transform.h"
-#include "Components/SquareSprite.h"
+#include <ScarlettGame/Components/Tag.h>
+#include <ScarlettGame/Components/Transform.h>
+#include <ScarlettGame/Components/SquareSprite.h>
 #include "Systems/SquareSpriteSystem.h"
 
 namespace Scarlett
 {
 
+Engine* Engine::mInstance = nullptr;
+
 void Engine::InitEngine()
 {
+    SCARLETT_ASSERT(mInstance == nullptr && "Engine has already been initialized, can only initialize engine once.");
+    mInstance = this;
+
     Log::Init();
 
     std::string windowConfiguration;
@@ -43,26 +49,32 @@ void Engine::InitEngine()
     SquareSpriteSystemProperties properties;
     properties.device = Renderer::Instance().GetDevice();
     mScene->RegisterSystem<SquareSpriteSystem>(&properties);
+    mScene->RegisterComponent<Tag>();
     mScene->RegisterComponent<Transform>();
     mScene->RegisterComponent<SquareSprite>();
 
     auto square1 = mScene->CreateEntity();
+    square1.AddComponent<Tag>("Square1", square1);
     square1.AddComponent<Transform>()->translation = glm::vec3(0.5f, 0.0f, 0.4f);
     square1.AddComponent<SquareSprite>()->color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
 
     auto square2 = mScene->CreateEntity();
+    square2.AddComponent<Tag>("Square2", square2);
     square2.AddComponent<Transform>()->translation = glm::vec3(-0.5f, 0.0f, 0.2f);
     square2.AddComponent<SquareSprite>()->color = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
 
     auto square3 = mScene->CreateEntity();
+    square3.AddComponent<Tag>("Square3", square3);
     square3.AddComponent<Transform>()->translation = glm::vec3(0.0f, -0.5f, 0.3f);
     square3.AddComponent<SquareSprite>()->color = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
 
     auto square4 = mScene->CreateEntity();
+    square4.AddComponent<Tag>("Square4", square4);
     square4.AddComponent<Transform>()->translation = glm::vec3(0.0f, 0.5f, 0.1f);
     square4.AddComponent<SquareSprite>()->color = glm::vec4(1.0f, 0.0f, 1.0f, 1.0f);
 
     auto square5 = mScene->CreateEntity();
+    square5.AddComponent<Tag>("Square5", square5);
     auto transform = square5.AddComponent<Transform>();
     transform->translation = glm::vec3(0.0f, 0.0f, 0.0f);
     transform->scale = glm::vec3(0.5f, 1.f, 1.0f);

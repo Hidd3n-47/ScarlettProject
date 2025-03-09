@@ -25,10 +25,13 @@ public:
     Engine& operator=(Engine&&)         = delete;
     Engine& operator=(const Engine&)    = delete;
 
+    static inline Engine& Instance() { return *mInstance; }
+
     void InitEngine();
     void Run() const;
     void DestroyEngine();
 
+    [[nodiscard]] ScarlEntt::Scene* GetCurrentScene() const { return mScene; }
 private:
     static Engine* mInstance;
 

@@ -7,8 +7,9 @@
 #include "Rendering/Vulkan/Mesh.h"
 #include "Rendering/SpriteInfoStruct.h"
 
-#include "Components/Transform.h"
-#include "Components/SquareSprite.h"
+#include <ScarlettGame/Components/Transform.h>
+#include <ScarlettGame/Components/SquareSprite.h>
+
 #include "Rendering/Renderer.h"
 
 namespace Scarlett
@@ -42,8 +43,8 @@ void SquareSpriteSystem::InitSystem(ScarlEntt::ISystemProperties* properties)
 
 void SquareSpriteSystem::UpdateSystem()
 {
-    const VkCommandBuffer commandBuffer = Renderer::Instance().GetCommandBuffer();
-    const VkPipelineLayout pipelineLayout = Renderer::Instance().GetPipelineLayout();
+    const VkCommandBuffer commandBuffer     = Renderer::Instance().GetCommandBuffer();
+    const VkPipelineLayout pipelineLayout   = Renderer::Instance().GetPipelineLayout();
 
     const auto& squareSprites = mComponentManagerRef->GetComponentArray<SquareSprite>();
     const auto& entityIds = squareSprites.GetCorrespondingEntityId();
@@ -64,7 +65,7 @@ void SquareSpriteSystem::UpdateSystem()
         const SpriteInfoStruct info
         {
             .color = squareSprites[i].color,
-            .model = trans * scale * rotat
+            .model = trans * rotat * scale
         };
 
         vkCmdPushConstants(commandBuffer, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SpriteInfoStruct), &info);

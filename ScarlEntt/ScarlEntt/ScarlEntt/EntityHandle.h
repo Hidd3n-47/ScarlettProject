@@ -13,10 +13,10 @@ public:
     explicit EntityHandle(const EntityId entityId, Scene* sceneRef);
     ~EntityHandle() = default;
 
-    EntityHandle(const EntityHandle& other)                 = delete;
-    EntityHandle(EntityHandle&& other)                      = default;
-    EntityHandle& operator=(const EntityHandle& other)      = delete;
-    EntityHandle& operator=(EntityHandle&& other)           = default;
+    EntityHandle(const EntityHandle& other)                 = default;
+    EntityHandle(EntityHandle&& other)                      = delete;
+    EntityHandle& operator=(const EntityHandle& other)      = default;
+    EntityHandle& operator=(EntityHandle&& other)           = delete;
 
     /**
     * @brief Add a component to the entity
@@ -26,7 +26,7 @@ public:
     * @return A reference to the created component.
     */
     template <typename ComponentType, typename ...Args>
-    ComponentType* AddComponent(Args ...args) const;
+    [[maybe_unused]] ComponentType* AddComponent(Args ...args) const;
     /**
     * @brief Add the passed in component to the entity.<br/>
     * Note: The ownership of the __component__ is passed to the ComponentManager once called, therefore cannot be used after adding to Entity.
@@ -35,7 +35,7 @@ public:
     * @return A reference to the created component.
     */
     template <typename ComponentType>
-    ComponentType* AddComponent(const ComponentType& component) const;
+    [[maybe_unused]] ComponentType* AddComponent(const ComponentType& component) const;
 
     /**
     * @breif Remove a component (if found) from the _entity_.

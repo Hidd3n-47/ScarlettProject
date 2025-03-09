@@ -26,11 +26,16 @@ project "ScarlettEditor"
         "$(SolutionDir)deps/scarlettLogger/",
         "$(SolutionDir)deps/scarlettLogger/deps/",
         "$(SolutionDir)deps/imgui/",
+        "$(SolutionDir)deps/include/",
+
+        "$(SolutionDir)ScarlettGame",
+        "$(SolutionDir)ScarlEntt/ScarlEntt/",
     }
 
     links
     {
         "ScarlettLogger",
+        "ScarlettGame",
         "ScarlEntt",
         "ImGui"
     }

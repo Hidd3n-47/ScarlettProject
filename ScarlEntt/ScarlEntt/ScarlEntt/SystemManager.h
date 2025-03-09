@@ -33,6 +33,7 @@ public:
     /**
      * @brief Register a system. Registering a system adds it the update queue with required priority.
      * @tparam System The class of the System that is being registered. Note that this class must inherit from@code ISystem@endcode.
+     * @param sceneRef A pointer (reference) to the scene that the system is acting upon.
      * @param componentManagerRef A pointer (reference) for the component array. This is so that the system can get the@code ComponentArray@endcode of interested components.
      * @param properties The properties used to initialize the system.
      * @param priority The priority that the system is updated at. The lower the priority, the sooner it will be updated, i.e. priority 0 will be updated before priority 1.

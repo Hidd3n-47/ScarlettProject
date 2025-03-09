@@ -25,8 +25,12 @@ project "ScarlettEngine"
         "$(SolutionDir)%{prj.name}/%{prj.name}/deps/include/",
 
         "$(SolutionDir)ScarlettEditor/",
-        "$(SolutionDir)ScarlettEditor/ScarlettEditor",
+        "$(SolutionDir)ScarlettEditor/ScarlettEditor/",
+
+        "$(SolutionDir)ScarlettGame/",
+
         "$(SolutionDir)ScarlEntt/ScarlEntt/",
+
         "$(SolutionDir)deps/include/",
         "$(SolutionDir)deps/imgui/",
         "$(SolutionDir)deps/scarlettLogger/",
@@ -45,6 +49,7 @@ project "ScarlettEngine"
     {
         "ScarlettLogger",
         "ScarlettEditor",
+        "ScarlettGame",
         "ScarlEntt",
         "ImGui",
         "glfw3_mt.lib",

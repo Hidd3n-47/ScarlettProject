@@ -2,6 +2,7 @@
 
 // todo Christian try and use ScarlEntt version of assert over this.
 #include <cassert>
+#include <ranges>
 
 #include "ComponentArray.h"
 #include "ScarlEntt.h"
@@ -49,7 +50,7 @@ public:
     * @return A reference to the created component.
     */
     template <typename ComponentType, typename... Args>
-    ComponentType* AddComponent(const EntityId entityId, Args&&... args);
+    [[maybe_unused]] ComponentType* AddComponent(const EntityId entityId, Args&&... args);
 
     /**
      * @brief Add a passed in component to the entity.
@@ -60,7 +61,7 @@ public:
      * @return A reference to the created component.
      */
     template <typename ComponentType>
-    ComponentType* AddComponent(const EntityId entityId, const ComponentType& component);
+    [[maybe_unused]] ComponentType* AddComponent(const EntityId entityId, const ComponentType& component);
 
     /**
     * @brief Retrieve a pointer to the component of a specific _entity_.
@@ -69,7 +70,7 @@ public:
     * @return Returns the __component__ if found, __nullptr__ otherwise.
     */
     template <typename ComponentType>
-    ComponentType* GetComponent(const EntityId entityId);
+    [[nodiscard]] ComponentType* GetComponent(const EntityId entityId);
 
     /**
     * @brief Remove a component (if found) of a specific _entity_.
@@ -78,7 +79,7 @@ public:
     template <typename ComponentType>
     void RemoveComponent(EntityId entityId);
 private:
-    unordered_map<const char*, IComponentArray*> mComponents;
+    unordered_map<std::string, IComponentArray*> mComponents;
 };
 
 /*
@@ -87,7 +88,7 @@ private:
 
 inline ComponentManager::~ComponentManager()
 {
-    for (const auto [componentTypeName, componentArray] : mComponents)
+    for (const auto& componentArray : mComponents | std::views::values)
     {
         delete componentArray;
     }
@@ -97,20 +98,24 @@ template <typename ComponentType>
 inline void ComponentManager::RegisterComponent()
 {
     const char* id = typeid(ComponentType).name();
-    SCARLENTT_ASSERT(!mComponents.contains(id) && "Registering component type more than once.");
-    assert(!mComponents.contains(id) && "Registering component type more than once."); // todo remove.
+    const std::string typeName(id);
+    //ComponentType::TypeName(typeName); // TODO remove if we don't need.
+    SCARLENTT_ASSERT(!mComponents.contains(typeName) && "Registering component type more than once.");
+    assert(!mComponents.contains(typeName) && "Registering component type more than once."); // todo remove.
 
-    mComponents[id] = new ComponentArray<ComponentType>();
+    mComponents[typeName] = new ComponentArray<ComponentType>();
 }
 
 template<typename ComponentType>
 inline ComponentArray<ComponentType>& ComponentManager::GetComponentArray()
 {
     const char* id = typeid(ComponentType).name();
-    SCARLENTT_ASSERT(mComponents.contains(id) && "Component not registered before use.");
-    assert(mComponents.contains(id) && "Component not registered before use."); // todo remove.
+    const std::string typeName(id);
+    //ComponentType::TypeName(typeName); // TODO remove if we don't need.
+    SCARLENTT_ASSERT(mComponents.contains(typeName) && "Component not registered before use.");
+    assert(mComponents.contains(typeName) && "Component not registered before use."); // todo remove.
 
-    return *static_cast<ComponentArray<ComponentType>*>(mComponents[id]);
+    return *static_cast<ComponentArray<ComponentType>*>(mComponents[typeName]);
 }
 
 template <typename ComponentType, typename... Args>

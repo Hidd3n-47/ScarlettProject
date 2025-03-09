@@ -9,6 +9,7 @@
 #include <ScarlettEditor/Editor/EditorManager.h>
 
 #include "VulkanUtils.h"
+#include "Core/Engine.h"
 #include "Core/Window/Window.h"
 
 namespace Scarlett
@@ -174,7 +175,7 @@ void VulkanRendererEditor::BeginRenderEditor() const
 void VulkanRendererEditor::RenderEditor()
 {
     mViewportTexture[mCurrentTextureIndex] = ImGui_ImplVulkan_AddTexture(mSampler, mSwapChain->GetViewportImageView(mNextImageIndex), VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-    ScarlettEditor::EditorManager::Instance().RenderUi((ImTextureID)mViewportTexture[mCurrentTextureIndex]);
+    ScarlettEditor::EditorManager::Instance().RenderUi(Engine::Instance().GetCurrentScene(), (ImTextureID)mViewportTexture[mCurrentTextureIndex]);
 
     mCurrentTextureIndex = (mCurrentTextureIndex + 1) % 3;
     if (mViewportTexture[mCurrentTextureIndex])
