@@ -17,10 +17,12 @@ static ImVec4 HexToRgba(int a, int b, int c)
     return { a / 255.0f, b / 255.0f, c / 255.0f, 1.0f };
 }
 
-static ImVec4 Dark      = HexToRgba(0x17, 0x17, 0x17); // #171717FF
-static ImVec4 Medium    = HexToRgba(0x2A, 0x2A, 0x2A); // #2A2A2AFF
-static ImVec4 Light     = HexToRgba(0xA9, 0xA9, 0xA9);
+static ImVec4 Dark      = HexToRgba(0x20, 0x20, 0x20); // #171717FF
+static ImVec4 Medium    = HexToRgba(0x30, 0x30, 0x30); // #2A2A2AFF
+static ImVec4 aaa       = HexToRgba(0x40, 0x40, 0x40); // #2A2A2AFF
+static ImVec4 Light     = HexToRgba(0x50, 0x50, 0x50);
 static ImVec4 OffWhite  = HexToRgba(0xF5, 0xF5, 0xF5);
+static ImVec4 Scarlett  = HexToRgba(0xDC, 0x33, 0xC6); // DC33C6
 
 void EditorManager::Init(ImGuiContext* uiContext, ImGuiMemAllocFunc* allocateFunction, ImGuiMemFreeFunc* freeFunction, void* data)
 {
@@ -39,10 +41,33 @@ void EditorManager::Init(ImGuiContext* uiContext, ImGuiMemAllocFunc* allocateFun
     style.Alpha             = 1.0f;
     style.WindowRounding    = 0.0f;
     style.FrameRounding     = 0.0f;
+    style.FramePadding = ImVec2(7.0f, 4.0f);
+    style.WindowPadding = ImVec2(10.0f, 5.0f);
+    style.WindowMenuButtonPosition = ImGuiDir_None;
+    style.TabBarOverlineSize = 0.0f;
+
+    style.Colors[ImGuiCol_TitleBg] = Dark;
+    style.Colors[ImGuiCol_TitleBgActive] = Dark;
+
+    style.Colors[ImGuiCol_WindowBg] = Medium;
+    style.Colors[ImGuiCol_Tab] = Medium;
+
+    style.Colors[ImGuiCol_TabActive] = Medium;
+    style.Colors[ImGuiCol_TabSelected] = Medium;
+    style.Colors[ImGuiCol_TabHovered] = Medium;
+    style.Colors[ImGuiCol_TabDimmed] = Medium;
+    style.Colors[ImGuiCol_TabDimmedSelected] = Medium;
+
+    style.Colors[ImGuiCol_Button] = Light;
+    style.Colors[ImGuiCol_ButtonActive] = Light;
+    style.Colors[ImGuiCol_ButtonHovered] = Scarlett;
+
+    style.Colors[ImGuiCol_Header] = Light;
+    style.Colors[ImGuiCol_HeaderActive] = Light;
+    style.Colors[ImGuiCol_HeaderHovered] = Scarlett;
 
     // style.Colors[ImGuiCol_Text] = ImVec4(0.00f, 1.00f, 1.00f, 1.00f);
     // style.Colors[ImGuiCol_TextDisabled] = ImVec4(0.00f, 0.40f, 0.41f, 1.00f);
-    style.Colors[ImGuiCol_WindowBg] = Dark;
     // style.Colors[ImGuiCol_Border] = ImVec4(0.00f, 1.00f, 1.00f, 0.65f);
     // style.Colors[ImGuiCol_BorderShadow] = ImVec4(0.00f, 0.00f, 0.00f, 0.00f);
     // style.Colors[ImGuiCol_FrameBg] = ImVec4(0.44f, 0.80f, 0.80f, 0.18f);
@@ -74,7 +99,6 @@ void EditorManager::Init(ImGuiContext* uiContext, ImGuiMemAllocFunc* allocateFun
     // style.Colors[ImGuiCol_PlotHistogramHovered] = ImVec4(0.00f, 1.00f, 1.00f, 1.00f);
     // style.Colors[ImGuiCol_TextSelectedBg] = ImVec4(0.00f, 1.00f, 1.00f, 0.22f);
     // style.Colors[ImGuiCol_TabActive] = ImVec4(0.00f, 0.60f, 0.61f, 0.80f);
-    // style.Colors[ImGuiCol_Tab] = ImVec4(0.00f, 0.40f, 0.41f, 0.40f);
     // style.Colors[ImGuiCol_TabUnfocused] = ImVec4(0.00f, 0.40f, 0.41f, 1.00f);
 
     //Scarlett::Log::Init(true, "ScarlettEditor");
