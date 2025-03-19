@@ -7,18 +7,19 @@
 #include "Rendering/Vulkan/Mesh.h"
 #include "Rendering/SpriteInfoStruct.h"
 
-#include <ScarlettGame/Components/Transform.h>
-#include <ScarlettGame/Components/SquareSprite.h>
+#include <ScarlettGameCore/Components/Transform.h>
+#include <ScarlettGameCore/Components/SquareSprite.h>
 
 #include "Rendering/Renderer.h"
 
 namespace Scarlett
 {
-    SquareSpriteSystem::SquareSpriteSystem(ScarlEntt::Scene* sceneRef, ScarlEntt::ComponentManager* componentManagerRef)
-    {
-        mSceneRef               = sceneRef;
-        mComponentManagerRef    = componentManagerRef;
-    }
+
+SquareSpriteSystem::SquareSpriteSystem(ScarlEntt::Scene* sceneRef, ScarlEntt::ComponentManager* componentManagerRef)
+{
+    mSceneRef               = sceneRef;
+    mComponentManagerRef    = componentManagerRef;
+}
 
 void SquareSpriteSystem::InitSystem(ScarlEntt::ISystemProperties* properties)
 {
@@ -46,12 +47,12 @@ void SquareSpriteSystem::UpdateSystem()
     const VkCommandBuffer commandBuffer     = Renderer::Instance().GetCommandBuffer();
     const VkPipelineLayout pipelineLayout   = Renderer::Instance().GetPipelineLayout();
 
-    const auto& squareSprites = mComponentManagerRef->GetComponentArray<SquareSprite>();
+    const auto& squareSprites = mComponentManagerRef->GetComponentArray<ScarlettGame::SquareSprite>();
     const auto& entityIds = squareSprites.GetCorrespondingEntityId();
     for (ScarlEntt::ComponentId i{0}; i < squareSprites.Size(); ++i)
     {
         ScarlEntt::EntityHandle entity{entityIds[i], mSceneRef };
-        const Transform* transform = entity.GetComponent<Transform>();
+        const ScarlettGame::Transform* transform = entity.GetComponent<ScarlettGame::Transform>();
 
         const float c = glm::cos(glm::radians(transform->rotation.z));
         const float s = glm::sin(glm::radians(transform->rotation.z));

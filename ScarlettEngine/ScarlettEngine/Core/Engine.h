@@ -2,11 +2,6 @@
 
 #include "Events/Event.h"
 
-namespace ScarlEntt
-{
-class Scene;
-}
-
 namespace Scarlett
 {
 
@@ -31,7 +26,6 @@ public:
     void Run() const;
     void DestroyEngine();
 
-    [[nodiscard]] ScarlEntt::Scene* GetCurrentScene() const { return mScene; }
 private:
     static Engine* mInstance;
 
@@ -41,8 +35,6 @@ private:
 
     void OnEvent(Event& e);
     bool OnWindowClose(const WindowClosedEvent& e);
-
-    ScarlEntt::Scene* mScene;
 };
 
 Engine* CreateEngine();

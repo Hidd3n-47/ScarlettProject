@@ -2,12 +2,12 @@
 
 #include <glm/vec3.hpp>
 
-#include "ScarlettGame/Src/ScarlettGame.h"
+#include "ScarlettGameCore/Src/ScarlettGame.h"
 
-namespace Scarlett
+namespace ScarlettGame
 {
 
-struct SCARLETT_GAME_API Transform
+struct SCARLETT_GAME_CORE_API Transform
 {
     glm::vec3 translation   { 0.0f };
     glm::vec3 rotation      { 0.0f };
@@ -16,4 +16,4 @@ struct SCARLETT_GAME_API Transform
     void Translate(const glm::vec3 _translation);
 };
 
-} // Namespace Scarlett.
+} // Namespace ScarlettGame.

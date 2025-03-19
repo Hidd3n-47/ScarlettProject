@@ -1,6 +1,6 @@
 ﻿#include "Transform.h"
 
-namespace Scarlett
+namespace ScarlettGame
 {
 
 void Transform::Translate(const glm::vec3 _translation)
@@ -8,4 +8,4 @@ void Transform::Translate(const glm::vec3 _translation)
     translation = _translation;
 }
 
-} // Namespace Scarlett.
+} // Namespace ScarlettGame.

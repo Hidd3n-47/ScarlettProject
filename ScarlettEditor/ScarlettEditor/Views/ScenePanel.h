@@ -7,7 +7,7 @@ namespace ScarlettEditor
 class ScenePanel final : public Panel
 {
 public:
-    explicit inline ScenePanel(const PanelProperties& properties = PanelProperties()) : Panel{ properties } { /* Empty */ }
+    explicit inline ScenePanel(IView* view, const PanelProperties& properties = PanelProperties()) : Panel{ view, properties } { /* Empty */ }
 
     void Render() override;
 private:

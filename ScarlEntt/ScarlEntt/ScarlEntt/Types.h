@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include <unordered_map>
+
 namespace ScarlEntt
 {
 typedef uint32_t uint32;

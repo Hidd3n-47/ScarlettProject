@@ -3,11 +3,11 @@
 
 #include <ScarlEntt/Scene.h>
 
-#include <ScarlettGame/Components/Tag.h>
-#include <ScarlettGame/Components/Transform.h>
-#include <ScarlettGame/Components/SquareSprite.h>
+#include <ScarlettGameCore/Src/GameCore.h>
+#include <ScarlettGameCore/Components/Tag.h>
 
 
+#include "EditorView.h"
 #include "Editor/EditorManager.h"
 
 namespace ScarlettEditor
@@ -15,33 +15,29 @@ namespace ScarlettEditor
 
 void ScenePanel::Render()
 {
-    ScarlEntt::ComponentManager* componentManager = EditorManager::Instance().GetCurrentScene()->GetComponentManager();
-    auto& tags = componentManager->GetComponentArray<Scarlett::Tag>();
+    ScarlEntt::ComponentManager* componentManager = ScarlettGame::GameCore::Instance().GetActiveScene()->GetComponentManager();
+    auto& tags = componentManager->GetComponentArray<ScarlettGame::Tag>();
 
-    static int addedEntities = 0;
     if (ImGui::Button("Add Entity"))
     {
-        // todo fix we have a crash when components are added cross boundary.
-        const auto entity = EditorManager::Instance().GetCurrentScene()->CreateEntity();
-        entity.AddComponent<Scarlett::Transform>();
-        entity.AddComponent<Scarlett::Tag>("Entity", entity);
-        entity.AddComponent<Scarlett::SquareSprite>();
+        auto ent = ScarlettGame::GameCore::Instance().CreateEntity();
     }
 
     bool selectedEntity = false;
     for (ScarlEntt::ComponentId i {0}; i < tags.Size(); ++i)
     {
-        if (ImGui::CollapsingHeader(tags[i].name))
+        if (ImGui::CollapsingHeader(tags[i].name.c_str()))
         {
             selectedEntity = true;
-            //mSelectionManager.SetSelectedEntity(&tags[i].entity);
+
+        	dynamic_cast<EditorView*>(mView)->GetSelectionManager().SetSelectedEntity(&tags[i].entity);
         }
     }
 
-    // if (!selectedEntity)
-    // {
-    //     mSelectionManager.SetSelectedEntity(nullptr);
-    // }
+    if (!selectedEntity)
+    {
+        dynamic_cast<EditorView*>(mView)->GetSelectionManager().SetSelectedEntity(nullptr);
+    }
 }
 
 } // Namespace ScarlettEditor

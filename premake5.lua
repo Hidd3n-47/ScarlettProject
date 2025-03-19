@@ -16,7 +16,7 @@ VulkanPath = os.getenv('VULKAN_SDK')
 
 include "ScarlettEngine/"
 include "ScarlettEditor/"
-include "ScarlettGame/"
+include "ScarlettGameCore/"
 include "Scarlett/"
 include "ScarlEntt/"
 

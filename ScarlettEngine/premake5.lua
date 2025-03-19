@@ -27,7 +27,7 @@ project "ScarlettEngine"
         "$(SolutionDir)ScarlettEditor/",
         "$(SolutionDir)ScarlettEditor/ScarlettEditor/",
 
-        "$(SolutionDir)ScarlettGame/",
+        "$(SolutionDir)ScarlettGameCore/",
 
         "$(SolutionDir)ScarlEntt/ScarlEntt/",
 
@@ -49,7 +49,7 @@ project "ScarlettEngine"
     {
         "ScarlettLogger",
         "ScarlettEditor",
-        "ScarlettGame",
+        "ScarlettGameCore",
         "ScarlEntt",
         "ImGui",
         "glfw3_mt.lib",

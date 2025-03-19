@@ -1,14 +1,14 @@
 #include "ScarlettEnginePch.h"
 #include "Engine.h"
 
-#include <ScarlEntt/Scene.h>
-
 #include "Core/Window/WindowManager.h"
 #include "Rendering/Vulkan/VulkanRendererEditor.h"
 
-#include <ScarlettGame/Components/Tag.h>
-#include <ScarlettGame/Components/Transform.h>
-#include <ScarlettGame/Components/SquareSprite.h>
+#include <ScarlettGameCore/Src/GameCore.h>
+#include <ScarlettGameCore/Components/Tag.h>
+#include <ScarlettGameCore/Components/Transform.h>
+#include <ScarlettGameCore/Components/SquareSprite.h>
+
 #include "Systems/SquareSpriteSystem.h"
 
 namespace Scarlett
@@ -43,43 +43,36 @@ void Engine::InitEngine()
 
     Renderer::Instance().Init(mMainWindow);
 
+    ScarlettGame::GameCore::Instance().Init();
+
     SCARLETT_DLOG("Engine Initialized");
-    mScene = new ScarlEntt::Scene();
 
     SquareSpriteSystemProperties properties;
     properties.device = Renderer::Instance().GetDevice();
-    mScene->RegisterSystem<SquareSpriteSystem>(&properties);
-    mScene->RegisterComponent<Tag>();
-    mScene->RegisterComponent<Transform>();
-    mScene->RegisterComponent<SquareSprite>();
+    ScarlettGame::GameCore::Instance().GetActiveScene()->RegisterSystem<SquareSpriteSystem>(&properties);
 
-    auto square1 = mScene->CreateEntity();
-    square1.AddComponent<Tag>("Square1", square1);
-    square1.AddComponent<Transform>()->translation = glm::vec3(0.5f, 0.0f, 0.4f);
-    square1.AddComponent<SquareSprite>()->color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+    auto square1 = ScarlettGame::GameCore::Instance().CreateEntity();
+    square1.GetComponent<ScarlettGame::Transform>()->translation = glm::vec3(0.5f, 0.0f, 0.4f);
+    square1.GetComponent<ScarlettGame::SquareSprite>()->color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
 
-    auto square2 = mScene->CreateEntity();
-    square2.AddComponent<Tag>("Square2", square2);
-    square2.AddComponent<Transform>()->translation = glm::vec3(-0.5f, 0.0f, 0.2f);
-    square2.AddComponent<SquareSprite>()->color = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
+    auto square2 = ScarlettGame::GameCore::Instance().CreateEntity();
+    square2.GetComponent<ScarlettGame::Transform>()->translation = glm::vec3(-0.5f, 0.0f, 0.2f);
+    square2.GetComponent<ScarlettGame::SquareSprite>()->color = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
 
-    auto square3 = mScene->CreateEntity();
-    square3.AddComponent<Tag>("Square3", square3);
-    square3.AddComponent<Transform>()->translation = glm::vec3(0.0f, -0.5f, 0.3f);
-    square3.AddComponent<SquareSprite>()->color = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
+    auto square3 = ScarlettGame::GameCore::Instance().CreateEntity();
+    square3.GetComponent<ScarlettGame::Transform>()->translation = glm::vec3(0.0f, -0.5f, 0.3f);
+    square3.GetComponent<ScarlettGame::SquareSprite>()->color = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
 
-    auto square4 = mScene->CreateEntity();
-    square4.AddComponent<Tag>("Square4", square4);
-    square4.AddComponent<Transform>()->translation = glm::vec3(0.0f, 0.5f, 0.1f);
-    square4.AddComponent<SquareSprite>()->color = glm::vec4(1.0f, 0.0f, 1.0f, 1.0f);
+    auto square4 = ScarlettGame::GameCore::Instance().CreateEntity();
+    square4.GetComponent<ScarlettGame::Transform>()->translation = glm::vec3(0.0f, 0.5f, 0.1f);
+    square4.GetComponent<ScarlettGame::SquareSprite>()->color = glm::vec4(1.0f, 0.0f, 1.0f, 1.0f);
 
-    auto square5 = mScene->CreateEntity();
-    square5.AddComponent<Tag>("Square5", square5);
-    auto transform = square5.AddComponent<Transform>();
+    auto square5 = ScarlettGame::GameCore::Instance().CreateEntity();
+    auto transform = square5.GetComponent<ScarlettGame::Transform>();
     transform->translation = glm::vec3(0.0f, 0.0f, 0.0f);
     transform->scale = glm::vec3(0.5f, 1.f, 1.0f);
     transform->rotation = glm::vec3(0.0f, 0.0f, 45.0f);
-    square5.AddComponent<SquareSprite>()->color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+    square5.GetComponent<ScarlettGame::SquareSprite>()->color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
 
     // Everything initialized okay, so we can run the engine.
     mRunning = true;
@@ -95,15 +88,14 @@ void Engine::Run() const
         Renderer::Instance().Render();
         // Todo restructure renderer BeginRender and EndRender so systems can update pre-render.
         // Probably will happen when changing to command based renderering.
-        mScene->Update();
+        ScarlettGame::GameCore::Instance().GetActiveScene()->Update();
         Renderer::Instance().EndRender();
     }
 }
 
 void Engine::DestroyEngine()
 {
-    delete mScene;
-    mScene = nullptr;
+    ScarlettGame::GameCore::Destroy();
 
     Renderer::Instance().Destroy();
 

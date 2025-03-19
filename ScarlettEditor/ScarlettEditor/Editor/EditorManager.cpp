@@ -114,17 +114,14 @@ void EditorManager::Destroy()
     EDITOR_ILOG("Editor Destroyed.");
 }
 
-void EditorManager::RenderUi(ScarlEntt::Scene* currentScene, const ImTextureID viewportTexture)
+void EditorManager::RenderUi(const ImTextureID viewportTexture)
 {
-    mCurrentScene = currentScene;
     mViewportTexture = viewportTexture;
 
     if (mCurrentView == nullptr)
     {
         mCurrentView = new EditorView();
     }
-
-    ((EditorView*)mCurrentView)->SetCurrentScene(currentScene);
 
     mCurrentView->Render();
 }

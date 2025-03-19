@@ -78,7 +78,7 @@ void VulkanRendererEditor::Init(const Window* windowRef)
     initInfo.CheckVkResultFn        = nullptr;
     initInfo.RenderPass             = mSwapChain->GetEditorRenderPass();
 
-    io.FontDefault = io.Fonts->AddFontFromFileTTF("E:/Programming/ScarlettProject/Assets/Fonts/Roboto/Roboto-Medium.ttf", 15);
+    io.FontDefault = io.Fonts->AddFontFromFileTTF("E:/Personal development folder/ScarlettProject/Assets/Fonts/Roboto/Roboto-Medium.ttf", 15);
 
     ImGui_ImplVulkan_Init(&initInfo);
     ImGui_ImplVulkan_CreateFontsTexture();
@@ -175,7 +175,7 @@ void VulkanRendererEditor::BeginRenderEditor() const
 void VulkanRendererEditor::RenderEditor()
 {
     mViewportTexture[mCurrentTextureIndex] = ImGui_ImplVulkan_AddTexture(mSampler, mSwapChain->GetViewportImageView(mNextImageIndex), VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL);
-    ScarlettEditor::EditorManager::Instance().RenderUi(Engine::Instance().GetCurrentScene(), (ImTextureID)mViewportTexture[mCurrentTextureIndex]);
+    ScarlettEditor::EditorManager::Instance().RenderUi((ImTextureID)mViewportTexture[mCurrentTextureIndex]);
 
     mCurrentTextureIndex = (mCurrentTextureIndex + 1) % 3;
     if (mViewportTexture[mCurrentTextureIndex])

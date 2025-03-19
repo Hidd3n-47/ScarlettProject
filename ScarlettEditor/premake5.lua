@@ -28,14 +28,14 @@ project "ScarlettEditor"
         "$(SolutionDir)deps/imgui/",
         "$(SolutionDir)deps/include/",
 
-        "$(SolutionDir)ScarlettGame",
+        "$(SolutionDir)ScarlettGameCore",
         "$(SolutionDir)ScarlEntt/ScarlEntt/",
     }
 
     links
     {
         "ScarlettLogger",
-        "ScarlettGame",
+        "ScarlettGameCore",
         "ScarlEntt",
         "ImGui"
     }

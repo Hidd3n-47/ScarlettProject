@@ -1,6 +1,6 @@
--- ---------------------------- Scarlett Game Project.
-project "ScarlettGame"
-    location "ScarlettGame"
+-- ---------------------------- Scarlett Game Core Project.
+project "ScarlettGameCore"
+    location "ScarlettGameCore"
     kind "SharedLib"
     language "C++"
     staticruntime "On"
@@ -23,12 +23,23 @@ project "ScarlettGame"
         "$(SolutionDir)%{prj.name}/",
 
         "$(SolutionDir)deps/include/",
+
+        "$(SolutionDir)ScarlEntt/ScarlEntt/",
+        "$(SolutionDir)deps/scarlettLogger/",
+        "$(SolutionDir)deps/scarlettLogger/deps/",
+    }
+
+    links
+    {
+        "ScarlEntt",
+        "ScarlettLogger",
     }
 
     postbuildcommands
     {
         ("{COPYFILE} %[%{cfg.buildtarget.abspath}] %[" .. outputPath .."ScarlettEngine/]"),
-        ("{COPYFILE} %[%{cfg.buildtarget.abspath}] %[" .. outputPath .."ScarlettEditor/]")
+        ("{COPYFILE} %[%{cfg.buildtarget.abspath}] %[" .. outputPath .."ScarlettEditor/]"),
+        ("{COPYFILE} %[%{cfg.buildtarget.abspath}] %[" .. outputPath .."Scarlett/]")
     }
 
     filter "system:windows"
@@ -36,10 +47,10 @@ project "ScarlettGame"
 
     filter "configurations:Dev"
         runtime "Debug"
-        defines "SCARLETT_GAME_DEBUG"
+        defines "SCARLETT_GAME_CORE_DEBUG"
         symbols "on"
 
     filter "configurations:Release"
         runtime "Release"
-        defines "SCARLETT_GAME_RELEASE"
+        defines "SCARLETT_GAME_CORE_RELEASE"
         optimize "on"

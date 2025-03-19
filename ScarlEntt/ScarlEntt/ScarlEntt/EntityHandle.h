@@ -14,9 +14,9 @@ public:
     ~EntityHandle() = default;
 
     EntityHandle(const EntityHandle& other)                 = default;
-    EntityHandle(EntityHandle&& other)                      = delete;
+    EntityHandle(EntityHandle&& other)                      = default;
     EntityHandle& operator=(const EntityHandle& other)      = default;
-    EntityHandle& operator=(EntityHandle&& other)           = delete;
+    EntityHandle& operator=(EntityHandle&& other)           = default;
 
     /**
     * @brief Add a component to the entity
@@ -51,6 +51,11 @@ public:
     template <typename ComponentType>
     [[nodiscard]] ComponentType* GetComponent();
 
+    /**
+    * @brief Get the ID of the entity.
+    * @return Returns the ID of the entity.
+    */
+    [[nodiscard]] EntityId GetId() const { return mEntityId; }
 private:
     EntityId            mEntityId;
     Scene*              mSceneRef;
