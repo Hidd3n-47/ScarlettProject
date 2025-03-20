@@ -5,12 +5,13 @@
 
 #include "Src/ScarlettEditorDefines.h"
 
-#include "Views/EditorView.h"
+#include "Views/Editor/EditorView.h"
 
 namespace ScarlettEditor
 {
 
-EditorManager* EditorManager::mInstance = nullptr;
+EditorManager* EditorManager::mInstance     = nullptr;
+IView* EditorManager::mCurrentView          = nullptr;
 
 static ImVec4 HexToRgba(int a, int b, int c)
 {
@@ -103,6 +104,8 @@ void EditorManager::Init(ImGuiContext* uiContext, ImGuiMemAllocFunc* allocateFun
 
     //Scarlett::Log::Init(true, "ScarlettEditor");
 
+    mCurrentView = new EditorView();
+
     EDITOR_ILOG("Editor Initialized.");
 }
 
@@ -117,11 +120,6 @@ void EditorManager::Destroy()
 void EditorManager::RenderUi(const ImTextureID viewportTexture)
 {
     mViewportTexture = viewportTexture;
-
-    if (mCurrentView == nullptr)
-    {
-        mCurrentView = new EditorView();
-    }
 
     mCurrentView->Render();
 }

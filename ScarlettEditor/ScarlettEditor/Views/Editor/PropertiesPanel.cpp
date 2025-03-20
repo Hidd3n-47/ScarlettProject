@@ -10,7 +10,7 @@
 #include <ScarlettGameCore/Components/Transform.h>
 #include <ScarlettGameCore/Components/SquareSprite.h>
 
-#include "Views/EditorView.h"
+#include "Views/Editor/EditorView.h"
 
 namespace ScarlettEditor
 {

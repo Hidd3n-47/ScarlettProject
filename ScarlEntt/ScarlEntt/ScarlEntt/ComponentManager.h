@@ -3,6 +3,7 @@
 // todo Christian try and use ScarlEntt version of assert over this.
 #include <cassert>
 #include <ranges>
+#include <string>
 
 #include "ComponentArray.h"
 #include "ScarlEntt.h"

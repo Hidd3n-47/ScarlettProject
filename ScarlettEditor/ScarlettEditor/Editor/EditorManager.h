@@ -25,7 +25,8 @@ private:
 
     ImTextureID mViewportTexture = 0;
 
-    IView*      mCurrentView = nullptr;
+    // Todo, fix from being static and made in the init.
+    static IView*      mCurrentView;
 };
 
 } // Namespace ScarlettEditor.

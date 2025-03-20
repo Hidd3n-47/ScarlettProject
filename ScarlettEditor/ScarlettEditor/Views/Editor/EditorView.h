@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "IView.h"
+#include "Views/IView.h"
 
 #include "Editor/SelectionManager.h"
 

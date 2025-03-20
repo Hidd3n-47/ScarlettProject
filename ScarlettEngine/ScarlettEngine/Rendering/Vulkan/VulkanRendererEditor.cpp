@@ -1,6 +1,9 @@
 #include "ScarlettEnginePch.h"
 #include "VulkanRendererEditor.h"
 
+#include <ScarlettGameCore/Src/GameCore.h>
+#include <Views/Editor/ViewportCamera.h>
+
 #ifdef SCARLETT_EDITOR_ENABLED
 
 #include <imgui/imgui_impl_glfw.h>
@@ -9,7 +12,6 @@
 #include <ScarlettEditor/Editor/EditorManager.h>
 
 #include "VulkanUtils.h"
-#include "Core/Engine.h"
 #include "Core/Window/Window.h"
 
 namespace Scarlett
@@ -78,7 +80,7 @@ void VulkanRendererEditor::Init(const Window* windowRef)
     initInfo.CheckVkResultFn        = nullptr;
     initInfo.RenderPass             = mSwapChain->GetEditorRenderPass();
 
-    io.FontDefault = io.Fonts->AddFontFromFileTTF("E:/Personal development folder/ScarlettProject/Assets/Fonts/Roboto/Roboto-Medium.ttf", 15);
+    io.FontDefault = io.Fonts->AddFontFromFileTTF("E:/Programming/ScarlettProject/Assets/Fonts/Roboto/Roboto-Medium.ttf", 15);
 
     ImGui_ImplVulkan_Init(&initInfo);
     ImGui_ImplVulkan_CreateFontsTexture();
@@ -198,6 +200,13 @@ void VulkanRendererEditor::EndRenderEditor() const
     VK_CHECK(vkEndCommandBuffer(mCommandBuffers[mNextImageIndex]), "Failed to end recording Vulkan Command Buffer.");
 
     VK_CHECK(mSwapChain->SubmitCommandBuffers(&mCommandBuffers[mNextImageIndex], &mNextImageIndex), "Failed to present Vulkan Swap Chain Image");
+}
+
+ScarlettGame::Camera* VulkanRendererEditor::GetRenderCamera()
+{
+    const auto& viewportCamera = ScarlettGame::GameCore::Instance().GetActiveScene()->GetComponentManager()->GetComponentArray<ScarlettEditor::ViewportCamera>();
+    //todo add asserts here to ensure the correct number of [viewport] camera's active.
+    return (ScarlettGame::Camera*)(&viewportCamera[0]);
 }
 
 } // Namespace Scarlett.

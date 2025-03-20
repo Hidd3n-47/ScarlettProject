@@ -1,6 +1,11 @@
 #pragma once
 #include "Vulkan/VertexBuffer.h"
 
+namespace ScarlettGame
+{
+struct Camera;
+}
+
 namespace Scarlett {
 
 class Window;
@@ -21,9 +26,10 @@ public:
     virtual void EndRender() = 0;
 
     // Todo Change Renderer to use commands instead and remove references to these.
-    virtual Device* GetDevice() = 0;
-    virtual VkCommandBuffer GetCommandBuffer() = 0;
-    virtual VkPipelineLayout GetPipelineLayout() = 0;
+    virtual Device* GetDevice()     = 0;
+    virtual ScarlettGame::Camera* GetRenderCamera() = 0;
+    virtual VkCommandBuffer GetCommandBuffer()      = 0;
+    virtual VkPipelineLayout GetPipelineLayout()    = 0;
 
     virtual void OnWindowResize(const uint32 width, const uint32 height) = 0;
 protected:

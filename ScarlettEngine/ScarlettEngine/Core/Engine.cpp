@@ -5,7 +5,6 @@
 #include "Rendering/Vulkan/VulkanRendererEditor.h"
 
 #include <ScarlettGameCore/Src/GameCore.h>
-#include <ScarlettGameCore/Components/Tag.h>
 #include <ScarlettGameCore/Components/Transform.h>
 #include <ScarlettGameCore/Components/SquareSprite.h>
 
@@ -41,9 +40,9 @@ void Engine::InitEngine()
 
     mMainWindow->SetEventCallback(SCARLETT_BIND_FUNCTION(Engine::OnEvent));
 
-    Renderer::Instance().Init(mMainWindow);
-
     ScarlettGame::GameCore::Instance().Init();
+
+    Renderer::Instance().Init(mMainWindow);
 
     SCARLETT_DLOG("Engine Initialized");
 
@@ -87,7 +86,7 @@ void Engine::Run() const
         Renderer::Instance().BeginRender();
         Renderer::Instance().Render();
         // Todo restructure renderer BeginRender and EndRender so systems can update pre-render.
-        // Probably will happen when changing to command based renderering.
+        // Probably will happen when changing to command based rendering.
         ScarlettGame::GameCore::Instance().GetActiveScene()->Update();
         Renderer::Instance().EndRender();
     }

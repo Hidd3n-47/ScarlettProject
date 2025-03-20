@@ -8,13 +8,11 @@ namespace Scarlett {
 
 struct SpriteInfoStruct
 {
-    /*glm::vec4	color = glm::vec4(1.0f);
-    glm::vec2 	translation = glm::vec2(0.0f);
-    glm::vec2 	scale = glm::vec2(1.0f);
-    float 		rotation = 0.0f;*/
-    glm::vec4 color = glm::vec4(1.0f);
+    glm::vec4 color     = glm::vec4{ 1.0f };
 
-    glm::mat4 model = glm::mat4(1.0f);
+    glm::mat4 view      = glm::mat4{1.0f };
+    glm::mat4 proj      = glm::mat4{1.0f };
+    glm::mat4 model     = glm::mat4{ 1.0f };
 };
 
 } // Namespace Scarlett.

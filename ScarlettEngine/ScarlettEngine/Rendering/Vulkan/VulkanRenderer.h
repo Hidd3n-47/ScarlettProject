@@ -23,8 +23,9 @@ public:
 
     // Todo Change Renderer to use commands instead and remove references to these.
     inline Device* GetDevice() override { return &mDevice; }
-    inline VkCommandBuffer GetCommandBuffer() override { return mCommandBuffers[mNextImageIndex]; }
-    inline VkPipelineLayout GetPipelineLayout() override { return mPipelineLayout; }
+    inline ScarlettGame::Camera*    GetRenderCamera()       override { return nullptr; } // todo add camera for release
+    inline VkCommandBuffer          GetCommandBuffer()      override { return mCommandBuffers[mNextImageIndex]; }
+    inline VkPipelineLayout         GetPipelineLayout()     override { return mPipelineLayout; }
 
     void Init(const Window* windowRef) override;
     void Destroy() override;

@@ -6,14 +6,16 @@
 
 #include <ScarlEntt/Scene.h>
 
+#include <ScarlettGameCore/Src/GameCore.h>
 #include <ScarlettGameCore/Components/Tag.h>
-#include <ScarlettGameCore/Components/Transform.h>
-#include <ScarlettGameCore/Components/SquareSprite.h>
 
 #include "Editor/EditorManager.h"
 
 #include "PropertiesPanel.h"
 #include "ScenePanel.h"
+
+#include "ViewportCameraSystem.h"
+#include "ScarlettGameCore/Components/Camera.h"
 
 namespace ScarlettEditor
 {
@@ -23,6 +25,15 @@ EditorView::EditorView()
     : mPropertiesPanel(new PropertiesPanel(this, {.title = "Properties" }))
     , mScenePanel(new ScenePanel(this, {.title = "Scene" }))
 {
+    ScarlettGame::GameCore::Instance().GetActiveScene()->RegisterSystem<ViewportCameraSystem>();
+    ScarlettGame::GameCore::Instance().GetActiveScene()->RegisterComponent<ViewportCamera>();
+
+    const ScarlEntt::EntityHandle viewportCamera = ScarlettGame::GameCore::Instance().CreateEntity();
+    viewportCamera.RemoveComponent<ScarlettGame::Tag>();
+    ViewportCamera* camera = viewportCamera.AddComponent<ViewportCamera>();
+
+    //todo change aspect ratio to be the viewport.
+    camera->projectionMatrix = glm::perspective(glm::radians(60.0f), 1920.0f / 1080.0f, 0.1f, 100.0f);
 }
 
 EditorView::~EditorView()

@@ -161,7 +161,7 @@ void VulkanRenderer::CreatePipeline()
     }
     mPipeline = new Pipeline();
 
-    mPipeline->Init(&mDevice, "E:/Personal development folder/ScarlettProject/ScarlettEngine/ScarlettEngine/Rendering/Shaders/vert.spv", "E:/Personal development folder/ScarlettProject/ScarlettEngine/ScarlettEngine/Rendering/Shaders/frag.spv", pipelineConfig);
+    mPipeline->Init(&mDevice, "E:/Programming/ScarlettProject/ScarlettEngine/ScarlettEngine/Rendering/Shaders/vert.spv", "E:/Programming/ScarlettProject/ScarlettEngine/ScarlettEngine/Rendering/Shaders/frag.spv", pipelineConfig);
 }
 
 void VulkanRenderer::CreateCommandBuffers()

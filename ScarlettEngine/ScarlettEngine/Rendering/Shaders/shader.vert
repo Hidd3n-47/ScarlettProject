@@ -3,14 +3,16 @@
 layout(location = 0)
 in vec2 position;
 
-layout(push_constant) 
-uniform Sprite 
+layout(push_constant)
+uniform Sprite
 {
-	vec4 color;
-	mat4 model;
+    vec4 color;
+    mat4 view;
+    mat4 proj;
+    mat4 model;
 } sprite;
 
 void main()
 {
-    gl_Position = sprite.model * vec4(position, 0.0, 1.0);
+    gl_Position = sprite.proj * sprite.view * sprite.model * vec4(position, 0.0, 1.0);
 }
