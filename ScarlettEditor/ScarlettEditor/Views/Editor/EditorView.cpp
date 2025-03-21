@@ -20,7 +20,7 @@
 namespace ScarlettEditor
 {
 
-//Todo should title be definied in the constructor.
+//Todo should title be defined in the constructor.
 EditorView::EditorView()
     : mPropertiesPanel(new PropertiesPanel(this, {.title = "Properties" }))
     , mScenePanel(new ScenePanel(this, {.title = "Scene" }))

@@ -11,7 +11,14 @@ namespace Scarlett
 enum class EventType
 {
     WINDOW_CLOSE,
-    MOUSE_MOVE
+
+    MOUSE_MOVE,
+    MOUSE_BUTTON_PRESSED,
+    MOUSE_BUTTON_RELEASED,
+
+    KEY_PRESSED,
+    KEY_RELEASED,
+    KEY_TYPED
 };
 
 #define EVENT_CLASS_TYPE(type)      [[nodiscard]] static  EventType GetStaticType()               { return EventType::##type; } \
@@ -53,7 +60,7 @@ protected:
 class EventDispatcher
 {
 public:
-    inline EventDispatcher(Event& event)
+    inline explicit EventDispatcher(Event& event)
         : mEvent(event)
     { /* Empty*/ }
 
@@ -65,7 +72,7 @@ public:
      * @return@code true@endcode if the event was successfully dispatched to a callback method,@code false@endcode otherwise.
      */
     template<typename T>
-    inline bool Dispatch(std::function<bool(const T&)> function)
+    inline bool Dispatch(const std::function<bool(const T&)>& function)
     {
         if (mEvent.GetEventType() == T::GetStaticType())
         {
@@ -77,46 +84,6 @@ public:
 
 private:
     Event& mEvent;
-};
-
-/**
- * @class WindowClosedEvent: A class used to represent a window closed event.
- */
-class WindowClosedEvent final : public Event
-{
-public:
-    EVENT_CLASS_TYPE(WINDOW_CLOSE)
-};
-
-/**
- * @class MouseEvent: A class used to represent a mouse event.
- */
-class MouseEvent : public Event
-{
-public:
-    MouseEvent(const float x, const float y)
-        : mX(x)
-        , mY(y)
-    { /* Empty. */ }
-
-    inline float GetXPos() const { return mX; }
-    inline float GetYPos() const { return mY; }
-protected:
-    float mX = 0.0f;
-    float mY = 0.0f;
-};
-
-/**
- * @class MouseEvent: A class used to represent a mouse moved event.
- */
-class MouseMovedEvent final : public MouseEvent
-{
-public:
-    inline MouseMovedEvent(const float x, const float y)
-        : MouseEvent(x, y)
-    { /* Empty. */ }
-
-    EVENT_CLASS_TYPE(MOUSE_MOVE)
 };
 
 } // Namespace Scarlett.

@@ -3,14 +3,23 @@
 
 #include <glfw/glfw3.h>
 
+#include "Core/Events/MouseEvents.h"
+#include "Core/Events/KeyboardEvents.h"
+#include "Core/Events/ApplicationEvents.h"
+
 namespace Scarlett
 {
 
-static void GlfwErrorCallback(int error, const char* description)
+namespace
+{
+
+void GlfwErrorCallback(int error, const char* description)
 {
     SCARLETT_FLOG("{0}", description);
     __debugbreak();
 }
+
+} // Anonymous namespace.
 
 bool WindowManager::mInitialized = false;
 
@@ -62,9 +71,9 @@ Window* WindowManager::CreateWindowInternal(const WindowProperties& windowProper
         }
     });
 
-    glfwSetCursorPosCallback(window, [](GLFWwindow* win, double x, double y)
+    glfwSetCursorPosCallback(window, [](GLFWwindow* win, const double x, const double y)
     {
-        WindowProperties& data = *static_cast<WindowProperties*>(glfwGetWindowUserPointer(win));
+        const WindowProperties& data = *static_cast<WindowProperties*>(glfwGetWindowUserPointer(win));
 
         if (data.eventCallback)
         {
@@ -73,16 +82,77 @@ Window* WindowManager::CreateWindowInternal(const WindowProperties& windowProper
         }
     });
 
+    glfwSetMouseButtonCallback(window, [](GLFWwindow* win, const int button, const int action, const int mods)
+    {
+        const WindowProperties& data = *static_cast<WindowProperties*>(glfwGetWindowUserPointer(win));
+
+        switch (action)
+        {
+        case GLFW_PRESS:
+        {
+            MouseButtonPressedEvent event(button);
+            data.eventCallback(event);
+            break;
+        }
+        case GLFW_RELEASE:
+        {
+            MouseButtonReleasedEvent event(button);
+            data.eventCallback(event);
+            break;
+        }
+        default:
+            SCARLETT_WLOG("Mouse callback action that is not captured.");
+            break;
+        }
+        });
+
+    glfwSetKeyCallback(window, [](GLFWwindow* win, const int key, const int scanCode, const int action, const int mods)
+    {
+        const WindowProperties& data = *static_cast<WindowProperties*>(glfwGetWindowUserPointer(win));
+
+        switch(action)
+        {
+        case GLFW_PRESS:
+        {
+            KeyPressedEvent event(key, 0);
+            data.eventCallback(event);
+            break;
+        }
+        case GLFW_RELEASE:
+        {
+            KeyReleasedEvent event(key);
+            data.eventCallback(event);
+            break;
+        }
+        case GLFW_REPEAT:
+        {
+            KeyPressedEvent event(key, 1);
+            data.eventCallback(event);
+            break;
+        }
+        default:
+            SCARLETT_WLOG("Key callback action that is not captured.");
+            break;
+        }
+    });
+
+    glfwSetCharCallback(window, [](GLFWwindow* win, const uint32 keycode)
+    {
+        const WindowProperties& data = *static_cast<WindowProperties*>(glfwGetWindowUserPointer(win));
+
+        KeyTypedEvent event(keycode);
+        data.eventCallback(event);
+    });
+
     return windowHandle;
 }
 
 void WindowManager::DestroyWindow(const Window* window)
 {
-    SCARLETT_DLOG("Destoryed window.");
+    SCARLETT_DLOG("Destroyed window.");
 
     delete window;
     window = nullptr;
 }
-
 
 } // Namespace Scarlett.
