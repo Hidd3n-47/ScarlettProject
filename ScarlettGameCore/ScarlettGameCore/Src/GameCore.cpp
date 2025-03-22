@@ -13,35 +13,34 @@ GameCore* GameCore::mInstance = new GameCore();
 
 void GameCore::Init()
 {
-	Scarlett::Log::Init(true, "ScarlettGameCore");
+    Scarlett::Log::Init(true, "ScarlettGameCore");
 
-	mCurrentScene = std::make_unique<ScarlEntt::Scene>();
+    mCurrentScene = std::make_unique<ScarlEntt::Scene>();
 
-	mCurrentScene->RegisterComponent<Tag>();
-	mCurrentScene->RegisterComponent<Transform>();
-	mCurrentScene->RegisterComponent<SquareSprite>();
+    mCurrentScene->RegisterComponent<Tag>();
+    mCurrentScene->RegisterComponent<Transform>();
+    mCurrentScene->RegisterComponent<SquareSprite>();
 
-	Scarlett::Log::GetLogger()->info("Scarlett Game Core initialized");
+    Scarlett::Log::GetLogger()->info("Scarlett Game Core initialized");
 }
 
 void GameCore::Destroy()
 {
-	delete mInstance;
-	mInstance = nullptr;
+    delete mInstance;
+    mInstance = nullptr;
 
-	Scarlett::Log::GetLogger()->info("Scarlett Game Core destroyed");
+    Scarlett::Log::GetLogger()->info("Scarlett Game Core destroyed");
 }
 
 ScarlEntt::EntityHandle GameCore::CreateEntity() const
 {
-	ScarlEntt::EntityHandle ent = mCurrentScene->CreateEntity();
+    const ScarlEntt::EntityHandle ent = mCurrentScene->CreateEntity();
 
-	ScarlettStl::String entityName = { "Entity " + std::to_string(ent.GetId())};
-	ent.AddComponent<Transform>();
-	ent.AddComponent<Tag>(entityName, ent);
-	ent.AddComponent<SquareSprite>();
+    (void)ent.AddComponent<Transform>();
+    (void)ent.AddComponent<Tag>(ScarlettStl::String{ "Entity " + std::to_string(ent.GetId()) }, ent);
+    (void)ent.AddComponent<SquareSprite>();
 
-	return ent;
+    return ent;
 }
 
 } // Namespace ScarlettGame.

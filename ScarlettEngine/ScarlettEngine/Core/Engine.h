@@ -1,12 +1,15 @@
 #pragma once
 
-#include "Events/Event.h"
-#include "Events/ApplicationEvents.h"
+#include "Types/Ref.h"
 
 namespace Scarlett
 {
 
+class Event;
+class Layer;
 class Window;
+class LayerStack;
+class WindowLayer;
 class VulkanRenderer;
 class VulkanRendererEditor;
 
@@ -27,15 +30,18 @@ public:
     void Run() const;
     void DestroyEngine();
 
+    inline void WindowClosed() { mRunning = false; }
 private:
     static Engine* mInstance;
 
-    Window* mMainWindow;
+    Window* mMainWindow     = nullptr;
+    LayerStack* mLayerStack = nullptr;
+
+    Ref<Layer> mWindowLayer;
 
     bool mRunning;
 
-    void OnEvent(Event& e);
-    bool OnWindowClose(const WindowClosedEvent& e);
+    void OnEvent(Event& e) const;
 };
 
 Engine* CreateEngine();

@@ -1,6 +1,6 @@
--- ---------------------------- ScarlEnttTests project.
-project "ScarlEnttTests"
-    location "ScarlEnttTests"
+-- ---------------------------- ScarlettEngineTests project.
+project "ScarlettEngineTests"
+    location "ScarlettEngineTests"
     kind "ConsoleApp"
     language "C++"
     staticruntime "On"
@@ -19,13 +19,13 @@ project "ScarlEnttTests"
     {
         "$(SolutionDir)Tests/%{prj.name}/%{prj.name}/",
         "$(SolutionDir)Tests/ScarlettTestProject/",
-        "$(SolutionDir)ScarlEntt/ScarlEntt/",
+        "$(SolutionDir)ScarlettEngine/ScarlettEngine/",
     }
 
     links
     {
-        "ScarlettTestProject",
-        "ScarlEntt"
+       "ScarlettTestProject",
+       "ScarlettEngine"
     }
 
     filter "system:windows"

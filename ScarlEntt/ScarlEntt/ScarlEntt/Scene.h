@@ -25,7 +25,7 @@ public:
     Scene& operator=(const Scene& )   = delete;
 
     /**
-    * @brief Create an entity and get a@code EntityHandle@endcode to the created entity.
+    * @brief Create an entity and get a \c EntityHandle to the created entity.
     * @see EntityHandle
     * @return A handle to the created entity.
     */
@@ -45,7 +45,7 @@ public:
 
     /**
     * @brief Register a system. Registering a system adds it the update queue with required priority.
-    * @tparam System The class of the System that is being registered. Note that this class must inherit from@code ISystem@endcode.
+    * @tparam System The class of the System that is being registered. Note that this class must inherit from \c ISystem.
     * @param properties The properties used to initialize the system. @see ISystemProperties.
     * @param priority The priority that the system is updated at. The lower the priority, the sooner it will be updated, i.e. priority 0 will be updated before priority 1.
     */
@@ -54,14 +54,14 @@ public:
 
     /**
     * @brief Register a system. Registering a system adds it the update queue with required priority.
-    * @tparam System The class of the System that is being registered. Note that this class must inherit from@code ISystem@endcode.
+    * @tparam System The class of the System that is being registered. Note that this class must inherit from \c ISystem.
     * @param priority The priority that the system is updated at. The lower the priority, the sooner it will be updated, i.e. priority 0 will be updated before priority 1.
     */
     template <typename System>
     inline void RegisterSystem(const uint32 priority = std::numeric_limits<uint32>::max()) { this, mSystemManager.RegisterSystem<System>(this, &mComponentManager, nullptr, priority); }
 
     /**
-    * @brief Get a reference to the@code ComponentManager@endcode of the scene.
+    * @brief Get a reference to the \c ComponentManager of the scene.
     * @see ComponentManager
     * @return A reference to the component manager of the scene.
     */

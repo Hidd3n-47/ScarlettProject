@@ -20,7 +20,7 @@ public:
     GameCore& operator=(GameCore&&)         = delete;
     GameCore& operator=(const GameCore&)    = delete;
 
-	static inline GameCore& Instance() { return *mInstance; }
+    static inline GameCore& Instance() { return *mInstance; }
 
     void Init();
     static void Destroy();
@@ -30,7 +30,7 @@ public:
     [[nodiscard]] ScarlEntt::Scene* GetActiveScene() const { return mCurrentScene.get(); }
 private:
 
-	static GameCore* mInstance;
+    static GameCore* mInstance;
 
     std::unique_ptr<ScarlEntt::Scene> mCurrentScene = nullptr;
 };

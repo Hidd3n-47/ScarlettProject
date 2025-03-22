@@ -1,7 +1,5 @@
 ﻿#pragma once
 
-#include <ScarlettTestProject/Core/TestRegistry.h>
-
 #include <ScarlEntt/Scene.h>
 
 #include "Components.h"
@@ -35,6 +33,8 @@ public:
 
     inline static bool SystemUpdateWorksCorrectlyForOneTick()
     {
+        constexpr int NUM_ENTITIES          = 5;
+
         bool passed = true;
 
         ScarlEntt::Scene scene;
@@ -42,17 +42,17 @@ public:
         scene.RegisterSystem<SystemChangeComponentA_Value>();
         scene.RegisterComponent<ComponentA>();
 
-        for (ScarlEntt::EntityId i{0}; i < 5; ++i)
+        for (ScarlEntt::EntityId i{0}; i < NUM_ENTITIES; ++i)
         {
             ScarlEntt::EntityHandle entity = scene.CreateEntity();
-            entity.AddComponent<ComponentA>(0);
+            (void)entity.AddComponent<ComponentA>(0);
         }
 
         scene.Update();
 
         auto& components = scene.GetComponentManager()->GetComponentArray<ComponentA>();
 
-        passed &= components.Size() == 5;
+        passed &= components.Size() == NUM_ENTITIES;
         for (ScarlEntt::ComponentId i{0}; i < components.Size(); ++i)
         {
             passed &= components[i].value == 200;
@@ -63,6 +63,8 @@ public:
 
     inline static bool SystemUpdateWorksCorrectlyForFiveTicks()
     {
+        constexpr int NUM_ENTITIES          = 5;
+
         bool passed = true;
 
         ScarlEntt::Scene scene;
@@ -70,20 +72,20 @@ public:
         scene.RegisterSystem<SystemChangeComponentA_Value>();
         scene.RegisterComponent<ComponentA>();
 
-        for (ScarlEntt::EntityId i{0}; i < 5; ++i)
+        for (ScarlEntt::EntityId i{0}; i < NUM_ENTITIES; ++i)
         {
             ScarlEntt::EntityHandle entity = scene.CreateEntity();
-            entity.AddComponent<ComponentA>(0);
+            (void)entity.AddComponent<ComponentA>(0);
         }
 
-        for (int i{0}; i < 5; ++i)
+        for (int i{0}; i < NUM_ENTITIES; ++i)
         {
             scene.Update();
         }
 
         auto& components = scene.GetComponentManager()->GetComponentArray<ComponentA>();
 
-        passed &= components.Size() == 5;
+        passed &= components.Size() == NUM_ENTITIES;
         for (ScarlEntt::ComponentId i{0}; i < components.Size(); ++i)
         {
             passed &= components[i].value == 1000;
@@ -94,6 +96,8 @@ public:
 
     inline static bool SystemUpdateWorksCorrectlyForOneTick_WithPriorities()
     {
+        constexpr int NUM_ENTITIES = 3;
+
         bool passed = true;
 
         ScarlEntt::Scene scene;
@@ -102,7 +106,7 @@ public:
         scene.RegisterSystem<SystemHigherPriority>(uint32_t{0});
         scene.RegisterComponent<ComponentMatrix>();
 
-        for (ScarlEntt::EntityId i{0}; i < 3; ++i)
+        for (ScarlEntt::EntityId i{0}; i < NUM_ENTITIES; ++i)
         {
             ScarlEntt::EntityHandle entity = scene.CreateEntity();
             entity.AddComponent<ComponentMatrix>(1.0f + static_cast<float>(i), 2.0f + static_cast<float>(i), 3.0f + static_cast<float>(i), 4.0f + static_cast<float>(i));
@@ -112,7 +116,7 @@ public:
 
         auto& components = scene.GetComponentManager()->GetComponentArray<ComponentMatrix>();
 
-        passed &= components.Size() == 3;
+        passed &= components.Size() == NUM_ENTITIES;
 
         // Entity 1.
         constexpr ComponentMatrix ent1Solution { { { 23.0f, 36.0f }, { 59.0f, 92.0f } } };
@@ -131,6 +135,8 @@ public:
 
     inline static bool SystemUpdateWorksCorrectlyForThreeTick_WithPriorities()
     {
+        constexpr int NUM_ENTITIES = 3;
+
         bool passed = true;
 
         ScarlEntt::Scene scene;
@@ -139,7 +145,7 @@ public:
         scene.RegisterSystem<SystemHigherPriority>(uint32_t{0});
         scene.RegisterComponent<ComponentMatrix>();
 
-        for (ScarlEntt::EntityId i{0}; i < 3; ++i)
+        for (ScarlEntt::EntityId i{0}; i < NUM_ENTITIES; ++i)
         {
             ScarlEntt::EntityHandle entity = scene.CreateEntity();
             entity.AddComponent<ComponentMatrix>(1.0f + static_cast<float>(i), 2.0f + static_cast<float>(i), 3.0f + static_cast<float>(i), 4.0f + static_cast<float>(i));
@@ -151,7 +157,7 @@ public:
         }
         auto& components = scene.GetComponentManager()->GetComponentArray<ComponentMatrix>();
 
-        passed &= components.Size() == 3;
+        passed &= components.Size() == NUM_ENTITIES;
 
         // Entity 1.
         constexpr ComponentMatrix ent1Solution { { { 9967.0f, 15564.0f }, { 25531.0f, 39868.0f } } };
@@ -170,6 +176,8 @@ public:
 
     inline static bool SystemInitializedWithProperties()
     {
+        constexpr int NUM_ENTITIES = 5;
+
         bool passed = true;
 
         ScarlEntt::Scene scene;
@@ -178,10 +186,10 @@ public:
         scene.RegisterSystem<SystemWithInitialParameters>(&properties, 0);
         scene.RegisterComponent<ComponentA>();
 
-        for (ScarlEntt::EntityId i{0}; i < 5; ++i)
+        for (ScarlEntt::EntityId i{0}; i < NUM_ENTITIES; ++i)
         {
             ScarlEntt::EntityHandle entity = scene.CreateEntity();
-            entity.AddComponent<ComponentA>(0);
+            (void)entity.AddComponent<ComponentA>(0);
         }
 
         scene.Update();

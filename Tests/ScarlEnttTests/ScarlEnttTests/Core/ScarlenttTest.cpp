@@ -19,15 +19,15 @@ public:
 
     inline void RegisterTests() override
     {
-        EntityTesting           entityTesting(this);
-        EntityHandleTesting     entityHandleTesting(this);
-        ComponentTesting        componentTesting(this);
-        SystemTesting           systemTesting(this);
+        EntityTesting           (this);
+        EntityHandleTesting     (this);
+        ComponentTesting        (this);
+        SystemTesting           (this);
     }
 
 };
 
-Scarlett::TestRegistry* Scarlett::CreateTestEnvironment()
+Scarlett::TestRegistry* Scarlett::CreateTestEnvironment()  // NOLINT(clang-diagnostic-extra-qualification)
 {
     return new ScarlEnttTest();
 }

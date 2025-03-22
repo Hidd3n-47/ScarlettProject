@@ -1,6 +1,5 @@
 ﻿#pragma once
 
-#include <complex.h>
 #include <ScarlEntt/Scene.h>
 
 #include "Components.h"
@@ -20,18 +19,20 @@ public:
 
     inline static bool RequestingFiftyEntities()
     {
+        constexpr int NUM_ENTITIES = 50;
+
         bool passed = true;
         ScarlEntt::Scene scene;
 
         // Create the entities.
-        ScarlEntt::EntityHandle entities[50];
+        ScarlEntt::EntityHandle entities[NUM_ENTITIES];
         for (ScarlEntt::EntityHandle& entity : entities)
         {
             entity = scene.CreateEntity();
         }
 
         // Check the generated entity ID's.
-        for (ScarlEntt::EntityId i{0}; i < 50; ++i)
+        for (ScarlEntt::EntityId i{0}; i < NUM_ENTITIES; ++i)
         {
             // This is a 'hacky' way to get the EntityId form EntityHandle without implementing a get method.
             // Since we know the memory layout of EntityId, and that the first member variable is the id,
@@ -44,19 +45,21 @@ public:
 
     inline static bool AddingComponentsToEntityHandles()
     {
+        constexpr int NUM_ENTITIES = 5;
+
         bool passed = true;
         ScarlEntt::Scene scene;
 
         scene.RegisterComponent<ComponentA>();
 
-        ScarlEntt::EntityHandle entities[5];
-        for (int i{0}; i < 5; ++i)
+        ScarlEntt::EntityHandle entities[NUM_ENTITIES];
+        for (int i{0}; i < NUM_ENTITIES; ++i)
         {
             entities[i] = scene.CreateEntity();
             entities[i].AddComponent<ComponentA>()->value = i;
         }
 
-        for (int i{0}; i < 5; ++i)
+        for (int i{0}; i < NUM_ENTITIES; ++i)
         {
             passed &= entities[i].GetComponent<ComponentA>()->value == i;
         }
@@ -66,19 +69,21 @@ public:
 
     inline static bool AddingComponentsWithArgsToEntityHandles()
     {
+        constexpr int NUM_ENTITIES = 5;
+
         bool passed = true;
         ScarlEntt::Scene scene;
 
         scene.RegisterComponent<ComponentA>();
 
-        ScarlEntt::EntityHandle entities[5];
-        for (int i{0}; i < 5; ++i)
+        ScarlEntt::EntityHandle entities[NUM_ENTITIES];
+        for (int i{0}; i < NUM_ENTITIES; ++i)
         {
             entities[i] = scene.CreateEntity();
-            entities[i].AddComponent<ComponentA>(i);
+            (void)entities[i].AddComponent<ComponentA>(i);
         }
 
-        for (int i{0}; i < 5; ++i)
+        for (int i{0}; i < NUM_ENTITIES; ++i)
         {
             passed &= entities[i].GetComponent<ComponentA>()->value == i;
         }
@@ -88,20 +93,22 @@ public:
 
     inline static bool AddingComponentsByMoveSemanticsToEntityHandles()
     {
+        constexpr int NUM_ENTITIES = 5;
+
         bool passed = true;
         ScarlEntt::Scene scene;
 
         scene.RegisterComponent<ComponentA>();
 
-        ScarlEntt::EntityHandle entities[5];
-        for (int i{0}; i < 5; ++i)
+        ScarlEntt::EntityHandle entities[NUM_ENTITIES];
+        for (int i{0}; i < NUM_ENTITIES; ++i)
         {
             ComponentA component{ i };
             entities[i] = scene.CreateEntity();
-            entities[i].AddComponent<ComponentA>(component);
+            (void)entities[i].AddComponent<ComponentA>(component);
         }
 
-        for (int i{0}; i < 5; ++i)
+        for (int i{0}; i < NUM_ENTITIES; ++i)
         {
             passed &= entities[i].GetComponent<ComponentA>()->value == i;
         }
@@ -111,13 +118,17 @@ public:
 
     inline static bool ComponentsUpdateByReferenceWithHandles()
     {
+        constexpr int NUM_ENTITIES          = 5;
+        constexpr int MULTIPLY_VALUE        = 10;
+        constexpr int ENTITY_THREE_VALUE    = 1000;
+
         bool passed = true;
         ScarlEntt::Scene scene;
 
         scene.RegisterComponent<ComponentA>();
 
-        ScarlEntt::EntityHandle entities[5];
-        for (int i{0}; i < 5; ++i)
+        ScarlEntt::EntityHandle entities[NUM_ENTITIES];
+        for (int i{0}; i < NUM_ENTITIES; ++i)
         {
             entities[i] = scene.CreateEntity();
             entities[i].AddComponent<ComponentA>()->value = i;
@@ -125,48 +136,50 @@ public:
 
         auto* componentEntityThree = entities[3].GetComponent<ComponentA>();
 
-        for (int i{0}; i < 5; ++i)
+        for (int i{0}; i < NUM_ENTITIES; ++i)
         {
-            entities[i].GetComponent<ComponentA>()->value *= 10;
+            entities[i].GetComponent<ComponentA>()->value *= MULTIPLY_VALUE;
         }
 
         for (int i{0}; i < 5; ++i)
         {
-            passed &= entities[i].GetComponent<ComponentA>()->value == i * 10;
+            passed &= entities[i].GetComponent<ComponentA>()->value == i * MULTIPLY_VALUE;
         }
 
-        componentEntityThree->value = 1000;
+        componentEntityThree->value = ENTITY_THREE_VALUE;
 
-        passed &= entities[3].GetComponent<ComponentA>()->value == 1000;
+        passed &= entities[3].GetComponent<ComponentA>()->value == ENTITY_THREE_VALUE;
 
         return passed;
     }
 
     inline static bool AddingAndRemovingComponentsWithHandles()
     {
+        constexpr int NUM_ENTITIES          = 5;
+
         bool passed = true;
         ScarlEntt::Scene scene;
 
         scene.RegisterComponent<ComponentA>();
 
-        ScarlEntt::EntityHandle entities[5];
-        for (int i{0}; i < 5; ++i)
+        ScarlEntt::EntityHandle entities[NUM_ENTITIES];
+        for (int i{0}; i < NUM_ENTITIES; ++i)
         {
             entities[i] = scene.CreateEntity();
             entities[i].AddComponent<ComponentA>()->value = i;
         }
 
-        for (int i{0}; i < 5; ++i)
+        for (int i{0}; i < NUM_ENTITIES; ++i)
         {
             passed &= entities[i].GetComponent<ComponentA>()->value == i;
         }
 
-        for (int i{0}; i < 5; ++i)
+        for (int i{0}; i < NUM_ENTITIES; ++i)
         {
             entities[i].RemoveComponent<ComponentA>();
         }
 
-        for (int i{0}; i < 5; ++i)
+        for (int i{0}; i < NUM_ENTITIES; ++i)
         {
             passed &= entities[i].GetComponent<ComponentA>() == nullptr;
         }

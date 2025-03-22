@@ -34,7 +34,7 @@ public:
     /**
      * @brief Destroy a window.
      * @param window The widow that is being destroyed. <br/>
-     * Note the window will become@code nullptr@endcode after called.
+     * Note the window will become \c nullptr after called.
      */
     static void     DestroyWindow(const Window* window);
 

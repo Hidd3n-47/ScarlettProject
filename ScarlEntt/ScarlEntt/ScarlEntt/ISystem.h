@@ -10,7 +10,7 @@ class ComponentManager;
 /**
  * @class ISystemProperties: An interface for properties that are to be passed into<br/>
  * the system during initialization. The properties can be used in the implemented <br/>
- * @code InitSystem@endcode of the system by using a re-interpret cast to the correct <br/>
+ * \c InitSystem of the system by using a re-interpret cast to the correct <br/>
  * type of property.
  */
 struct ISystemProperties { };

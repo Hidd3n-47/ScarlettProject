@@ -1,6 +1,9 @@
 #include "ScarlettEnginePch.h"
 #include "Engine.h"
 
+#include "WindowLayer.h"
+#include "Input/LayerStack.h"
+
 #include "Core/Window/WindowManager.h"
 #include "Rendering/Vulkan/VulkanRendererEditor.h"
 
@@ -22,6 +25,8 @@ void Engine::InitEngine()
 
     Log::Init();
 
+    mLayerStack = new LayerStack();
+
     std::string windowConfiguration;
 #if defined(SCARLETT_DEBUG)
     windowConfiguration = " - Dev";
@@ -37,6 +42,7 @@ void Engine::InitEngine()
     winProps.title += windowConfiguration;
 
     mMainWindow = WindowManager::CreateWindowInternal(winProps);
+    mWindowLayer = mLayerStack->PushLayer<WindowLayer>();
 
     mMainWindow->SetEventCallback(SCARLETT_BIND_FUNCTION(Engine::OnEvent));
 
@@ -67,7 +73,7 @@ void Engine::InitEngine()
     square4.GetComponent<ScarlettGame::SquareSprite>()->color = glm::vec4(1.0f, 0.0f, 1.0f, 1.0f);
 
     auto square5 = ScarlettGame::GameCore::Instance().CreateEntity();
-    auto transform = square5.GetComponent<ScarlettGame::Transform>();
+    const auto transform = square5.GetComponent<ScarlettGame::Transform>();
     transform->translation = glm::vec3(0.0f, 0.0f, 0.0f);
     transform->scale = glm::vec3(0.5f, 1.f, 1.0f);
     transform->rotation = glm::vec3(0.0f, 0.0f, 45.0f);
@@ -101,19 +107,16 @@ void Engine::DestroyEngine()
     WindowManager::DestroyWindow(mMainWindow);
     WindowManager::TerminateApi();
 
+    mLayerStack->PopLayer(mWindowLayer);
+    delete mLayerStack;
+    mLayerStack = nullptr;
+
     SCARLETT_DLOG("Engine Destroyed.");
 }
 
-void Engine::OnEvent(Event& e)
+void Engine::OnEvent(Event& e) const
 {
-    EventDispatcher dispatcher(e);
-    dispatcher.Dispatch<WindowClosedEvent>(SCARLETT_BIND_FUNCTION(Engine::OnWindowClose));
-}
-
-bool Engine::OnWindowClose(const WindowClosedEvent& e)
-{
-    mRunning = false;
-    return true;
+    mLayerStack->OnEvent(e);
 }
 
 } // Namespace Scarlett.

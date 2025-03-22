@@ -11,8 +11,8 @@ namespace Scarlett
  * @class TestRegistry:
  * A class used to register test methods for when running unit tests. <br/>
  * In order to have a project for unit tests, link to this and then <br/>
- * have a local class that inherits from@code TestRegistry@endcode and <br/>
- * implement external@code CreateTestEnvironment@endcode to return local class. <br/>
+ * have a local class that inherits from \c TestRegistry and <br/>
+ * implement external \c CreateTestEnvironment to return local class. <br/>
  */
 class TestRegistry
 {

@@ -1,0 +1,42 @@
+﻿#pragma once
+
+namespace Scarlett
+{
+/**
+ * @class Ref: A class used to hold a reference to a pointer such that the ownership is not transferred.<br/>
+ * Having a \c Ref to a pointer allows you to access the pointer and its methods but not call \c delete on it.
+ * @tparam T: The class of the pointer.
+ */
+template <typename T>
+class Ref
+{
+public:
+    Ref()      = default;
+    ~Ref()     = default;
+
+    Ref(const Ref&)             = delete;
+    Ref(Ref&&)                  = delete;
+    Ref& operator=(Ref&&)       = default;
+    Ref& operator=(const Ref&)  = default;
+
+    inline explicit Ref(T* reference)
+        : mReferencePtr(reference)
+    { /* Empty. */ }
+
+    /**
+     * A method used to check if the pointer is still valid.
+     * @return \c true if the reference is still valid, \c false otherwise.
+     */
+    inline bool IsRefValid() const { return mReferencePtr != nullptr; }
+    /**
+     * A method used to invalidate a pointer.
+     */
+    inline void Invalidate() { mReferencePtr = nullptr;  }
+
+    inline T* operator->()              { return mReferencePtr; }
+    inline const T* operator->() const  { return mReferencePtr; }
+private:
+    T* mReferencePtr = nullptr;
+};
+
+} // Namespace Scarlett.

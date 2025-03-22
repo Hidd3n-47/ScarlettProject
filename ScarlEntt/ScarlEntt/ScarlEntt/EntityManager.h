@@ -37,7 +37,7 @@ public:
     /**
      * @brief Check if an entity is valid/alive.
      * @param entityId The entity ID being checked if it's valid.
-     * @return @code true@endcode if entity is valid,@code false@endcode otherwise.
+     * @return \c true if entity is valid,\c false otherwise.
      */
     [[nodiscard]] inline static bool IsAlive(const EntityId entityId) { return entityId != Entity::InvalidEntityId; }
 private:

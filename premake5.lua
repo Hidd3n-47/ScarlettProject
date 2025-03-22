@@ -26,4 +26,5 @@ include "deps/scarlettLogger/"
 
 -- Test Directories.
 include "Tests/ScarlettTestProject/"
+include "Tests/ScarlettEngineTests/"
 include "Tests/ScarlEnttTests/"

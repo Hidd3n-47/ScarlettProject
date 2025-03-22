@@ -1,7 +1,5 @@
 #pragma once
 
-#include <functional>
-
 namespace Scarlett
 {
 
@@ -46,7 +44,7 @@ public:
     [[nodiscard]] virtual EventType GetEventType() const = 0;
     /**
      * Get if the event is handled or not.
-     * @return@code true@endcode if the event is handled,@code false@endcode otherwise.
+     * @return \c true if the event is handled, \c false otherwise.
      */
     [[nodiscard]] inline bool IsHandled() const { return mHandled; }
 
@@ -66,10 +64,10 @@ public:
 
     /**
      * Dispatch an event class to a respective function callback.
-     * @tparam T Generic interface of the events where@code T@endcode inherits from@code Event@endcode.
+     * @tparam T Generic interface of the events where \c T inherits from \c Event.
      * @see Event
      * @param function The callback function the event is being dispatched to.
-     * @return@code true@endcode if the event was successfully dispatched to a callback method,@code false@endcode otherwise.
+     * @return \c true if the event was successfully dispatched to a callback method, \c false otherwise.
      */
     template<typename T>
     inline bool Dispatch(const std::function<bool(const T&)>& function)
