@@ -8,7 +8,8 @@ namespace ScarlettEditor
 class PropertiesPanel final : public Panel
 {
 public:
-    explicit inline PropertiesPanel(IView* view, const PanelProperties& properties = PanelProperties()) : Panel{ view, properties } { /* Empty */ }
+    explicit inline PropertiesPanel(IView* view) : Panel{ view, {.title = "Properties" } } { /* Empty */ }
+
     void Render() override;
 
 };

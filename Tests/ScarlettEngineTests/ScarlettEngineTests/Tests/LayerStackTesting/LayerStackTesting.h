@@ -24,8 +24,8 @@ public:
         bool passed = true;
 
         Scarlett::LayerStack stack;
-        Scarlett::Ref<Scarlett::Layer> layer1 = stack.PushLayer<Scarlett::EmptyLayer>();
-        Scarlett::Ref<Scarlett::Layer> layer2 = stack.PushLayer<Scarlett::EmptyLayer>();
+        Scarlett::WeakRef<Scarlett::Layer> layer1 = stack.PushLayer<Scarlett::EmptyLayer>();
+        Scarlett::WeakRef<Scarlett::Layer> layer2 = stack.PushLayer<Scarlett::EmptyLayer>();
 
         passed &= layer1->GetId() == 0;
         passed &= layer2->GetId() == 1;
@@ -41,8 +41,8 @@ public:
         bool passed;
 
         Scarlett::LayerStack stack;
-        Scarlett::Ref<Scarlett::Layer> layer1 = stack.PushLayer<Scarlett::EmptyLayer>();
-        Scarlett::Ref<Scarlett::Layer> layer2 = stack.PushLayer<Scarlett::EmptyLayer>();
+        Scarlett::WeakRef<Scarlett::Layer> layer1 = stack.PushLayer<Scarlett::EmptyLayer>();
+        Scarlett::WeakRef<Scarlett::Layer> layer2 = stack.PushLayer<Scarlett::EmptyLayer>();
 
         try
         {
@@ -63,8 +63,8 @@ public:
         bool passed;
 
         Scarlett::LayerStack stack;
-        Scarlett::Ref<Scarlett::Layer> layer1 = stack.PushLayer<Scarlett::EmptyLayer>();
-        Scarlett::Ref<Scarlett::Overlay> layer2 = stack.PushOverlay<Scarlett::EmptyLayer>();
+        Scarlett::WeakRef<Scarlett::Layer> layer1 = stack.PushLayer<Scarlett::EmptyLayer>();
+        Scarlett::WeakRef<Scarlett::Overlay> layer2 = stack.PushOverlay<Scarlett::EmptyLayer>();
 
         try
         {
@@ -85,7 +85,7 @@ public:
         bool passed;
 
         Scarlett::LayerStack stack;
-        Scarlett::Ref<Scarlett::Layer> layer1 = stack.PushLayer<Scarlett::EmptyLayer>();
+        Scarlett::WeakRef<Scarlett::Layer> layer1 = stack.PushLayer<Scarlett::EmptyLayer>();
 
         stack.PopLayer(layer1);
 
@@ -108,7 +108,7 @@ public:
         bool passed;
 
         Scarlett::LayerStack stack;
-        Scarlett::Ref<Scarlett::Overlay> layer1 = stack.PushOverlay<Scarlett::EmptyLayer>();
+        Scarlett::WeakRef<Scarlett::Overlay> layer1 = stack.PushOverlay<Scarlett::EmptyLayer>();
 
         stack.PopOverlay(layer1);
 

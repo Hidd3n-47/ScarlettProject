@@ -10,6 +10,7 @@
 
 #include "Views/Editor/ViewportCamera.h"
 #include "Views/Editor/View/EditorView.h"
+#include "Views/Editor/Panels/ViewportPanel.h"
 
 namespace ScarlettEditor
 {
@@ -31,7 +32,7 @@ bool EditorViewInputLayer::OnMouseButtonPressed(const Scarlett::MouseButtonPress
 {
     if (e.GetMouseButton() == Scarlett::KeyCode::MOUSE_BUTTON_2)
     {
-        if (mEditorView->IsHovered())
+        if (mEditorView->GetPanel<ViewportPanel>()->IsHovered())
         {
             mPanning = true;
             return true;

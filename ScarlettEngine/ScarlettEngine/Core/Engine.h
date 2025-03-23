@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Types/Ref.h"
+#include "Types/WeakRef.h"
 
 namespace Scarlett
 {
@@ -37,7 +37,7 @@ private:
     Window* mMainWindow     = nullptr;
     LayerStack* mLayerStack = nullptr;
 
-    Ref<Layer> mWindowLayer;
+    WeakRef<Layer> mWindowLayer;
 
     bool mRunning;
 

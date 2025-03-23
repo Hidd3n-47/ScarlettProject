@@ -2,24 +2,25 @@
 
 namespace Scarlett
 {
+
 /**
- * @class Ref: A class used to hold a reference to a pointer such that the ownership is not transferred.<br/>
+ * @class WeakRef: A class used to hold a reference to a pointer such that the ownership is not transferred.<br/>
  * Having a \c Ref to a pointer allows you to access the pointer and its methods but not call \c delete on it.
  * @tparam T: The class of the pointer.
  */
 template <typename T>
-class Ref
+class WeakRef
 {
 public:
-    Ref()      = default;
-    ~Ref()     = default;
+    WeakRef()      = default;
+    ~WeakRef()     = default;
 
-    Ref(const Ref&)             = delete;
-    Ref(Ref&&)                  = delete;
-    Ref& operator=(Ref&&)       = default;
-    Ref& operator=(const Ref&)  = default;
+    WeakRef(const WeakRef&)             = delete;
+    WeakRef(WeakRef&&)                  = delete;
+    WeakRef& operator=(WeakRef&&)       = default;
+    WeakRef& operator=(const WeakRef&)  = default;
 
-    inline explicit Ref(T* reference)
+    inline explicit WeakRef(T* reference)
         : mReferencePtr(reference)
     { /* Empty. */ }
 

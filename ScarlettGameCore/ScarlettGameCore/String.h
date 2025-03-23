@@ -9,25 +9,25 @@ namespace ScarlettStl
 class SCARLETT_GAME_CORE_API String
 {
 public:
-	String(const std::string& str)
-	{
-		*this = str;
-	}
+    explicit String(const std::string& str)
+    {
+        *this = str;
+    }
 
-	const char* c_str() const { return mStr; }
+    [[nodiscard]] const char* c_str() const { return mStr; }
 
-	String& operator=(const std::string& rhs)
-	{
-		size_t length = std::min(rhs.length(), (size_t)50);
-		for (int i{ 0 }; i < length; ++i)
-		{
-			mStr[i] = rhs[i];
-		}
+    String& operator=(const std::string& rhs)
+    {
+        const int length = std::min(static_cast<int>(rhs.length()), 50);
+        for (int i{ 0 }; i < length; ++i)
+        {
+            mStr[i] = rhs[i];
+        }
 
-		return *this;
-	}
+    return *this;
+    }
 private:
-	char mStr[50] = { " " };
+    char mStr[50] = { " " };
 };
 
 }

@@ -4,7 +4,7 @@
 
 #include <Src/PrimitiveTypes.h>
 
-#include "Core/Types/Ref.h"
+#include "Core/Types/WeakRef.h"
 #include "Core/Input/Layer.h"
 #include "Core/Events/Event.h"
 
@@ -42,7 +42,7 @@ public:
      * @return A reference to the \c Layer added to the layer stack.
      */
     template<typename layer, typename ...Args>
-    [[nodiscard]] Ref<Layer> PushLayer(Args ...args);
+    [[nodiscard]] WeakRef<Layer> PushLayer(Args ...args);
 
     /**
      * @brief Push an \c Overlay to the overlay stack.
@@ -51,20 +51,20 @@ public:
      * @return A reference to the \c Overlay added to the overlay stack.
      */
     template<typename overlay, typename... Args>
-    [[nodiscard]] Ref<Overlay> PushOverlay(Args ...args);
+    [[nodiscard]] WeakRef<Overlay> PushOverlay(Args ...args);
 
     /**
      * @brief Pop a \c Layer off the layer stack.
      * @throws std::runtime_error if \c Layer is not the most recently added layer to the stack.
      * @param layer A reference to the layer that is being popped of the layer stack.
      */
-    void PopLayer(Ref<Layer>& layer);
+    void PopLayer(WeakRef<Layer>& layer);
     /**
      * @brief Pop an \c Overlay off the overlay stack.
      * @throws std::runtime_error if \c Overlay is not the most recently added overlay to the stack.
      * @param overlay A reference to the overlay that is being popped of the overlay stack.
      */
-    void PopOverlay(Ref<Overlay>& overlay);
+    void PopOverlay(WeakRef<Overlay>& overlay);
 
     void OnEvent(Event& e) const;
 private:
@@ -93,18 +93,18 @@ inline LayerStack::~LayerStack()
 }
 
 template<typename layer, typename ...Args>
-inline Ref<Layer> LayerStack::PushLayer(Args ...args)
+inline WeakRef<Layer> LayerStack::PushLayer(Args ...args)
 {
     mLayers.emplace_back(new layer(std::forward<Args>(args)...));
 
     mLayers.back()->mId = mLayerId++;
     mLayers.back()->OnAttach();
 
-    return Ref<Layer>{ mLayers.back() };
+    return WeakRef<Layer>{ mLayers.back() };
 }
 
 template<typename overlay, typename ...Args>
-inline Ref<Overlay> LayerStack::PushOverlay(Args ...args)
+inline WeakRef<Overlay> LayerStack::PushOverlay(Args ...args)
 {
     // TODO: (OPT) Is double 'new' more overhead than inheritance.
     mOverlays.emplace_back(new Overlay{ .layer = new overlay(std::forward<Args>(args)...) });
@@ -112,10 +112,10 @@ inline Ref<Overlay> LayerStack::PushOverlay(Args ...args)
     mOverlays.back()->layer->mId = mLayerId++;
     mOverlays.back()->layer->OnAttach();
 
-    return Ref<Overlay>{ mOverlays.back() };
+    return WeakRef<Overlay>{ mOverlays.back() };
 }
 
-inline void LayerStack::PopLayer(Ref<Layer>& layer)
+inline void LayerStack::PopLayer(WeakRef<Layer>& layer)
 {
     // Todo Strip some of the testing in release builds.
 
@@ -136,7 +136,7 @@ inline void LayerStack::PopLayer(Ref<Layer>& layer)
     layer.Invalidate();
 }
 
-inline void LayerStack::PopOverlay(Ref<Overlay>& overlay)
+inline void LayerStack::PopOverlay(WeakRef<Overlay>& overlay)
 {
     // Todo Strip some of the testing in release builds.
 

@@ -1,13 +1,14 @@
 ﻿#pragma once
+
 #include "UI/Panel.h"
 
 namespace ScarlettEditor
 {
 
-class ScenePanel final : public Panel
+class ViewportPanel final : public Panel
 {
 public:
-    explicit inline ScenePanel(IView* view) : Panel{ view, {.title = "Scene" } } { /* Empty */ }
+    explicit inline ViewportPanel(IView* view) : Panel{ view, {.title = "Viewport" } } { /* Empty */ }
 
     void Render() override;
 private:

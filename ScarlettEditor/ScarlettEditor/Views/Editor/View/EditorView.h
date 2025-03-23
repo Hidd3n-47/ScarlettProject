@@ -28,17 +28,11 @@ public:
     EditorView& operator=(EditorView&&)         = delete;
     EditorView& operator=(const EditorView&)    = delete;
 
-    void Render() override;
-
     [[nodiscard]] inline SelectionManager& GetSelectionManager() { return mSelectionManager; }
 private:
-    void RenderViewport();
     SelectionManager mSelectionManager;
 
-    Panel* mPropertiesPanel;
-    Panel* mScenePanel;
-
-    Scarlett::Ref<Scarlett::Overlay> mEditorViewOverlay;
+    Scarlett::WeakRef<Scarlett::Overlay> mEditorViewOverlay;
 };
 
 } // Namespace ScarlettEditor.
