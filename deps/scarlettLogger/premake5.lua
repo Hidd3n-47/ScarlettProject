@@ -17,7 +17,7 @@ project "ScarlettLogger"
 	
 	includedirs
 	{
-		"$(SolutionDir)/deps/scarlettLogger/deps/"
+		"$(SolutionDir)/deps/ScarlettLogger/deps/"
 	}
 
     filter "system:windows"

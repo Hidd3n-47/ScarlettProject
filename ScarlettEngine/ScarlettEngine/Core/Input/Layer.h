@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include "Src/PrimitiveTypes.h"
+
 namespace Scarlett
 {
 
