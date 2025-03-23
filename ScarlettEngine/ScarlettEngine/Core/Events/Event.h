@@ -1,5 +1,7 @@
 #pragma once
 
+#define SCARLETT_BIND_FUNCTION(fn)[this](auto&&... args) -> decltype(auto) { return this->fn(std::forward<decltype(args)>(args)...); }
+
 namespace Scarlett
 {
 
@@ -11,6 +13,7 @@ enum class EventType
     WINDOW_CLOSE,
 
     MOUSE_MOVE,
+    MOUSE_SCROLL,
     MOUSE_BUTTON_PRESSED,
     MOUSE_BUTTON_RELEASED,
 

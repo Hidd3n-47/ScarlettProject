@@ -37,6 +37,26 @@ public:
 };
 
 /**
+ * @class MouseScrollEvent: A class used to represent a mouse scroll event.
+ */
+class MouseScrollEvent final : public Event
+{
+public:
+    inline MouseScrollEvent(const float x, const float y)
+        : mXOffset(x)
+        , mYOffset(y)
+    { /* Empty. */ }
+
+    EVENT_CLASS_TYPE(MOUSE_SCROLL)
+
+    [[nodiscard]] inline float GetXOffset() const { return mXOffset; }
+    [[nodiscard]] inline float GetYOffset() const { return mYOffset; }
+private:
+    float mXOffset = 0.0f;
+    float mYOffset = 0.0f;
+};
+
+/**
  * @class MouseButtonEvent: A class used to represent a mouse button event.
  */
 class MouseButtonEvent : public Event

@@ -11,6 +11,8 @@
 #include <ScarlettGameCore/Components/Transform.h>
 #include <ScarlettGameCore/Components/SquareSprite.h>
 
+#include <Editor/EditorManager.h>
+
 #include "Systems/SquareSpriteSystem.h"
 
 namespace Scarlett
@@ -116,6 +118,10 @@ void Engine::DestroyEngine()
 
 void Engine::OnEvent(Event& e) const
 {
+#ifdef SCARLETT_EDITOR_ENABLED
+    ScarlettEditor::EditorManager::Instance().OnEvent(e);
+#endif // SCARLETT_EDITOR_ENABLED.
+
     mLayerStack->OnEvent(e);
 }
 

@@ -13,7 +13,7 @@ class SCARLETT_GAME_CORE_API GameCore
 {
 public:
     GameCore() = default;
-    ~GameCore() = default;
+    ~GameCore();
 
     GameCore(const GameCore&)               = delete;
     GameCore(GameCore&&)                    = delete;
@@ -27,12 +27,12 @@ public:
 
     ScarlEntt::EntityHandle CreateEntity() const;
 
-    [[nodiscard]] ScarlEntt::Scene* GetActiveScene() const { return mCurrentScene.get(); }
+    [[nodiscard]] ScarlEntt::Scene* GetActiveScene() const { return mCurrentScene; }
 private:
 
     static GameCore* mInstance;
 
-    std::unique_ptr<ScarlEntt::Scene> mCurrentScene = nullptr;
+    ScarlEntt::Scene* mCurrentScene = nullptr;
 };
 
 } // Namespace ScarlettGame.

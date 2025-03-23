@@ -1,9 +1,5 @@
 #pragma once
 
-// This include is needed as LayerStack uses Engine's primitive types.
-// ReSharper disable once CppUnusedIncludeDirective
-#include <Src/PrimitiveTypes.h>
-
 #include "TestLayers.h"
 #include <Core/Input/LayerStack.h>
 

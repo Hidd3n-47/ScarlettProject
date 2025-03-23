@@ -11,11 +11,16 @@ namespace ScarlettGame
 
 GameCore* GameCore::mInstance = new GameCore();
 
+GameCore::~GameCore()
+{
+    delete mCurrentScene;
+}
+
 void GameCore::Init()
 {
     Scarlett::Log::Init(true, "ScarlettGameCore");
 
-    mCurrentScene = std::make_unique<ScarlEntt::Scene>();
+    mCurrentScene = new ScarlEntt::Scene();
 
     mCurrentScene->RegisterComponent<Tag>();
     mCurrentScene->RegisterComponent<Transform>();

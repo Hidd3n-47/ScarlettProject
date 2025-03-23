@@ -82,6 +82,14 @@ Window* WindowManager::CreateWindowInternal(const WindowProperties& windowProper
         }
     });
 
+    glfwSetScrollCallback(window, [](GLFWwindow* win, const double xOffset, const double yOffset)
+    {
+        const WindowProperties& data = *static_cast<WindowProperties*>(glfwGetWindowUserPointer(win));
+
+        MouseScrollEvent event(static_cast<float>(xOffset), static_cast<float>(yOffset));
+        data.eventCallback(event);
+    });
+
     glfwSetMouseButtonCallback(window, [](GLFWwindow* win, const int button, const int action, const int mods)
     {
         const WindowProperties& data = *static_cast<WindowProperties*>(glfwGetWindowUserPointer(win));
@@ -104,7 +112,7 @@ Window* WindowManager::CreateWindowInternal(const WindowProperties& windowProper
             SCARLETT_WLOG("Mouse callback action that is not captured.");
             break;
         }
-        });
+    });
 
     glfwSetKeyCallback(window, [](GLFWwindow* win, const int key, const int scanCode, const int action, const int mods)
     {

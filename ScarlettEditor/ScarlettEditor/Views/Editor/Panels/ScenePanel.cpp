@@ -6,9 +6,8 @@
 #include <ScarlettGameCore/Src/GameCore.h>
 #include <ScarlettGameCore/Components/Tag.h>
 
-
-#include "EditorView.h"
 #include "Editor/EditorManager.h"
+#include "Views/Editor/View/EditorView.h"
 
 namespace ScarlettEditor
 {

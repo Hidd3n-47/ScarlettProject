@@ -23,6 +23,9 @@ project "ScarlettEditor"
         "$(SolutionDir)%{prj.name}/%{prj.name}/",
         "$(SolutionDir)%{prj.name}/%{prj.name}/Src",
 
+        "$(SolutionDir)ScarlettEngine/",
+        "$(SolutionDir)ScarlettEngine/ScarlettEngine",
+
         "$(SolutionDir)deps/scarlettLogger/",
         "$(SolutionDir)deps/scarlettLogger/deps/",
         "$(SolutionDir)deps/imgui/",

@@ -4,7 +4,6 @@
 #include <Core/Events/Event.h>
 
 #include <Core/Events/KeyboardEvents.h>
-#include <Src/ScarlettEngineDefines.h>
 
 namespace Scarlett
 {

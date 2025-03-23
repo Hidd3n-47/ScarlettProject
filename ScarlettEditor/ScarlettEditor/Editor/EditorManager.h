@@ -4,6 +4,12 @@
 
 #include "Src/ScarlettEditor.h"
 
+namespace Scarlett
+{
+class Event;
+class LayerStack;
+}
+
 namespace ScarlettEditor
 {
 
@@ -12,21 +18,35 @@ class IView;
 class EDITOR_API EditorManager
 {
 public:
+    EditorManager() = default;
+    ~EditorManager();
+
+     EditorManager(const  EditorManager&)               = delete;
+     EditorManager( EditorManager&&)                    = delete;
+     EditorManager& operator=( EditorManager&&)         = delete;
+     EditorManager& operator=(const  EditorManager&)    = delete;
+
     static inline EditorManager& Instance() { return *mInstance; }
 
-    static void Init(ImGuiContext* uiContext, ImGuiMemAllocFunc* allocateFunction, ImGuiMemFreeFunc* freeFunction, void* data);
-    static void Destroy();
+    static void CreateInstance(ImGuiContext* uiContext, ImGuiMemAllocFunc* allocateFunction, ImGuiMemFreeFunc* freeFunction, void* data);
+    static void DestroyInstance();
+
+    void Init();
+
+    void OnEvent(Scarlett::Event& e) const;
 
     void RenderUi(const ImTextureID viewportTexture);
 
-    [[nodiscard]] ImTextureID           GetViewportTexture()     const { return mViewportTexture; }
+    [[nodiscard]] inline ImTextureID           GetViewportTexture()    const { return mViewportTexture; }
+    [[nodiscard]] inline Scarlett::LayerStack* GetLayerStack()         const { return mEditorLayerStack; }
+    [[nodiscard]] inline IView*                GetCurrentView()        const { return mCurrentView;}
 private:
-    static EditorManager* mInstance;
+    static EditorManager*   mInstance;
 
-    ImTextureID mViewportTexture = 0;
+    ImTextureID             mViewportTexture      = 0;
 
-    // Todo, fix from being static and made in the init.
-    static IView*      mCurrentView;
+    Scarlett::LayerStack*   mEditorLayerStack   = nullptr;
+    IView*                  mCurrentView        = nullptr;
 };
 
 } // Namespace ScarlettEditor.

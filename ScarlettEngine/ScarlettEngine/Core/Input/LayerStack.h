@@ -2,6 +2,8 @@
 
 #include <stdexcept>
 
+#include <Src/PrimitiveTypes.h>
+
 #include "Core/Types/Ref.h"
 #include "Core/Input/Layer.h"
 #include "Core/Events/Event.h"
@@ -39,8 +41,8 @@ public:
      * @tparam layer The class of the layer. This class must inherit from the base \c Layer class.
      * @return A reference to the \c Layer added to the layer stack.
      */
-    template<typename layer>
-    [[nodiscard]] Ref<Layer> PushLayer();
+    template<typename layer, typename ...Args>
+    [[nodiscard]] Ref<Layer> PushLayer(Args ...args);
 
     /**
      * @brief Push an \c Overlay to the overlay stack.
@@ -48,8 +50,8 @@ public:
      * @tparam overlay The class of the overlay. This class must inherit from the base \c Layer class.
      * @return A reference to the \c Overlay added to the overlay stack.
      */
-    template<typename overlay>
-    [[nodiscard]] Ref<Overlay> PushOverlay();
+    template<typename overlay, typename... Args>
+    [[nodiscard]] Ref<Overlay> PushOverlay(Args ...args);
 
     /**
      * @brief Pop a \c Layer off the layer stack.
@@ -90,10 +92,10 @@ inline LayerStack::~LayerStack()
     }
 }
 
-template<typename layer>
-inline Ref<Layer> LayerStack::PushLayer()
+template<typename layer, typename ...Args>
+inline Ref<Layer> LayerStack::PushLayer(Args ...args)
 {
-    mLayers.emplace_back(new layer());
+    mLayers.emplace_back(new layer(std::forward<Args>(args)...));
 
     mLayers.back()->mId = mLayerId++;
     mLayers.back()->OnAttach();
@@ -101,11 +103,11 @@ inline Ref<Layer> LayerStack::PushLayer()
     return Ref<Layer>{ mLayers.back() };
 }
 
-template<typename overlay>
-inline Ref<Overlay> LayerStack::PushOverlay()
+template<typename overlay, typename ...Args>
+inline Ref<Overlay> LayerStack::PushOverlay(Args ...args)
 {
     // TODO: (OPT) Is double 'new' more overhead than inheritance.
-    mOverlays.emplace_back(new Overlay{ .layer = new overlay() });
+    mOverlays.emplace_back(new Overlay{ .layer = new overlay(std::forward<Args>(args)...) });
 
     mOverlays.back()->layer->mId = mLayerId++;
     mOverlays.back()->layer->OnAttach();

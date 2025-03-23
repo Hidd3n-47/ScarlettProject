@@ -10,6 +10,10 @@ struct Camera;
 namespace ScarlettEditor
 {
 
-struct ViewportCamera final : public ScarlettGame::Camera { };
+struct ViewportCamera final : public ScarlettGame::Camera
+{
+    float viewportWidth     = 1920.0f;
+    float viewportHeight    = 1080.0f;
+};
 
 } // Namespace ScarlettEditor.

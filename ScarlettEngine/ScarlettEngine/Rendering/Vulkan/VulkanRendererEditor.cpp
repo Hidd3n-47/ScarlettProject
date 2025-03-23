@@ -62,7 +62,7 @@ void VulkanRendererEditor::Init(const Window* windowRef)
     io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
     io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
-    ImGui_ImplGlfw_InitForVulkan(static_cast<GLFWwindow*>(mWindowRef->GetNativeWindow()), true);
+    ImGui_ImplGlfw_InitForVulkan(static_cast<GLFWwindow*>(mWindowRef->GetNativeWindow()), false);
 
     ImGui_ImplVulkan_InitInfo initInfo = {};
     initInfo.Instance               = mDevice.mInstance;
@@ -107,14 +107,15 @@ void VulkanRendererEditor::Init(const Window* windowRef)
     ImGuiMemFreeFunc freeFunction;
     void* data;
     ImGui::GetAllocatorFunctions(&allocateFunction, &freeFunction, &data);
-    ScarlettEditor::EditorManager::Init(ImGui::GetCurrentContext(), &allocateFunction, &freeFunction, data);
+    ScarlettEditor::EditorManager::CreateInstance(ImGui::GetCurrentContext(), &allocateFunction, &freeFunction, data);
+    ScarlettEditor::EditorManager::Instance().Init();
 }
 
 void VulkanRendererEditor::Destroy()
 {
     vkDeviceWaitIdle(mDevice.mDevice);
 
-    ScarlettEditor::EditorManager::Destroy();
+    ScarlettEditor::EditorManager::DestroyInstance();
 
     vkDestroySampler(mDevice.mDevice, mSampler, nullptr);
 

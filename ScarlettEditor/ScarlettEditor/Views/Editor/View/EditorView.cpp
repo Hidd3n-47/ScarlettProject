@@ -1,7 +1,6 @@
 ﻿#include "ScarlettEditorPch.h"
 #include "EditorView.h"
 
-#include <glm/gtc/type_ptr.hpp>
 #include <imgui/imgui.h>
 
 #include <ScarlEntt/Scene.h>
@@ -11,11 +10,13 @@
 
 #include "Editor/EditorManager.h"
 
-#include "PropertiesPanel.h"
-#include "ScenePanel.h"
+#include "Views/Editor/Panels/PropertiesPanel.h"
+#include "Views/Editor/Panels/ScenePanel.h"
 
-#include "ViewportCameraSystem.h"
+#include "Views/Editor/ViewportCameraSystem.h"
 #include "ScarlettGameCore/Components/Camera.h"
+
+#include "Views/Editor/Input/EditorViewInputLayer.h"
 
 namespace ScarlettEditor
 {
@@ -30,14 +31,15 @@ EditorView::EditorView()
 
     const ScarlEntt::EntityHandle viewportCamera = ScarlettGame::GameCore::Instance().CreateEntity();
     viewportCamera.RemoveComponent<ScarlettGame::Tag>();
-    ViewportCamera* camera = viewportCamera.AddComponent<ViewportCamera>();
+    (void)viewportCamera.AddComponent<ViewportCamera>();
 
-    //todo change aspect ratio to be the viewport.
-    camera->projectionMatrix = glm::perspective(glm::radians(60.0f), 1920.0f / 1080.0f, 0.1f, 100.0f);
+    mEditorViewOverlay = EditorManager::Instance().GetLayerStack()->PushOverlay<EditorViewInputLayer>(this);
 }
 
 EditorView::~EditorView()
 {
+    EditorManager::Instance().GetLayerStack()->PopOverlay(mEditorViewOverlay);
+
     delete mPropertiesPanel;
     delete mScenePanel;
 }
@@ -53,14 +55,20 @@ void EditorView::Render()
     mPropertiesPanel->RenderUi();
     mScenePanel->RenderUi();
 
+    // todo move the console into a panel.
     ImGui::Begin("Console");
 
     ImGui::End();
 }
 
-void EditorView::RenderViewport() const
+// todo move this into a panel.
+void EditorView::RenderViewport()
 {
     ImGui::Begin("Viewport");
+
+    //todo this doesn't return true? why?
+    mInFocus = ImGui::IsWindowFocused();
+    mIsHovered = ImGui::IsWindowHovered();
 
     const ImVec2 viewportPanelSize = ImGui::GetContentRegionAvail();
     ImGui::Image(EditorManager::Instance().GetViewportTexture(), viewportPanelSize);
