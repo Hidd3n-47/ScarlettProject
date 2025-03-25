@@ -11,6 +11,7 @@ void EditorInputLayer::OnEvent(Scarlett::Event& e)
     Scarlett::EventDispatcher dispatcher(e);
     dispatcher.Dispatch<Scarlett::MouseButtonPressedEvent>(SCARLETT_BIND_FUNCTION(EditorInputLayer::OnMouseButtonPressed));
     dispatcher.Dispatch<Scarlett::MouseButtonReleasedEvent>(SCARLETT_BIND_FUNCTION(EditorInputLayer::OnMouseButtonReleased));
+    dispatcher.Dispatch<Scarlett::MouseMovedEvent>(SCARLETT_BIND_FUNCTION(EditorInputLayer::OnMouseMoved));
     dispatcher.Dispatch<Scarlett::MouseScrollEvent>(SCARLETT_BIND_FUNCTION(EditorInputLayer::OnMouseScrolledEvent));
     dispatcher.Dispatch<Scarlett::KeyPressedEvent>(SCARLETT_BIND_FUNCTION(EditorInputLayer::OnKeyPressed));
     dispatcher.Dispatch<Scarlett::KeyReleasedEvent>(SCARLETT_BIND_FUNCTION(EditorInputLayer::OnKeyReleased));
@@ -28,6 +29,12 @@ bool EditorInputLayer::OnMouseButtonReleased(const Scarlett::MouseButtonReleased
 {
     ImGuiIO& io = ImGui::GetIO();
     io.MouseDown[e.GetMouseButton()] = false;
+    return true;
+}
+
+bool EditorInputLayer::OnMouseMoved(const Scarlett::MouseMovedEvent& e)
+{
+    // ImGui automatically captures the mouse moved event.
     return true;
 }
 

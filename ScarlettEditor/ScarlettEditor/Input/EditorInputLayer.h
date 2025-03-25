@@ -24,6 +24,7 @@ public:
 protected:
     virtual bool OnMouseButtonPressed(const Scarlett::MouseButtonPressedEvent& e);
     virtual bool OnMouseButtonReleased(const Scarlett::MouseButtonReleasedEvent& e);
+    virtual bool OnMouseMoved(const Scarlett::MouseMovedEvent& e);
     virtual bool OnMouseScrolledEvent(const Scarlett::MouseScrollEvent& e);
     virtual bool OnKeyPressed(const Scarlett::KeyPressedEvent& e);
     virtual bool OnKeyReleased(const Scarlett::KeyReleasedEvent& e);

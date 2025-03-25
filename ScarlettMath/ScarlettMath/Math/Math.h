@@ -1,6 +1,9 @@
 ﻿#pragma once
 
+#define GLM_ENABLE_EXPERIMENTAL
 #include <glm/glm.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/rotate_vector.hpp>
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/ext/matrix_clip_space.hpp>
 
@@ -12,6 +15,7 @@ typedef glm::vec2 Vec2;
 typedef glm::vec3 Vec3;
 typedef glm::vec4 Vec4;
 
+typedef glm::mat3 Mat3;
 typedef glm::mat4 Mat4;
 
 static inline Mat4 LookAt(const Vec3 eye, const Vec3 center, const Vec3 up)
@@ -37,6 +41,26 @@ static float Sin(const float angleRadians)
 static float Cos(const float angleRadians)
 {
     return glm::cos(angleRadians);
+}
+
+static inline Vec3 Normalize(const Vec3 v)
+{
+    return glm::normalize(v);
+}
+
+static inline Vec3 Cross(const Vec3 v1, const Vec3 v2)
+{
+    return glm::cross(v1, v2);
+}
+
+static inline float Dot(const Vec3 v1, const Vec3 v2)
+{
+    return glm::dot(v1, v2);
+}
+
+static inline Vec3 Rotate(const Vec3 v, const float angleRadians, const Vec3 axis)
+{
+    return glm::rotate(v, angleRadians, axis);
 }
 
 } // Namespace ScarlettMath.
