@@ -1,18 +1,16 @@
 #pragma once
 
-#define GLM_FORCE_RADIANS
-#define GLM_FORCE_DEPTH_ZERO_TO_ONE
-#include "glm/glm.hpp"
+#include <Math/Math.h>
 
 namespace Scarlett {
 
 struct SpriteInfoStruct
 {
-    glm::vec4 color     = glm::vec4{ 1.0f };
+    ScarlettMath::Vec4 color     = ScarlettMath::Vec4{ 1.0f };
 
-    glm::mat4 view      = glm::mat4{1.0f };
-    glm::mat4 proj      = glm::mat4{1.0f };
-    glm::mat4 model     = glm::mat4{ 1.0f };
+    ScarlettMath::Mat4 view      = ScarlettMath::Mat4{1.0f };
+    ScarlettMath::Mat4 proj      = ScarlettMath::Mat4{1.0f };
+    ScarlettMath::Mat4 model     = ScarlettMath::Mat4{ 1.0f };
 };
 
 } // Namespace Scarlett.

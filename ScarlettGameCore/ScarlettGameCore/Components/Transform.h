@@ -1,15 +1,15 @@
 ﻿#pragma once
 
-#include <glm/vec3.hpp>
+#include <Math/Math.h>
 
 namespace ScarlettGame
 {
 
 struct Transform
 {
-    glm::vec3 translation   { 0.0f };
-    glm::vec3 rotation      { 0.0f };
-    glm::vec3 scale         { 1.0f };
+    ScarlettMath::Vec3 translation   { 0.0f };
+    ScarlettMath::Vec3 rotation      { 0.0f };
+    ScarlettMath::Vec3 scale         { 1.0f };
 };
 
 } // Namespace ScarlettGame.

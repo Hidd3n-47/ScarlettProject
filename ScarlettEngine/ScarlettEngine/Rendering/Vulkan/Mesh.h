@@ -1,5 +1,7 @@
 #pragma once
 
+#include <Math/Math.h>
+
 #include "Utilities.h"
 
 #include "VertexBuffer.h"
@@ -11,7 +13,7 @@ class Device;
 
 struct Vertex
 {
-    glm::vec2 position;
+    ScarlettMath::Vec2 position;
 
     static vector<VkVertexInputBindingDescription> GetBindingDescriptions();
     static vector<VkVertexInputAttributeDescription> GetAttributeDescriptions();
@@ -19,8 +21,8 @@ struct Vertex
 
 struct Model
 {
-    alignas(16) glm::vec3 position;
-    alignas(16) glm::vec3 color;
+    alignas(16) ScarlettMath::Vec3 position;
+    alignas(16) ScarlettMath::Vec3 color;
 };
 
 class Mesh

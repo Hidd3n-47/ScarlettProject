@@ -1,13 +1,13 @@
 ﻿#pragma once
 
-#include <glm/vec4.hpp>
+#include <Math/Math.h>
 
 namespace ScarlettGame
 {
 
 struct SquareSprite
 {
-    glm::vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
+    ScarlettMath::Vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
 };
 
 } // Namespace ScarlettGame.

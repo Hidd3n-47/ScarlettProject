@@ -59,27 +59,27 @@ void Engine::InitEngine()
     ScarlettGame::GameCore::Instance().GetActiveScene()->RegisterSystem<SquareSpriteSystem>(&properties);
 
     auto square1 = ScarlettGame::GameCore::Instance().CreateEntity();
-    square1.GetComponent<ScarlettGame::Transform>()->translation = glm::vec3(0.5f, 0.0f, 0.4f);
-    square1.GetComponent<ScarlettGame::SquareSprite>()->color = glm::vec4(1.0f, 0.0f, 0.0f, 1.0f);
+    square1.GetComponent<ScarlettGame::Transform>()->translation = ScarlettMath::Vec3(0.5f, 0.0f, 0.4f);
+    square1.GetComponent<ScarlettGame::SquareSprite>()->color = ScarlettMath::Vec4(1.0f, 0.0f, 0.0f, 1.0f);
 
     auto square2 = ScarlettGame::GameCore::Instance().CreateEntity();
-    square2.GetComponent<ScarlettGame::Transform>()->translation = glm::vec3(-0.5f, 0.0f, 0.2f);
-    square2.GetComponent<ScarlettGame::SquareSprite>()->color = glm::vec4(0.0f, 0.0f, 1.0f, 1.0f);
+    square2.GetComponent<ScarlettGame::Transform>()->translation = ScarlettMath::Vec3(-0.5f, 0.0f, 0.2f);
+    square2.GetComponent<ScarlettGame::SquareSprite>()->color = ScarlettMath::Vec4(0.0f, 0.0f, 1.0f, 1.0f);
 
     auto square3 = ScarlettGame::GameCore::Instance().CreateEntity();
-    square3.GetComponent<ScarlettGame::Transform>()->translation = glm::vec3(0.0f, -0.5f, 0.3f);
-    square3.GetComponent<ScarlettGame::SquareSprite>()->color = glm::vec4(0.0f, 1.0f, 0.0f, 1.0f);
+    square3.GetComponent<ScarlettGame::Transform>()->translation = ScarlettMath::Vec3(0.0f, -0.5f, 0.3f);
+    square3.GetComponent<ScarlettGame::SquareSprite>()->color = ScarlettMath::Vec4(0.0f, 1.0f, 0.0f, 1.0f);
 
     auto square4 = ScarlettGame::GameCore::Instance().CreateEntity();
-    square4.GetComponent<ScarlettGame::Transform>()->translation = glm::vec3(0.0f, 0.5f, 0.1f);
-    square4.GetComponent<ScarlettGame::SquareSprite>()->color = glm::vec4(1.0f, 0.0f, 1.0f, 1.0f);
+    square4.GetComponent<ScarlettGame::Transform>()->translation = ScarlettMath::Vec3(0.0f, 0.5f, 0.1f);
+    square4.GetComponent<ScarlettGame::SquareSprite>()->color = ScarlettMath::Vec4(1.0f, 0.0f, 1.0f, 1.0f);
 
     auto square5 = ScarlettGame::GameCore::Instance().CreateEntity();
     const auto transform = square5.GetComponent<ScarlettGame::Transform>();
-    transform->translation = glm::vec3(0.0f, 0.0f, 0.0f);
-    transform->scale = glm::vec3(0.5f, 1.f, 1.0f);
-    transform->rotation = glm::vec3(0.0f, 0.0f, 45.0f);
-    square5.GetComponent<ScarlettGame::SquareSprite>()->color = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+    transform->translation = ScarlettMath::Vec3(0.0f, 0.0f, 0.0f);
+    transform->scale = ScarlettMath::Vec3(0.5f, 1.f, 1.0f);
+    transform->rotation = ScarlettMath::Vec3(0.0f, 0.0f, 45.0f);
+    square5.GetComponent<ScarlettGame::SquareSprite>()->color = ScarlettMath::Vec4(1.0f, 1.0f, 1.0f, 1.0f);
 
     // Everything initialized okay, so we can run the engine.
     mRunning = true;

@@ -1,7 +1,7 @@
 ﻿#include "ScarlettEditorPch.h"
 #include "EditorViewInputLayer.h"
 
-#include <glm/vec2.hpp>
+#include <Math/Math.h>
 
 #include <Core/Input/KeyCodes.h>
 
@@ -61,21 +61,21 @@ bool EditorViewInputLayer::OnKeyPressed(const Scarlett::KeyPressedEvent& e)
         return EditorInputLayer::OnKeyPressed(e);
     }
 
-    glm::vec2 cameraMoveDir { 0.0f };
+    ScarlettMath::Vec2 cameraMoveDir { 0.0f };
 
     switch (e.GetKeyCode())
     {
         case Scarlett::KeyCode::KEY_W:
-            cameraMoveDir += glm::vec2{ 0.0f,  1.0f };
+            cameraMoveDir += ScarlettMath::Vec2{ 0.0f,  1.0f };
             break;
         case Scarlett::KeyCode::KEY_S:
-            cameraMoveDir += glm::vec2{ 0.0f, -1.0f };
+            cameraMoveDir += ScarlettMath::Vec2{ 0.0f, -1.0f };
             break;
         case Scarlett::KeyCode::KEY_A:
-            cameraMoveDir += glm::vec2{ -1.0f, 0.0f };
+            cameraMoveDir += ScarlettMath::Vec2{ -1.0f, 0.0f };
             break;
         case Scarlett::KeyCode::KEY_D:
-            cameraMoveDir += glm::vec2{  1.0f, 0.0f };
+            cameraMoveDir += ScarlettMath::Vec2{  1.0f, 0.0f };
             break;
     default:
         return EditorInputLayer::OnKeyPressed(e);
@@ -86,7 +86,7 @@ bool EditorViewInputLayer::OnKeyPressed(const Scarlett::KeyPressedEvent& e)
     const auto& entityIds = viewportCamera.GetCorrespondingEntityId();
 
     ScarlEntt::EntityHandle entity{entityIds[0], ScarlettGame::GameCore::Instance().GetActiveScene() };
-    entity.GetComponent<ScarlettGame::Transform>()->translation += glm::vec3{ cameraMoveDir, 0.0f };
+    entity.GetComponent<ScarlettGame::Transform>()->translation += ScarlettMath::Vec3{ cameraMoveDir, 0.0f };
 
     return true;
 }

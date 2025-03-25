@@ -4,8 +4,6 @@
 
 #include <vulkan/vulkan.h>
 
-#include <glm/glm.hpp>
-
 const vector<const char*> gDeviceExtensions = {
     VK_KHR_SWAPCHAIN_EXTENSION_NAME
 };
@@ -193,7 +191,7 @@ static void TransitionImageLayout(VkDevice logicalDevice, VkQueue queue, VkComma
 
     VkPipelineStageFlags srcStage;
     VkPipelineStageFlags dstStage;
-    
+
     if (oldLayout == VK_IMAGE_LAYOUT_UNDEFINED && newLayout == VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL)
     {
         imageMemoryBarrier.srcAccessMask = 0;
@@ -206,12 +204,12 @@ static void TransitionImageLayout(VkDevice logicalDevice, VkQueue queue, VkComma
     {
         imageMemoryBarrier.srcAccessMask = VK_ACCESS_TRANSFER_WRITE_BIT;
         imageMemoryBarrier.dstAccessMask = VK_ACCESS_SHADER_READ_BIT;
-        
+
         srcStage = VK_PIPELINE_STAGE_TRANSFER_BIT;
         dstStage = VK_PIPELINE_STAGE_FRAGMENT_SHADER_BIT;
     }
 
     vkCmdPipelineBarrier(commandBuffer, srcStage, dstStage, 0, 0, nullptr, 0, nullptr, 1, &imageMemoryBarrier);
-    
+
     EndAndSubmitCommandBuffer(logicalDevice, commandPool, queue, commandBuffer);
 }

@@ -9,9 +9,6 @@ project "ScarlettGameCore"
     targetdir(outputPath .. "%{prj.name}")
     objdir(outputIntPath .. "%{prj.name}")
 
-    --pchheader "ScarlettGamePch.h"
-    --pchsource "%{prj.name}/Src/ScarlettGamePch.cpp"
-
     files
     {
         "%{prj.name}/**.h",
@@ -23,15 +20,17 @@ project "ScarlettGameCore"
         "$(SolutionDir)%{prj.name}/",
 
         "$(SolutionDir)deps/include/",
+        "$(SolutionDir)ScarlettMath/ScarlettMath/",
 
         "$(SolutionDir)ScarlEntt/ScarlEntt/",
-        "$(SolutionDir)deps/scarlettLogger/",
-        "$(SolutionDir)deps/scarlettLogger/deps/",
+        "$(SolutionDir)deps/ScarlettLogger/",
+        "$(SolutionDir)deps/ScarlettLogger/deps/",
     }
 
     links
     {
         "ScarlEntt",
+        "ScarlettMath",
         "ScarlettLogger",
     }
 

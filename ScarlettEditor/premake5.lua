@@ -33,12 +33,14 @@ project "ScarlettEditor"
 
         "$(SolutionDir)ScarlettGameCore",
         "$(SolutionDir)ScarlEntt/ScarlEntt/",
+        "$(SolutionDir)ScarlettMath/ScarlettMath/",
     }
 
     links
     {
         "ScarlettLogger",
         "ScarlettGameCore",
+        "ScarlettMath",
         "ScarlEntt",
         "ImGui"
     }

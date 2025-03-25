@@ -56,11 +56,11 @@ void SquareSpriteSystem::UpdateSystem()
         ScarlEntt::EntityHandle entity{entityIds[i], mSceneRef };
         const ScarlettGame::Transform* transform = entity.GetComponent<ScarlettGame::Transform>();
 
-        const float c = glm::cos(glm::radians(transform->rotation.z));
-        const float s = glm::sin(glm::radians(transform->rotation.z));
-        const glm::mat4 scale{ transform->scale.x, 0.0f, 0.0f, 0.0, 0.0f, transform->scale.y, 0.0f, 0.0f, 0.0f, 0.0f, transform->scale.z, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f };
-        const glm::mat4 rotat{ c, -s, 0.0f, 0.0f, s, c, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f };
-        glm::mat4 trans{ 1.0f };
+        const float c = ScarlettMath::Cos(ScarlettMath::Radians(transform->rotation.z));
+        const float s = ScarlettMath::Sin(ScarlettMath::Radians(transform->rotation.z));
+        const ScarlettMath::Mat4 scale{ transform->scale.x, 0.0f, 0.0f, 0.0, 0.0f, transform->scale.y, 0.0f, 0.0f, 0.0f, 0.0f, transform->scale.z, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f };
+        const ScarlettMath::Mat4 rotat{ c, -s, 0.0f, 0.0f, s, c, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f };
+        ScarlettMath::Mat4 trans{ 1.0f };
         trans[3][0] = transform->translation.x;
         trans[3][1] = transform->translation.y;
         trans[3][2] = transform->translation.z;

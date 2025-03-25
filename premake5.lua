@@ -19,6 +19,7 @@ include "ScarlettEditor/"
 include "ScarlettGameCore/"
 include "Scarlett/"
 include "ScarlEntt/"
+include "ScarlettMath/"
 
 -- Dependencies directories.
 include "deps/ImGui/"

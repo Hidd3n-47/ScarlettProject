@@ -28,8 +28,8 @@ project "ScarlettEngine"
         "$(SolutionDir)ScarlettEditor/ScarlettEditor/",
 
         "$(SolutionDir)ScarlettGameCore/",
-
         "$(SolutionDir)ScarlEntt/ScarlEntt/",
+        "$(SolutionDir)ScarlettMath/ScarlettMath",
 
         "$(SolutionDir)deps/include/",
         "$(SolutionDir)deps/imgui/",
@@ -50,6 +50,7 @@ project "ScarlettEngine"
         "ScarlettLogger",
         "ScarlettEditor",
         "ScarlettGameCore",
+        "ScarlettMath",
         "ScarlEntt",
         "ImGui",
         "glfw3_mt.lib",
