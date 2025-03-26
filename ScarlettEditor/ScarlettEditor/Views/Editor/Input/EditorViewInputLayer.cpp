@@ -21,7 +21,11 @@ void EditorViewInputLayer::OnEvent(Scarlett::Event& e)
     dispatcher.Dispatch<Scarlett::MouseButtonPressedEvent>(SCARLETT_BIND_FUNCTION(EditorViewInputLayer::OnMouseButtonPressed));
     dispatcher.Dispatch<Scarlett::MouseButtonReleasedEvent>(SCARLETT_BIND_FUNCTION(EditorViewInputLayer::OnMouseButtonReleased));
     dispatcher.Dispatch<Scarlett::MouseMovedEvent>(SCARLETT_BIND_FUNCTION(EditorViewInputLayer::OnMouseMoved));
+
     dispatcher.Dispatch<Scarlett::KeyPressedEvent>(SCARLETT_BIND_FUNCTION(EditorViewInputLayer::OnKeyPressed));
+    dispatcher.Dispatch<Scarlett::KeyReleasedEvent>(SCARLETT_BIND_FUNCTION(EditorViewInputLayer::OnKeyReleased));
+
+    dispatcher.Dispatch<Scarlett::OnUpdateEvent>(SCARLETT_BIND_FUNCTION(EditorViewInputLayer::OnUpdateEvent));
 
     if (!e.IsHandled())
     {
@@ -33,8 +37,6 @@ bool EditorViewInputLayer::OnMouseButtonPressed(const Scarlett::MouseButtonPress
 {
     if (e.GetMouseButton() == Scarlett::KeyCode::MOUSE_BUTTON_2)
     {
-        mCaptureMouseDownPos = true;
-
         if (mEditorView->GetPanel<ViewportPanel>()->IsHovered())
         {
             mCameraFlying = true;
@@ -58,27 +60,24 @@ bool EditorViewInputLayer::OnMouseButtonReleased(const Scarlett::MouseButtonRele
 
 bool EditorViewInputLayer::OnMouseMoved(const Scarlett::MouseMovedEvent& e)
 {
-    //todo cache camera as there will only be one.
-    const auto& viewportCamera = ScarlettGame::GameCore::Instance().GetActiveScene()->GetComponentManager()->GetComponentArray<ViewportCamera>();
-    const auto& entityIds = viewportCamera.GetCorrespondingEntityId();
-    ScarlEntt::EntityHandle entity{entityIds[0], ScarlettGame::GameCore::Instance().GetActiveScene() };
-    ScarlettGame::Transform* transform = entity.GetComponent<ScarlettGame::Transform>();
-
-    if (mCaptureMouseDownPos)
-    {
-        mMouseButtonDownPosition = { e.GetXPos(), e.GetYPos() };
-        mOriginalRotation = transform->rotation;
-        mCaptureMouseDownPos = false;
-    }
+    const ScarlettMath::Vec2 mousePosition { e.GetXPos(), e.GetYPos() };
 
     if (mCameraFlying)
     {
-        constexpr float SPEED_SCALING_FACTOR = 0.1f;
-        const ScarlettMath::Vec2 moveDelta = ScarlettMath::Vec2{ e.GetXPos(), e.GetYPos() } - mMouseButtonDownPosition;
+        //todo cache camera as there will only be one.
+        const auto& viewportCamera = ScarlettGame::GameCore::Instance().GetActiveScene()->GetComponentManager()->GetComponentArray<ViewportCamera>();
+        const auto& entityIds = viewportCamera.GetCorrespondingEntityId();
+        ScarlEntt::EntityHandle entity{entityIds[0], ScarlettGame::GameCore::Instance().GetActiveScene() };
+        ScarlettGame::Transform* transform = entity.GetComponent<ScarlettGame::Transform>();
 
-        transform->rotation.y = mOriginalRotation.y - moveDelta.x * SPEED_SCALING_FACTOR;
-        transform->rotation.x = mOriginalRotation.x - moveDelta.y * SPEED_SCALING_FACTOR;
+        constexpr float SPEED_SCALING_FACTOR = 0.1f;
+        const ScarlettMath::Vec2 moveDelta = mousePosition - mPreviousMousePosition;
+
+        transform->rotation.y -= moveDelta.x * SPEED_SCALING_FACTOR;
+        transform->rotation.x -= moveDelta.y * SPEED_SCALING_FACTOR;
     }
+
+    mPreviousMousePosition = mousePosition;
 
     return EditorInputLayer::OnMouseMoved(e);
 }
@@ -91,6 +90,72 @@ bool EditorViewInputLayer::OnKeyPressed(const Scarlett::KeyPressedEvent& e)
         return EditorInputLayer::OnKeyPressed(e);
     }
 
+    // todo change this to be event based so that it can be smooth movement.
+    switch (e.GetKeyCode())
+    {
+        case Scarlett::KeyCode::KEY_W:
+            mCameraForwardDirection    +=  1.0f;
+            break;
+        case Scarlett::KeyCode::KEY_S:
+            mCameraForwardDirection    += -1.0f;
+            break;
+        case Scarlett::KeyCode::KEY_A:
+            mCameraHorizontalDirection += -1.0f;
+            break;
+        case Scarlett::KeyCode::KEY_D:
+            mCameraHorizontalDirection +=  1.0f;
+            break;
+        case Scarlett::KeyCode::KEY_E:
+            mCameraVerticalDirection   +=  1.0f;
+            break;
+        case Scarlett::KeyCode::KEY_Q:
+            mCameraVerticalDirection   += -1.0f;
+            break;
+    default:
+        return EditorInputLayer::OnKeyPressed(e);
+    }
+
+    return true;
+}
+
+bool EditorViewInputLayer::OnKeyReleased(const Scarlett::KeyReleasedEvent& e)
+{
+    switch (e.GetKeyCode())
+    {
+    case Scarlett::KeyCode::KEY_W:
+        mCameraForwardDirection    -=  1.0f;
+        break;
+    case Scarlett::KeyCode::KEY_S:
+        mCameraForwardDirection    -= -1.0f;
+        break;
+    case Scarlett::KeyCode::KEY_A:
+        mCameraHorizontalDirection -= -1.0f;
+        break;
+    case Scarlett::KeyCode::KEY_D:
+        mCameraHorizontalDirection -=  1.0f;
+        break;
+    case Scarlett::KeyCode::KEY_E:
+        mCameraVerticalDirection   -=  1.0f;
+        break;
+    case Scarlett::KeyCode::KEY_Q:
+        mCameraVerticalDirection   -= -1.0f;
+        break;
+    default:
+        return EditorInputLayer::OnKeyReleased(e);
+    }
+
+    return true;
+}
+
+bool EditorViewInputLayer::OnUpdateEvent(const Scarlett::OnUpdateEvent& e)
+{
+    if (!mCameraFlying)
+    {
+        return EditorInputLayer::OnUpdateEvent(e);
+    }
+
+    constexpr float SPEED_SCALING_FACTOR = 0.01f;
+
     //todo this need to be improved as this cannot be the only way to get a component of an entity given a different component.
     const auto& viewportCameraArray = ScarlettGame::GameCore::Instance().GetActiveScene()->GetComponentManager()->GetComponentArray<ViewportCamera>();
     const auto& entityIds = viewportCameraArray.GetCorrespondingEntityId();
@@ -99,37 +164,10 @@ bool EditorViewInputLayer::OnKeyPressed(const Scarlett::KeyPressedEvent& e)
 
     const ViewportCamera* camera = &viewportCameraArray[0];
 
-    float cameraForwardMovement = 0.0f;
-    float cameraRightMovement   = 0.0f;
-    float cameraUpMovement      = 0.0f;
-
-    // todo change this to be event based so that it can be smooth movement.
-    switch (e.GetKeyCode())
-    {
-        case Scarlett::KeyCode::KEY_W:
-            cameraForwardMovement += 1.0f;
-            break;
-        case Scarlett::KeyCode::KEY_S:
-            cameraForwardMovement -= 1.0f;
-            break;
-        case Scarlett::KeyCode::KEY_A:
-            cameraRightMovement   -= 1.0f;
-            break;
-        case Scarlett::KeyCode::KEY_D:
-            cameraRightMovement   += 1.0f;
-            break;
-        case Scarlett::KeyCode::KEY_E:
-            cameraUpMovement     += 1.0f;
-            break;
-        case Scarlett::KeyCode::KEY_Q:
-            cameraUpMovement     -= 1.0f;
-            break;
-    default:
-        return EditorInputLayer::OnKeyPressed(e);
-    }
-
     // Todo (CameraIssue) Should you subtract camera forward?
-    entity.GetComponent<ScarlettGame::Transform>()->translation += camera->rightVector * cameraRightMovement - camera->forwardVector * cameraForwardMovement + camera->upVector * cameraUpMovement;
+    entity.GetComponent<ScarlettGame::Transform>()->translation += camera->rightVector      * mCameraHorizontalDirection    * SPEED_SCALING_FACTOR
+                                                                 - camera->forwardVector    * mCameraForwardDirection       * SPEED_SCALING_FACTOR
+                                                                 + camera->upVector         * mCameraVerticalDirection      * SPEED_SCALING_FACTOR;
 
     return true;
 }

@@ -6,6 +6,8 @@
 #include <Core/Events/MouseEvents.h>
 #include <Core/Events/KeyboardEvents.h>
 
+#include "Core/Events/ApplicationEvents.h"
+
 namespace ScarlettEditor
 {
 
@@ -24,11 +26,14 @@ public:
 protected:
     virtual bool OnMouseButtonPressed(const Scarlett::MouseButtonPressedEvent& e);
     virtual bool OnMouseButtonReleased(const Scarlett::MouseButtonReleasedEvent& e);
-    virtual bool OnMouseMoved(const Scarlett::MouseMovedEvent& e);
     virtual bool OnMouseScrolledEvent(const Scarlett::MouseScrollEvent& e);
+    virtual bool OnMouseMoved(const Scarlett::MouseMovedEvent& e);
+
     virtual bool OnKeyPressed(const Scarlett::KeyPressedEvent& e);
     virtual bool OnKeyReleased(const Scarlett::KeyReleasedEvent& e);
     virtual bool OnKeyTyped(const Scarlett::KeyTypedEvent& e);
+
+    virtual inline bool OnUpdateEvent(const Scarlett::OnUpdateEvent& e);
 
     // todo add some sort of event for panel resizing.
     //virtual bool OnWindowResize(const Scarlett::WindowClosedEvent& e) { return true; }

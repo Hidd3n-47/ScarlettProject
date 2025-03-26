@@ -73,9 +73,10 @@ void ViewportCameraSystem::UpdateSystem()
         camera->viewMatrix[3][0] = -ScarlettMath::Dot(u, transform->translation);
         camera->viewMatrix[3][1] = -ScarlettMath::Dot(v, transform->translation);
         camera->viewMatrix[3][2] = -ScarlettMath::Dot(w, transform->translation);
+
+        camera->projectionMatrix = ScarlettMath::Perspective(60.0f, viewportCamera[0].viewportWidth / viewportCamera[0].viewportHeight, 0.1f, 100.0f);
     }
 
-    camera->projectionMatrix = ScarlettMath::Perspective(60.0f, viewportCamera[0].viewportWidth / viewportCamera[0].viewportHeight, 0.1f, 100.0f);
 }
 
 } // Namespace ScarlettEditor.

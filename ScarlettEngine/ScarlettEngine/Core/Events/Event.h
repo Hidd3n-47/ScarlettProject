@@ -12,12 +12,15 @@ enum class EventType
 {
     WINDOW_CLOSE,
 
+    ON_UPDATE,
+
     MOUSE_MOVE,
     MOUSE_SCROLL,
     MOUSE_BUTTON_PRESSED,
     MOUSE_BUTTON_RELEASED,
 
     KEY_PRESSED,
+    KEY_REPEAT,
     KEY_RELEASED,
     KEY_TYPED
 };

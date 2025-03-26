@@ -122,7 +122,7 @@ Window* WindowManager::CreateWindowInternal(const WindowProperties& windowProper
         {
         case GLFW_PRESS:
         {
-            KeyPressedEvent event(key, 0);
+            KeyPressedEvent event(key);
             data.eventCallback(event);
             break;
         }
@@ -134,7 +134,7 @@ Window* WindowManager::CreateWindowInternal(const WindowProperties& windowProper
         }
         case GLFW_REPEAT:
         {
-            KeyPressedEvent event(key, 1);
+            KeyRepeatEvent event(key, 1);
             data.eventCallback(event);
             break;
         }

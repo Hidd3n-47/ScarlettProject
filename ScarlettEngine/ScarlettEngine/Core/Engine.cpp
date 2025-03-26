@@ -13,6 +13,7 @@
 
 #include <Editor/EditorManager.h>
 
+#include "Events/ApplicationEvents.h"
 #include "Systems/SquareSpriteSystem.h"
 
 namespace Scarlett
@@ -109,6 +110,10 @@ void Engine::Run() const
         // Probably will happen when changing to command based rendering.
         ScarlettGame::GameCore::Instance().GetActiveScene()->Update();
         Renderer::Instance().EndRender();
+
+        // Trigger OnUpdate Event.
+        OnUpdateEvent event;
+        OnEvent(event);
     }
 }
 

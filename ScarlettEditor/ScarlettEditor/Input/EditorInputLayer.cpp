@@ -11,11 +11,14 @@ void EditorInputLayer::OnEvent(Scarlett::Event& e)
     Scarlett::EventDispatcher dispatcher(e);
     dispatcher.Dispatch<Scarlett::MouseButtonPressedEvent>(SCARLETT_BIND_FUNCTION(EditorInputLayer::OnMouseButtonPressed));
     dispatcher.Dispatch<Scarlett::MouseButtonReleasedEvent>(SCARLETT_BIND_FUNCTION(EditorInputLayer::OnMouseButtonReleased));
-    dispatcher.Dispatch<Scarlett::MouseMovedEvent>(SCARLETT_BIND_FUNCTION(EditorInputLayer::OnMouseMoved));
     dispatcher.Dispatch<Scarlett::MouseScrollEvent>(SCARLETT_BIND_FUNCTION(EditorInputLayer::OnMouseScrolledEvent));
+    dispatcher.Dispatch<Scarlett::MouseMovedEvent>(SCARLETT_BIND_FUNCTION(EditorInputLayer::OnMouseMoved));
+
     dispatcher.Dispatch<Scarlett::KeyPressedEvent>(SCARLETT_BIND_FUNCTION(EditorInputLayer::OnKeyPressed));
     dispatcher.Dispatch<Scarlett::KeyReleasedEvent>(SCARLETT_BIND_FUNCTION(EditorInputLayer::OnKeyReleased));
     dispatcher.Dispatch<Scarlett::KeyTypedEvent>(SCARLETT_BIND_FUNCTION(EditorInputLayer::OnKeyTyped));
+
+    dispatcher.Dispatch<Scarlett::OnUpdateEvent>(SCARLETT_BIND_FUNCTION(EditorInputLayer::OnUpdateEvent));
 }
 
 bool EditorInputLayer::OnMouseButtonPressed(const Scarlett::MouseButtonPressedEvent& e)
@@ -65,6 +68,11 @@ bool EditorInputLayer::OnKeyTyped(const Scarlett::KeyTypedEvent& e)
 {
     ImGuiIO& io = ImGui::GetIO();
     io.AddInputCharacter(e.GetKeyCode());
+    return true;
+}
+
+bool EditorInputLayer::OnUpdateEvent(const Scarlett::OnUpdateEvent& e)
+{
     return true;
 }
 

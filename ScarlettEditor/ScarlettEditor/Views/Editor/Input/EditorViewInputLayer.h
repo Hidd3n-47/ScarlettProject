@@ -22,10 +22,11 @@ private:
 
     bool mCameraFlying = false;
 
-    // todo this capture should not exist, and mouse down should be able to capture it.
-    bool mCaptureMouseDownPos = false;
-    ScarlettMath::Vec2 mMouseButtonDownPosition { -1.f };
-    ScarlettMath::Vec3 mOriginalRotation        { 0.0f }; // todo change this so that we don't have to capture this but rather work on a per frame basis.
+    ScarlettMath::Vec2 mPreviousMousePosition   { -1.f };
+
+    float mCameraVerticalDirection      = 0.0f;
+    float mCameraHorizontalDirection    = 0.0f;
+    float mCameraForwardDirection       = 0.0f;
 
     bool OnMouseButtonPressed(const Scarlett::MouseButtonPressedEvent& e) override;
     bool OnMouseButtonReleased(const Scarlett::MouseButtonReleasedEvent& e) override;
@@ -33,6 +34,9 @@ private:
     bool OnMouseMoved(const Scarlett::MouseMovedEvent& e) override;
 
     bool OnKeyPressed(const Scarlett::KeyPressedEvent& e) override;
+    bool OnKeyReleased(const Scarlett::KeyReleasedEvent& e) override;
+
+    bool OnUpdateEvent(const Scarlett::OnUpdateEvent& e) override;
 };
 
 } // Namespace ScarlettEditor.

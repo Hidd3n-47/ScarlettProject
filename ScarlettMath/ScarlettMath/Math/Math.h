@@ -63,4 +63,9 @@ static inline Vec3 Rotate(const Vec3 v, const float angleRadians, const Vec3 axi
     return glm::rotate(v, angleRadians, axis);
 }
 
+static inline float Clamp(const float value, const float min, const float max)
+{
+    return glm::clamp(value, min, max);
+}
+
 } // Namespace ScarlettMath.
