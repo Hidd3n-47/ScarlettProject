@@ -15,24 +15,6 @@
 namespace ScarlettEditor
 {
 
-void EditorViewInputLayer::OnEvent(Scarlett::Event& e)
-{
-    Scarlett::EventDispatcher dispatcher(e);
-    dispatcher.Dispatch<Scarlett::MouseButtonPressedEvent>(SCARLETT_BIND_FUNCTION(EditorViewInputLayer::OnMouseButtonPressed));
-    dispatcher.Dispatch<Scarlett::MouseButtonReleasedEvent>(SCARLETT_BIND_FUNCTION(EditorViewInputLayer::OnMouseButtonReleased));
-    dispatcher.Dispatch<Scarlett::MouseMovedEvent>(SCARLETT_BIND_FUNCTION(EditorViewInputLayer::OnMouseMoved));
-
-    dispatcher.Dispatch<Scarlett::KeyPressedEvent>(SCARLETT_BIND_FUNCTION(EditorViewInputLayer::OnKeyPressed));
-    dispatcher.Dispatch<Scarlett::KeyReleasedEvent>(SCARLETT_BIND_FUNCTION(EditorViewInputLayer::OnKeyReleased));
-
-    dispatcher.Dispatch<Scarlett::OnUpdateEvent>(SCARLETT_BIND_FUNCTION(EditorViewInputLayer::OnUpdateEvent));
-
-    if (!e.IsHandled())
-    {
-        EditorInputLayer::OnEvent(e);
-    }
-}
-
 bool EditorViewInputLayer::OnMouseButtonPressed(const Scarlett::MouseButtonPressedEvent& e)
 {
     if (e.GetMouseButton() == Scarlett::KeyCode::MOUSE_BUTTON_2)

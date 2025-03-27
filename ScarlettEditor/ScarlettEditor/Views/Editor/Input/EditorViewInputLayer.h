@@ -16,7 +16,6 @@ public:
         : mEditorView(editorView)
     { /* Empty. */ }
 
-    void OnEvent(Scarlett::Event& e) override;
 private:
     EditorView* mEditorView = nullptr;
 
