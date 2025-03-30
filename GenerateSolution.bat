@@ -6,15 +6,15 @@ echo ===========================================================================
 set rootDir=%~dp0
 
 :: Set paths where new directories will be created ('bin/Dev', 'bin/Release', 'bin-int/Dev', 'bin-int/Release').
-set binDevDir=%rootDir%bin\Dev
-set binRelDir=%rootDir%bin\Release
-set binDevTestDir=%binDevDir%\Tests
-set binRelTestDir=%binRelDir%\Tests
+set binDevDir       =%rootDir%\bin\Dev
+set binRelDir       =%rootDir%\bin\Release
+set binDevTestDir   =%binDevDir%\Tests
+set binRelTestDir   =%binRelDir%\Tests
 
-set intDevDir=%rootDir%bin-int\Dev
-set intRelDir=%rootDir%bin-int\Release
-set intDevTestDir=%intDevDir%\Tests
-set intRelTestDir=%intRelDir%\Tests
+set intDevDir       =%rootDir%\bin-int\Dev
+set intRelDir       =%rootDir%\bin-int\Release
+set intDevTestDir   =%intDevDir%\Tests
+set intRelTestDir   =%intRelDir%\Tests
 
 :: Make sure the base directories exist.
 if not exist "%binDevDir%" mkdir "%binDevDir%"
@@ -96,7 +96,7 @@ for /r "%rootDir%" %%d in (.) do (
     )
 )
 
-echo Done creating directories in %newBaseDir%
+echo Done creating directories for Scarlett Project.
 
 echo ===================================================================================================================
 
