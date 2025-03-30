@@ -7,6 +7,7 @@
 
 #include <ScarlettGameCore/Src/GameCore.h>
 #include <ScarlettGameCore/Components/Transform.h>
+#include <ScarlettGameCore/Components/BoundingBox.h>
 
 #include "Views/Editor/ViewportCamera.h"
 #include "Views/Editor/View/EditorView.h"
@@ -17,13 +18,70 @@ namespace ScarlettEditor
 
 bool EditorViewInputLayer::OnMouseButtonPressed(const Scarlett::MouseButtonPressedEvent& e)
 {
+    if (!mEditorView->GetPanel<ViewportPanel>()->IsHovered())
+    {
+        return EditorInputLayer::OnMouseButtonPressed(e);
+    }
+
+    if (e.GetMouseButton() == Scarlett::KeyCode::MOUSE_BUTTON_1)
+    {
+        ScarlEntt::Scene* scene = ScarlettGame::GameCore::Instance().GetActiveScene();
+        const auto& bb = scene->GetComponentManager()->GetComponentArray<ScarlettGame::BoundingBox>();
+        const auto& entityIds = bb.GetCorrespondingEntityId();
+
+        // todo, again, need a better way.
+        const auto& cameras = scene->GetComponentManager()->GetComponentArray<ViewportCamera>();
+        ScarlEntt::EntityHandle cameraEntity{ cameras.GetCorrespondingEntityId()[0], ScarlettGame::GameCore::Instance().GetActiveScene() };
+
+        const ScarlettMath::Vec3 cameraCenter = cameraEntity.GetComponent<ScarlettGame::Transform>()->translation;
+        const ScarlettMath::Vec3 cameraDirection = cameras[0].forwardVector;
+
+        vector<std::pair<ScarlEntt::EntityHandle*, ScarlettMath::Vec3>> collidedWithEntities;
+
+        // need to make sure that it selects only the first instance (closest).
+        for (ScarlEntt::ComponentId i{ 0 }; i < bb.Size(); ++i)
+        {
+            ScarlEntt::EntityHandle entity{ entityIds[i], ScarlettGame::GameCore::Instance().GetActiveScene() };
+            const ScarlettGame::Transform* transform = entity.GetComponent<ScarlettGame::Transform>();
+
+            const ScarlettMath::Vec3 boundingBoxCenter = bb[i].GetCenter();
+
+            const float tMin = ( cameraDirection.x * (boundingBoxCenter.x - cameraCenter.x) + cameraDirection.y * (boundingBoxCenter.y - cameraCenter.y) + cameraDirection.z * (boundingBoxCenter.z - cameraCenter.z) )
+                                / (cameraDirection.x * cameraDirection.x + cameraDirection.y * cameraDirection.y + cameraDirection.z * cameraDirection.z);
+
+            const ScarlettMath::Vec3 closestPoint = cameraCenter + tMin * cameraDirection;
+
+            const ScarlettMath::Vec3 rotatedMin = ScarlettMath::Rotate(bb[i].localMinimum, transform->rotation);
+            const ScarlettMath::Vec3 rotatedMax = ScarlettMath::Rotate(bb[i].localMaximum, transform->rotation);
+
+            if ((rotatedMin.x <= closestPoint.x && closestPoint.x <= rotatedMax.x) &&
+                (rotatedMin.y <= closestPoint.y && closestPoint.y <= rotatedMax.y) &&
+                (rotatedMin.z <= closestPoint.z && closestPoint.z <= rotatedMax.z))
+            {
+                collidedWithEntities.emplace_back(&entity, boundingBoxCenter);
+            }
+        }
+
+        float minDistance = std::numeric_limits<float>::max();
+        ScarlEntt::EntityHandle* closestEntity = nullptr;
+        for (const auto& [ent, boundingBoxCenter] : collidedWithEntities)
+        {
+            const float distance = glm::length(boundingBoxCenter - cameraCenter);
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                closestEntity = ent;
+            }
+        }
+
+        mEditorView->GetSelectionManager().SetSelectedEntity(closestEntity);
+        return true;
+    }
+
     if (e.GetMouseButton() == Scarlett::KeyCode::MOUSE_BUTTON_2)
     {
-        if (mEditorView->GetPanel<ViewportPanel>()->IsHovered())
-        {
-            mCameraFlying = true;
-            return true;
-        }
+        mCameraFlying = true;
+        return true;
     }
 
     return EditorInputLayer::OnMouseButtonPressed(e);
@@ -49,7 +107,7 @@ bool EditorViewInputLayer::OnMouseMoved(const Scarlett::MouseMovedEvent& e)
         //todo cache camera as there will only be one.
         const auto& viewportCamera = ScarlettGame::GameCore::Instance().GetActiveScene()->GetComponentManager()->GetComponentArray<ViewportCamera>();
         const auto& entityIds = viewportCamera.GetCorrespondingEntityId();
-        ScarlEntt::EntityHandle entity{entityIds[0], ScarlettGame::GameCore::Instance().GetActiveScene() };
+        ScarlEntt::EntityHandle entity{ entityIds[0], ScarlettGame::GameCore::Instance().GetActiveScene() };
         ScarlettGame::Transform* transform = entity.GetComponent<ScarlettGame::Transform>();
 
         constexpr float SPEED_SCALING_FACTOR = 0.1f;

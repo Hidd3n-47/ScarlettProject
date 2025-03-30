@@ -2,6 +2,8 @@
 
 #include "ScarlettGameCore/String.h"
 
+
+//todo make this editor only.
 namespace  ScarlettGame
 {
 

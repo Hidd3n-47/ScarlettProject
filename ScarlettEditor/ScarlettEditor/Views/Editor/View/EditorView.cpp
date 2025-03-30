@@ -4,7 +4,6 @@
 #include <ScarlEntt/Scene.h>
 
 #include <ScarlettGameCore/Src/GameCore.h>
-#include <ScarlettGameCore/Components/Tag.h>
 #include <ScarlettGameCore/Components/Transform.h>
 
 #include "Editor/EditorManager.h"
@@ -14,7 +13,7 @@
 #include "Views/Editor/Panels/ViewportPanel.h"
 #include "Views/Editor/Panels/PropertiesPanel.h"
 
-#include "Views/Editor/ViewportCameraSystem.h"
+#include "EditorSystems/ViewportCameraSystem.h"
 
 #include "Views/Editor/Input/EditorViewInputLayer.h"
 

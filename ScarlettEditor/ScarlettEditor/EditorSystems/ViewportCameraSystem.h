@@ -2,7 +2,7 @@
 
 #include <ScarlEntt/ISystem.h>
 
-#include "ViewportCamera.h"
+#include "Views/Editor/ViewportCamera.h"
 
 namespace ScarlettEditor
 {

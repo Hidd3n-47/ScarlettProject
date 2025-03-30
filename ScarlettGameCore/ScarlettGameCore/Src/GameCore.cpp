@@ -3,6 +3,8 @@
 #include <ScarlettLogger/Log.h>
 
 #include "ScarlettGameCore/Components/Tag.h"
+#include "ScarlettGameCore/Components/BoundingBox.h"
+
 #include "ScarlettGameCore/Components/Transform.h"
 #include "ScarlettGameCore/Components/SquareSprite.h"
 
@@ -23,6 +25,8 @@ void GameCore::Init()
     mCurrentScene = new ScarlEntt::Scene();
 
     mCurrentScene->RegisterComponent<Tag>();
+    mCurrentScene->RegisterComponent<BoundingBox>();
+
     mCurrentScene->RegisterComponent<Transform>();
     mCurrentScene->RegisterComponent<SquareSprite>();
 
@@ -41,8 +45,10 @@ ScarlEntt::EntityHandle GameCore::CreateEntity() const
 {
     const ScarlEntt::EntityHandle ent = mCurrentScene->CreateEntity();
 
-    (void)ent.AddComponent<Transform>();
     (void)ent.AddComponent<Tag>(ScarlettStl::String{ "Entity " + std::to_string(ent.GetId()) }, ent);
+    (void)ent.AddComponent<BoundingBox>();
+
+    (void)ent.AddComponent<Transform>();
     (void)ent.AddComponent<SquareSprite>();
 
     return ent;
