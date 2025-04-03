@@ -132,7 +132,7 @@ public:
 
         Scarlett::StaticKeyPressVariableStorage::Reset();
 
-        Scarlett::KeyPressedEvent e{0, 1};
+        Scarlett::KeyPressedEvent e{0};
 
         Scarlett::LayerStack stack;
         auto layer = stack.PushLayer<Scarlett::EmptyLayerForKeyPress>();
@@ -153,7 +153,7 @@ public:
 
         Scarlett::StaticKeyPressVariableStorage::Reset();
 
-        Scarlett::KeyPressedEvent e{0, 1};
+        Scarlett::KeyPressedEvent e{0};
 
         Scarlett::LayerStack stack;
         auto overlay = stack.PushOverlay<Scarlett::EmptyOverlayForKeyPress>();
@@ -174,7 +174,7 @@ public:
 
         Scarlett::StaticKeyPressVariableStorage::Reset();
 
-        Scarlett::KeyPressedEvent e{0, 1};
+        Scarlett::KeyPressedEvent e{0};
 
         Scarlett::LayerStack stack;
         auto layer = stack.PushLayer<Scarlett::EmptyLayerForKeyPress>();
@@ -197,7 +197,7 @@ public:
 
         Scarlett::StaticKeyPressVariableStorage::Reset();
 
-        Scarlett::KeyPressedEvent e{0, 1};
+        Scarlett::KeyPressedEvent e{0};
 
         Scarlett::LayerStack stack;
         auto layer = stack.PushLayer<Scarlett::EmptyLayerForKeyPress>();

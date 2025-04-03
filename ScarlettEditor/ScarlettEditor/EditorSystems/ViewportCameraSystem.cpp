@@ -1,7 +1,7 @@
 ﻿#include "ScarlettEditorPch.h"
 #include "ViewportCameraSystem.h"
 
-#include <Math/Math.h>
+#include <Math/Trig.h>
 
 #include <ScarlettGameCore/Components/Transform.h>
 #include <ScarlettGameCore/Src/GameCore.h>
