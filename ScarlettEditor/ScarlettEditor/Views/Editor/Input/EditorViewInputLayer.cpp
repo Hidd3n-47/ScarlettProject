@@ -1,7 +1,7 @@
 ﻿#include "ScarlettEditorPch.h"
 #include "EditorViewInputLayer.h"
 
-#include <Math/Math.h>
+#include <Math/Quat.h>
 
 #include <Core/Input/KeyCodes.h>
 
@@ -51,8 +51,8 @@ bool EditorViewInputLayer::OnMouseButtonPressed(const Scarlett::MouseButtonPress
 
             const ScarlettMath::Vec3 closestPoint = cameraCenter + tMin * cameraDirection;
 
-            const ScarlettMath::Vec3 rotatedMin = ScarlettMath::Rotate(bb[i].localMinimum, transform->rotation);
-            const ScarlettMath::Vec3 rotatedMax = ScarlettMath::Rotate(bb[i].localMaximum, transform->rotation);
+            const ScarlettMath::Vec3 rotatedMin = ScarlettMath::Quat::RotatePoint(bb[i].localMinimum, transform->rotation);
+            const ScarlettMath::Vec3 rotatedMax = ScarlettMath::Quat::RotatePoint(bb[i].localMaximum, transform->rotation);
 
             if ((rotatedMin.x <= closestPoint.x && closestPoint.x <= rotatedMax.x) &&
                 (rotatedMin.y <= closestPoint.y && closestPoint.y <= rotatedMax.y) &&
@@ -113,8 +113,8 @@ bool EditorViewInputLayer::OnMouseMoved(const Scarlett::MouseMovedEvent& e)
         constexpr float SPEED_SCALING_FACTOR = 0.1f;
         const ScarlettMath::Vec2 moveDelta = mousePosition - mPreviousMousePosition;
 
-        transform->rotation.y -= moveDelta.x * SPEED_SCALING_FACTOR;
-        transform->rotation.x -= moveDelta.y * SPEED_SCALING_FACTOR;
+        //transform->rotation.y -= moveDelta.x * SPEED_SCALING_FACTOR;
+        //transform->rotation.x -= moveDelta.y * SPEED_SCALING_FACTOR;
     }
 
     mPreviousMousePosition = mousePosition;

@@ -62,26 +62,26 @@ void Engine::InitEngine()
     // Add a "Cube" to the scene.
     auto square1 = ScarlettGame::GameCore::Instance().CreateEntity();
     const auto transform1 = square1.GetComponent<ScarlettGame::Transform>();
-    transform1->translation = ScarlettMath::Vec3(0.5f, 0.0f, 0.0f);
-    transform1->rotation = ScarlettMath::Vec3(0.0f, 90.0f, 0.0f);
+    transform1->translation = ScarlettMath::Vec3(0.0f, 0.5f, 0.0f);
+    transform1->rotation = ScarlettMath::Quat{ 0.0f, ScarlettMath::Radians(90.0f), 0.0f };
     square1.GetComponent<ScarlettGame::SquareSprite>()->color = ScarlettMath::Vec4(1.0f, 0.0f, 0.0f, 1.0f);
 
     auto square2 = ScarlettGame::GameCore::Instance().CreateEntity();
     const auto transform2 = square2.GetComponent<ScarlettGame::Transform>();
-    transform2->translation = ScarlettMath::Vec3(-0.5f, 0.0f, 0.0f);
-    transform2->rotation = ScarlettMath::Vec3(0.0f, 90.0f, 0.0f);
+    transform2->translation = ScarlettMath::Vec3(0.0f, -0.5f, 0.0f);
+    transform2->rotation = ScarlettMath::Quat{ 0.0f, ScarlettMath::Radians(90.0f), 0.0f };
     square2.GetComponent<ScarlettGame::SquareSprite>()->color = ScarlettMath::Vec4(0.0f, 0.0f, 1.0f, 1.0f);
 
     auto square3 = ScarlettGame::GameCore::Instance().CreateEntity();
     const auto transform3 = square3.GetComponent<ScarlettGame::Transform>();
-    transform3->translation = ScarlettMath::Vec3(0.0f, 0.5f, 0.0f);
-    transform3->rotation = ScarlettMath::Vec3(90.0f, 0.0f, 0.0f);
+    transform3->translation = ScarlettMath::Vec3(0.5f, 0.0f, 0.0f);
+    transform3->rotation = ScarlettMath::Quat{ ScarlettMath::Radians(90.0f), 0.0f, 0.0f };
     square3.GetComponent<ScarlettGame::SquareSprite>()->color = ScarlettMath::Vec4(0.0f, 1.0f, 0.0f, 1.0f);
 
     auto square4 = ScarlettGame::GameCore::Instance().CreateEntity();
     const auto transform4 = square4.GetComponent<ScarlettGame::Transform>();
-    transform4->translation = ScarlettMath::Vec3(0.0f, -0.5f, 0.0f);
-    transform4->rotation = ScarlettMath::Vec3(90.0f, 0.0f, 0.0f);
+    transform4->translation = ScarlettMath::Vec3(-0.5f, 0.0f, 0.0f);
+    transform4->rotation = ScarlettMath::Quat{ ScarlettMath::Radians(90.0f), 0.0f, 0.0f };
     square4.GetComponent<ScarlettGame::SquareSprite>()->color = ScarlettMath::Vec4(1.0f, 0.0f, 1.0f, 1.0f);
 
     auto square5 = ScarlettGame::GameCore::Instance().CreateEntity();

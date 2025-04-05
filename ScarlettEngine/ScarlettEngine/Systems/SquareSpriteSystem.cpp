@@ -58,37 +58,17 @@ void SquareSpriteSystem::UpdateSystem()
 
         const ScarlettMath::Mat4 scale{ transform->scale.x, 0.0f, 0.0f, 0.0, 0.0f, transform->scale.y, 0.0f, 0.0f, 0.0f, 0.0f, transform->scale.z, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f };
 
-        const float cX = ScarlettMath::Cos(ScarlettMath::Radians(transform->rotation.x));
-        const float sX = ScarlettMath::Sin(ScarlettMath::Radians(transform->rotation.x));
-
-        const float cY = ScarlettMath::Cos(ScarlettMath::Radians(transform->rotation.y));
-        const float sY = ScarlettMath::Sin(ScarlettMath::Radians(transform->rotation.y));
-
-        const float cZ = ScarlettMath::Cos(ScarlettMath::Radians(transform->rotation.z));
-        const float sZ = ScarlettMath::Sin(ScarlettMath::Radians(transform->rotation.z));
-
-        const ScarlettMath::Mat4 rotateX{ 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, cX, -sX, 0.0f, 0.0f, sX, cX, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f };
-        const ScarlettMath::Mat4 rotateY{ cY, 0.0f, sY, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, -sY, 0.0f, cY, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f };
-        const ScarlettMath::Mat4 rotateZ{ cZ, -sZ, 0.0f, 0.0f, sZ, cZ, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f };
-
         ScarlettMath::Mat4 trans{ 1.0f };
         trans[3][0] = transform->translation.x;
         trans[3][1] = transform->translation.y;
         trans[3][2] = transform->translation.z;
-
-        ScarlettMath::Mat4 modelMatrix = { 1.0f };
-        modelMatrix = glm::scale(modelMatrix, transform->scale);
-        modelMatrix = glm::rotate(modelMatrix, ScarlettMath::Radians(transform->rotation.x), { 1.0f, 0.0f, 0.0f });
-        modelMatrix = glm::rotate(modelMatrix, ScarlettMath::Radians(transform->rotation.y), { 0.0f, 1.0f, 0.0f });
-        modelMatrix = glm::rotate(modelMatrix, ScarlettMath::Radians(transform->rotation.z), { 0.0f, 0.0f, 1.0f });
-        modelMatrix = glm::translate(modelMatrix, transform->translation);
 
         const SpriteInfoStruct info
         {
             .color = squareSprites[i].color,
             .view  = camera->viewMatrix,
             .proj  = camera->projectionMatrix,
-            .model = trans * rotateZ * rotateY * rotateX * scale
+            .model = trans * transform->rotation.GetRotationMatrix() * scale
         };
 
         vkCmdPushConstants(commandBuffer, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SpriteInfoStruct), &info);

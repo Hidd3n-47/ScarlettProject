@@ -19,6 +19,7 @@ public:
         testRegistry->AddTestCase("Quaternion Tests", "QuaternionReturnsCorrectRotationMatrixWhenRotateAboutY", QuaternionReturnsCorrectRotationMatrixWhenRotateAboutY);
         testRegistry->AddTestCase("Quaternion Tests", "QuaternionReturnsCorrectRotationMatrixWhenRotateAboutZ", QuaternionReturnsCorrectRotationMatrixWhenRotateAboutZ);
         testRegistry->AddTestCase("Quaternion Tests", "QuaternionReturnsCorrectRotationMatrixAtAnglesOfPiAndTwoPi", QuaternionReturnsCorrectRotationMatrixAtAnglesOfPiAndTwoPi);
+        testRegistry->AddTestCase("Quaternion Tests", "RotationMatrixAndQuaternionResultInSameRotation", RotationMatrixAndQuaternionResultInSameRotation);
 
         // Quaternion multiplication.
         testRegistry->AddTestCase("Quaternion Tests", "QuaternionMultipliedByInverseIsIdentity", QuaternionMultipliedByInverseIsIdentity);
@@ -145,6 +146,22 @@ public:
                ScarlettMath::IsEqualTo(solutionTwoPi, quatTwoPi.GetRotationMatrix());
     }
 
+    inline static bool RotationMatrixAndQuaternionResultInSameRotation()
+    {
+        constexpr ScarlettMath::Vec3 point      { 1.0f, 2.0f, 3.0f };
+        constexpr ScarlettMath::Mat4 pointMat   { 1.0f, 0.0f, 0.0f, 1.0f , 0.0f, 1.0f, 0.0f, 2.0f, 0.0f, 0.0f, 1.0f, 3.0f, 0.0f, 0.0f, 0.0f, 1.0f };
+        constexpr ScarlettMath::Vec3 solution   { 1.207107f,0.207107f,3.535534f };
+
+        const float pitch = ScarlettMath::Radians(45.0f);
+        const float roll  = ScarlettMath::Radians(45.0f);
+        const ScarlettMath::Quat rotation { 0.0f, pitch, roll };
+        const ScarlettMath::Vec3 resultQuat = ScarlettMath::Quat::RotatePoint(point, rotation);
+        const ScarlettMath::Mat4 resultMat  = pointMat * rotation.GetRotationMatrix();
+        const ScarlettMath::Vec3 resultMatAnswer = { resultMat[0][3], resultMat[1][3], resultMat[2][3] };
+
+        return ScarlettMath::IsEqualTo(resultQuat, solution) && ScarlettMath::IsEqualTo(resultMatAnswer, solution);
+    }
+
     inline static bool QuaternionMultipliedByInverseIsIdentity()
     {
         ScarlettMath::Quat quat { std::numbers::pi_v<float> * 0.5f, { 0.0f, 1.0f, 0.0f } };
@@ -216,7 +233,7 @@ public:
         constexpr ScarlettMath::Vec3 point      { 1.0f, 0.0f, 0.0f };
         constexpr ScarlettMath::Vec3 solution   = point;
 
-        const ScarlettMath::Vec3 result = RotatePoint(point, 0.0f, 0.0f, 90.0f);
+        const ScarlettMath::Vec3 result = RotatePoint(point, 0.0f, 90.0f, 0.0f);
 
         return ScarlettMath::IsEqualTo(result, solution);
     }
@@ -226,7 +243,7 @@ public:
         constexpr ScarlettMath::Vec3 point      { 0.0f, 1.0f, 0.0f };
         constexpr ScarlettMath::Vec3 solution   { 0.0f, 0.0f, 1.0f };
 
-        const ScarlettMath::Vec3 result = RotatePoint(point, 0.0f, 0.0f, 90.0f);
+        const ScarlettMath::Vec3 result = RotatePoint(point, 0.0f, 90.0f, 0.0f);
 
         return ScarlettMath::IsEqualTo(result, solution);
     }
@@ -236,7 +253,7 @@ public:
         constexpr ScarlettMath::Vec3 point      { 0.0f,  0.0f, 1.0f };
         constexpr ScarlettMath::Vec3 solution   { 0.0f, -1.0f, 0.0f };
 
-        const ScarlettMath::Vec3 result = RotatePoint(point, 0.0f, 0.0f, 90.0f);
+        const ScarlettMath::Vec3 result = RotatePoint(point, 0.0f, 90.0f, 0.0f);
 
         return ScarlettMath::IsEqualTo(result, solution);
     }
@@ -246,7 +263,7 @@ public:
         constexpr ScarlettMath::Vec3 point      { 1.0f, 0.0f,  0.0f };
         constexpr ScarlettMath::Vec3 solution   { 0.0f, 0.0f, -1.0f };
 
-        const ScarlettMath::Vec3 result = RotatePoint(point, 0.0f, 90.0f, 0.0f);
+        const ScarlettMath::Vec3 result = RotatePoint(point, 90.0f, 0.0f, 0.0f);
 
         return ScarlettMath::IsEqualTo(result, solution);
     }
@@ -256,7 +273,7 @@ public:
         constexpr ScarlettMath::Vec3 point      { 0.0f, 1.0f, 0.0f };
         constexpr ScarlettMath::Vec3 solution   = point;
 
-        const ScarlettMath::Vec3 result = RotatePoint(point, 0.0f, 90.0f, 0.0f);
+        const ScarlettMath::Vec3 result = RotatePoint(point, 90.0f, 0.0f, 0.0f);
 
         return ScarlettMath::IsEqualTo(result, solution);
     }
@@ -266,7 +283,7 @@ public:
         constexpr ScarlettMath::Vec3 point      { 0.0f, 0.0f, 1.0f };
         constexpr ScarlettMath::Vec3 solution   { 1.0f, 0.0f, 0.0f };
 
-        const ScarlettMath::Vec3 result = RotatePoint(point, 0.0f, 90.0f, 0.0f);
+        const ScarlettMath::Vec3 result = RotatePoint(point, 90.0f, 0.0f, 0.0f);
 
         return ScarlettMath::IsEqualTo(result, solution);
     }
@@ -276,7 +293,7 @@ public:
         constexpr ScarlettMath::Vec3 point      { 1.0f, 0.0f, 0.0f };
         constexpr ScarlettMath::Vec3 solution   { 0.0f, 1.0f, 0.0f };
 
-        const ScarlettMath::Vec3 result = RotatePoint(point, 90.0f, 0.0f, 0.0f);
+        const ScarlettMath::Vec3 result = RotatePoint(point, 0.0f, 0.0f, 90.0f);
 
         return ScarlettMath::IsEqualTo(result, solution);
     }
@@ -286,7 +303,7 @@ public:
         constexpr ScarlettMath::Vec3 point      {  0.0f, 1.0f, 0.0f };
         constexpr ScarlettMath::Vec3 solution   { -1.0f, 0.0f, 0.0f };
 
-        const ScarlettMath::Vec3 result = RotatePoint(point, 90.0f, 0.0f, 0.0f);
+        const ScarlettMath::Vec3 result = RotatePoint(point, 0.0f, 0.0f, 90.0f);
 
         return ScarlettMath::IsEqualTo(result, solution);
     }
@@ -296,7 +313,7 @@ public:
         constexpr ScarlettMath::Vec3 point      { 0.0f, 0.0f, 1.0f };
         constexpr ScarlettMath::Vec3 solution   = point;
 
-        const ScarlettMath::Vec3 result = RotatePoint(point, 90.0f, 0.0f, 0.0f);
+        const ScarlettMath::Vec3 result = RotatePoint(point, 0.0f, 0.0f, 90.0f);
 
         return ScarlettMath::IsEqualTo(result, solution);
     }
@@ -308,8 +325,8 @@ public:
         constexpr ScarlettMath::Vec3 solutionOne = {  0.282843f,-0.424264f, 0.0f };
         constexpr ScarlettMath::Vec3 solutionTwo = { -0.282843f, 0.424264f, 0.0f };
 
-        const ScarlettMath::Vec3 resultOne = RotatePoint(pointOne, 45.0f, 0.0f, 0.0f);
-        const ScarlettMath::Vec3 resultTwo = RotatePoint(pointTwo, 45.0f, 0.0f, 0.0f);
+        const ScarlettMath::Vec3 resultOne = RotatePoint(pointOne, 0.0f, 0.0f, 45.0f);
+        const ScarlettMath::Vec3 resultTwo = RotatePoint(pointTwo, 0.0f, 0.0f, 45.0f);
 
         return ScarlettMath::IsEqualTo(resultOne, solutionOne) && ScarlettMath::IsEqualTo(resultTwo, solutionTwo);
     }
@@ -319,7 +336,7 @@ public:
         constexpr ScarlettMath::Vec3 point      { 1.0f, 2.0f, 3.0f };
         constexpr ScarlettMath::Vec3 solution   { 1.0f, -0.707107f,3.535534f };
 
-        const ScarlettMath::Vec3 result = RotatePoint(point, 0.0f, 0.0f, 45.0f);
+        const ScarlettMath::Vec3 result = RotatePoint(point, 0.0f, 45.0f, 0.0f);
 
         return ScarlettMath::IsEqualTo(result, solution);
     }
@@ -329,7 +346,7 @@ public:
         constexpr ScarlettMath::Vec3 point      { 1.0f, 2.0f, 3.0f };
         constexpr ScarlettMath::Vec3 solution   { 2.828427f,2.0f,1.414214f };
 
-        const ScarlettMath::Vec3 result = RotatePoint(point, 0.0f, 45.0f, 0.0f);
+        const ScarlettMath::Vec3 result = RotatePoint(point, 45.0f, 0.0f, 0.0f);
 
         return ScarlettMath::IsEqualTo(result, solution);
     }
@@ -339,7 +356,7 @@ public:
         constexpr ScarlettMath::Vec3 point      { 1.0f, 2.0f, 3.0f };
         constexpr ScarlettMath::Vec3 solution   { -0.707107f,2.121320f,3.0f };
 
-        const ScarlettMath::Vec3 result = RotatePoint(point, 45.0f, 0.0f, 0.0f);
+        const ScarlettMath::Vec3 result = RotatePoint(point, 0.0f, 0.0f, 45.0f);
 
         return ScarlettMath::IsEqualTo(result, solution);
     }
@@ -349,7 +366,7 @@ public:
         constexpr ScarlettMath::Vec3 point      { 1.0f, 2.0f, 3.0f };
         constexpr ScarlettMath::Vec3 solution   { 3.20711f, -0.707107f, 1.79289f };
 
-        const ScarlettMath::Vec3 result = RotatePoint(point, 0.0f, 45.0f, 45.0f);
+        const ScarlettMath::Vec3 result = RotatePoint(point, 45.0f, 45.0f, 0.0f);
 
         return ScarlettMath::IsEqualTo(result, solution);
     }
@@ -359,7 +376,7 @@ public:
         constexpr ScarlettMath::Vec3 point      { 1.0f, 2.0f, 3.0f };
         constexpr ScarlettMath::Vec3 solution   { 0.585786f,3.414214f,1.414214f };
 
-        const ScarlettMath::Vec3 result = RotatePoint(point, 45.0f, 45.0f, 0.0f);
+        const ScarlettMath::Vec3 result = RotatePoint(point, 45.0f, 0.0f, 45.0f);
 
         return ScarlettMath::IsEqualTo(result, solution);
     }
@@ -369,7 +386,7 @@ public:
         constexpr ScarlettMath::Vec3 point      { 1.0f, 2.0f, 3.0f };
         constexpr ScarlettMath::Vec3 solution   { 1.207107f,0.207107f,3.535534f };
 
-        const ScarlettMath::Vec3 result = RotatePoint(point, 45.0f, 0.0f, 45.0f);
+        const ScarlettMath::Vec3 result = RotatePoint(point, 0.0f, 45.0f, 45.0f);
 
         return ScarlettMath::IsEqualTo(result, solution);
     }

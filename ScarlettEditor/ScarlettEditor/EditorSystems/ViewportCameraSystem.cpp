@@ -1,8 +1,6 @@
 ﻿#include "ScarlettEditorPch.h"
 #include "ViewportCameraSystem.h"
 
-#include <Math/Trig.h>
-
 #include <ScarlettGameCore/Components/Transform.h>
 #include <ScarlettGameCore/Src/GameCore.h>
 
@@ -32,33 +30,18 @@ void ViewportCameraSystem::UpdateSystem()
     if (camera->IsDirty())
     {
         // todo refactor this.
-
-        //calculate forward, right and up vector.
-        const float cX = ScarlettMath::Cos(ScarlettMath::Radians(transform->rotation.x));
-        const float sX = ScarlettMath::Sin(ScarlettMath::Radians(transform->rotation.x));
-
-        const float cY = ScarlettMath::Cos(ScarlettMath::Radians(transform->rotation.y));
-        const float sY = ScarlettMath::Sin(ScarlettMath::Radians(transform->rotation.y));
-
-        const float cZ = ScarlettMath::Cos(ScarlettMath::Radians(transform->rotation.z));
-        const float sZ = ScarlettMath::Sin(ScarlettMath::Radians(transform->rotation.z));
-
-        constexpr ScarlettMath::Vec3 xAxis { 1.0f, 0.0f, 0.0f };
-        constexpr ScarlettMath::Vec3 yAxis { 0.0f, 1.0f, 0.0f };
+        constexpr ScarlettMath::Vec3 xAxis { 1.0f, 0.0f,  0.0f };
+        constexpr ScarlettMath::Vec3 yAxis { 0.0f, 1.0f,  0.0f };
         constexpr ScarlettMath::Vec3 zAxis { 0.0f, 0.0f, -1.0f };
 
-        const ScarlettMath::Mat3 rotateX{ 1.0f, 0.0f, 0.0f, 0.0f, cX, -sX, 0.0f, sX, cX };
-        const ScarlettMath::Mat3 rotateY{ cY, 0.0f, sY, 0.0f, 1.0f, 0.0f, -sY, 0.0f, cY };
-        const ScarlettMath::Mat3 rotateZ{ cZ, -sZ, 0.0f, sZ, cZ, 0.0f, 0.0f, 0.0f, 1.0f };
-
-        const ScarlettMath::Mat3 rotation = rotateZ * rotateY * rotateX;
+        const ScarlettMath::Mat3 rotation = transform->rotation.GetRotationMatrix();
         camera->forwardVector   = rotation * zAxis;
         camera->rightVector     = rotation * xAxis;
         camera->upVector        = rotation * yAxis;
 
         // update view and proj matrix.
         const ScarlettMath::Vec3 w { ScarlettMath::Normalize(camera->forwardVector) };
-        const ScarlettMath::Vec3 u { ScarlettMath::Normalize(ScarlettMath::Cross(w, camera->upVector)) };
+        const ScarlettMath::Vec3 u { ScarlettMath::Normalize(ScarlettMath::Cross(camera->upVector, w)) };
         const ScarlettMath::Vec3 v { ScarlettMath::Cross(w, u) };
 
         camera->viewMatrix[0][0] = u.x;
@@ -70,9 +53,10 @@ void ViewportCameraSystem::UpdateSystem()
         camera->viewMatrix[0][2] = w.x;
         camera->viewMatrix[1][2] = w.y;
         camera->viewMatrix[2][2] = w.z;
-        camera->viewMatrix[3][0] = -ScarlettMath::Dot(u, transform->translation);
-        camera->viewMatrix[3][1] = -ScarlettMath::Dot(v, transform->translation);
-        camera->viewMatrix[3][2] = -ScarlettMath::Dot(w, transform->translation);
+        camera->viewMatrix[3][0] =  ScarlettMath::Dot(u, transform->translation); // todo check direction, should it not be negative?
+        camera->viewMatrix[3][1] = -ScarlettMath::Dot(v, transform->translation); // todo check direction, should it not be negative?
+        camera->viewMatrix[3][2] =  ScarlettMath::Dot(w, transform->translation); // todo check direction, should it not be negative?
+
 
         camera->projectionMatrix = ScarlettMath::Perspective(60.0f, viewportCamera[0].viewportWidth / viewportCamera[0].viewportHeight, 0.1f, 100.0f);
     }

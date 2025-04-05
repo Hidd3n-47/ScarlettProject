@@ -26,7 +26,9 @@ void PropertiesPanel::Render()
         {
             auto* transform = selectedEntity->GetComponent<ScarlettGame::Transform>();
             ImGui::DragFloat3((std::string("Position##") + entityName).c_str(), &transform->translation.x, 0.05f);
-            ImGui::DragFloat3((std::string("Rotation##") + entityName).c_str(), &transform->rotation.x, 0.05f);
+            static float rot[3] = { 0.0f, 0.0f, 0.0f };
+            ImGui::DragFloat3((std::string("Rotation##") + entityName).c_str(), rot, 0.1f);
+            transform->rotation = ScarlettMath::Quat { ScarlettMath::Radians(rot[1]), ScarlettMath::Radians(rot[0]), ScarlettMath::Radians(rot[2]) };
             ImGui::DragFloat3((std::string("Scale##") + entityName).c_str(), &transform->scale.x, 0.05f);
         }
 

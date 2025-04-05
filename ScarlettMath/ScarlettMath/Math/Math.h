@@ -53,10 +53,6 @@ static inline float Dot(const Vec3 v1, const Vec3 v2)
     return glm::dot(v1, v2);
 }
 
-static inline Vec3 Rotate(const Vec3 v, const float angleRadians, const Vec3 axis)
-{
-    return glm::rotate(v, angleRadians, axis);
-}
 
 static inline float Clamp(const float value, const float min, const float max)
 {

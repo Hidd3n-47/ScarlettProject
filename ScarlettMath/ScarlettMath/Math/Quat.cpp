@@ -26,9 +26,9 @@ Quat::Quat(const float angleRadians, const Vec3 axis)
 
 Quat::Quat(const float yawRadians, const float pitchRadians, const float rollRadians)
 {
-    const Quat x {  rollRadians  , { 1.0f, 0.0f, 0.0f } };
-    const Quat y {  pitchRadians , { 0.0f, 1.0f, 0.0f } };
-    const Quat z {  yawRadians   , { 0.0f, 0.0f, 1.0f } };
+    const Quat x {  pitchRadians  , { 1.0f, 0.0f, 0.0f } };
+    const Quat y {  yawRadians    , { 0.0f, 1.0f, 0.0f } };
+    const Quat z {  rollRadians   , { 0.0f, 0.0f, 1.0f } };
 
     *this = z * y * x;
 }
