@@ -19,12 +19,6 @@ public:
      */
     explicit Quat(const Vec3 point);
     /**
-     * @brief Construct a quaternion to represent a given rotation about a given axis.
-     * @param angleRadians The angle of rotation (in radians) that the quaternion represents.
-     * @param axis The axis the rotation is about.
-     */
-    explicit Quat(const float angleRadians, const Vec3 axis);
-    /**
      * @brief Construct a quaternion to represent a rotation from the given Yaw, Pitch and Roll rotation.
      * @param yawRadians The angle of rotation (in radians) about the z-axis.
      * @param pitchRadians The angle of rotation (in radians) about the y-axis.
@@ -51,7 +45,7 @@ public:
      * @param quaternion The quaternion used to rotate the point.
      * @return The rotated point.
      */
-    static Vec3 RotatePoint(const Vec3 point, const Quat quaternion);
+    static Vec3 RotatePoint(const Vec3 point, const Quat& quaternion);
 
     /**
      * @brief Get if the quaternion is an identity quaternion.
@@ -76,9 +70,31 @@ public:
      */
     [[nodiscard]] Mat4 GetRotationMatrix() const;
 
+    /**
+     * @brief Get the Yaw, Pitch and Roll rotations for the quaternion.
+     * @remark Angles are return measured in radians.
+     * @param yaw The angle representing the rotation in the 'yaw' axis (i.e. y-axis).
+     * @param pitch The angle representing the rotation in the 'pitch' axis (i.e. x-axis).
+     * @param roll The angle representing the rotation in the 'roll' axis (i.e. z-axis).
+     */
+    inline void GetYawPitchRoll(float& yaw, float& pitch, float& roll) const { yaw = mYaw; pitch = mPitch; roll = mRoll; }
+
+    /**
+     * @brief Set the Yaw, Pitch and Roll rotations for the quaternion.
+     * @remark Angles are measured in radians.
+     * @param yaw The angle representing the rotation in the 'yaw' axis (i.e. y-axis).
+     * @param pitch The angle representing the rotation in the 'pitch' axis (i.e. x-axis).
+     * @param roll The angle representing the rotation in the 'roll' axis (i.e. z-axis).
+     */
+    inline void SetYawPitchRoll(const float yaw, const float pitch, const float roll) { *this = Quat { yaw, pitch, roll }; }
+
     inline void operator*=(const Quat& rhs)
     {
         Multiply(*this, rhs, mX, mY, mZ, mW);
+
+        mYaw   += rhs.mYaw;
+        mPitch += rhs.mPitch;
+        mRoll  += rhs.mRoll;
     }
 
     inline Quat operator*(const Quat& rhs) const
@@ -86,7 +102,12 @@ public:
         float x, y, z, w;
         Multiply(*this, rhs, x, y, z, w);
 
-        return Quat{ w, x, y, z };
+        Quat result { w, x, y, z };
+        result.mYaw     = mYaw   + rhs.mYaw;
+        result.mPitch   = mPitch + rhs.mPitch;
+        result.mRoll    = mRoll  + rhs.mRoll;
+
+        return result;
     }
 
     inline bool operator==(const Quat& rhs) const
@@ -111,13 +132,17 @@ public:
      */
     [[nodiscard]] static Quat Identity() { return Quat{ 1.0f, 0.0f, 0.0f, 0.0f }; }
 private:
+    explicit Quat(const float angleRadians, const Vec3 axis);
+
     float mW = 0.0f, mX = 0.0f, mY = 0.0f, mZ = 0.0f;
+
+    float mYaw = 0.0f, mPitch = 0.0f, mRoll = 0.0f;
 
     inline static void Multiply(const Quat lhs, const Quat rhs, float& x, float& y, float& z, float& w)
     {
         x = lhs.mW * rhs.mX + lhs.mX * rhs.mW + lhs.mY * rhs.mZ - lhs.mZ * rhs.mY;
-        y = lhs.mW * rhs.mY - lhs.mX * rhs.mZ + lhs.mY * rhs.mW + lhs.mZ * rhs.mX;
-        z = lhs.mW * rhs.mZ + lhs.mX * rhs.mY - lhs.mY * rhs.mX + lhs.mZ * rhs.mW;
+        y = lhs.mW * rhs.mY + lhs.mY * rhs.mW + lhs.mZ * rhs.mX - lhs.mX * rhs.mZ;
+        z = lhs.mW * rhs.mZ + lhs.mZ * rhs.mW + lhs.mX * rhs.mY - lhs.mY * rhs.mX;
         w = lhs.mW * rhs.mW - lhs.mX * rhs.mX - lhs.mY * rhs.mY - lhs.mZ * rhs.mZ;
     }
 };

@@ -34,29 +34,11 @@ void ViewportCameraSystem::UpdateSystem()
         constexpr ScarlettMath::Vec3 yAxis { 0.0f, 1.0f,  0.0f };
         constexpr ScarlettMath::Vec3 zAxis { 0.0f, 0.0f, -1.0f };
 
-        const ScarlettMath::Mat3 rotation = transform->rotation.GetRotationMatrix();
-        camera->forwardVector   = rotation * zAxis;
-        camera->rightVector     = rotation * xAxis;
-        camera->upVector        = rotation * yAxis;
+        camera->forwardVector   = ScarlettMath::Quat::RotatePoint(zAxis, transform->rotation);
+        camera->rightVector     = ScarlettMath::Quat::RotatePoint(xAxis, transform->rotation);
+        camera->upVector        = ScarlettMath::Quat::RotatePoint(yAxis, transform->rotation);
 
-        // update view and proj matrix.
-        const ScarlettMath::Vec3 w { ScarlettMath::Normalize(camera->forwardVector) };
-        const ScarlettMath::Vec3 u { ScarlettMath::Normalize(ScarlettMath::Cross(camera->upVector, w)) };
-        const ScarlettMath::Vec3 v { ScarlettMath::Cross(w, u) };
-
-        camera->viewMatrix[0][0] = u.x;
-        camera->viewMatrix[1][0] = u.y;
-        camera->viewMatrix[2][0] = u.z;
-        camera->viewMatrix[0][1] = v.x;
-        camera->viewMatrix[1][1] = v.y;
-        camera->viewMatrix[2][1] = v.z;
-        camera->viewMatrix[0][2] = w.x;
-        camera->viewMatrix[1][2] = w.y;
-        camera->viewMatrix[2][2] = w.z;
-        camera->viewMatrix[3][0] =  ScarlettMath::Dot(u, transform->translation); // todo check direction, should it not be negative?
-        camera->viewMatrix[3][1] = -ScarlettMath::Dot(v, transform->translation); // todo check direction, should it not be negative?
-        camera->viewMatrix[3][2] =  ScarlettMath::Dot(w, transform->translation); // todo check direction, should it not be negative?
-
+        camera->viewMatrix      = ScarlettMath::LookAt(transform->translation, transform->translation + camera->forwardVector, camera->upVector);
 
         camera->projectionMatrix = ScarlettMath::Perspective(60.0f, viewportCamera[0].viewportWidth / viewportCamera[0].viewportHeight, 0.1f, 100.0f);
     }

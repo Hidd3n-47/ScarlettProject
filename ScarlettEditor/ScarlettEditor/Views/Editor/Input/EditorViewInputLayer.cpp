@@ -110,11 +110,16 @@ bool EditorViewInputLayer::OnMouseMoved(const Scarlett::MouseMovedEvent& e)
         ScarlEntt::EntityHandle entity{ entityIds[0], ScarlettGame::GameCore::Instance().GetActiveScene() };
         ScarlettGame::Transform* transform = entity.GetComponent<ScarlettGame::Transform>();
 
-        constexpr float SPEED_SCALING_FACTOR = 0.1f;
+        constexpr float SPEED_SCALING_FACTOR = 0.005f;
         const ScarlettMath::Vec2 moveDelta = mousePosition - mPreviousMousePosition;
 
-        //transform->rotation.y -= moveDelta.x * SPEED_SCALING_FACTOR;
-        //transform->rotation.x -= moveDelta.y * SPEED_SCALING_FACTOR;
+        float yaw, pitch, roll;
+        transform->rotation.GetYawPitchRoll(yaw, pitch, roll);
+
+        yaw    -= moveDelta.x * SPEED_SCALING_FACTOR;
+        pitch  -= moveDelta.y * SPEED_SCALING_FACTOR;
+
+        transform->rotation.SetYawPitchRoll(yaw, pitch, roll);
     }
 
     mPreviousMousePosition = mousePosition;
@@ -134,10 +139,10 @@ bool EditorViewInputLayer::OnKeyPressed(const Scarlett::KeyPressedEvent& e)
     switch (e.GetKeyCode())
     {
         case Scarlett::KeyCode::KEY_W:
-            mCameraForwardDirection    +=  1.0f;
+            mCameraForwardDirection    += -1.0f;
             break;
         case Scarlett::KeyCode::KEY_S:
-            mCameraForwardDirection    += -1.0f;
+            mCameraForwardDirection    +=  1.0f;
             break;
         case Scarlett::KeyCode::KEY_A:
             mCameraHorizontalDirection += -1.0f;
@@ -160,25 +165,47 @@ bool EditorViewInputLayer::OnKeyPressed(const Scarlett::KeyPressedEvent& e)
 
 bool EditorViewInputLayer::OnKeyReleased(const Scarlett::KeyReleasedEvent& e)
 {
+    if (!mCameraFlying)
+    {
+        return EditorInputLayer::OnKeyReleased(e);
+    }
     switch (e.GetKeyCode())
     {
     case Scarlett::KeyCode::KEY_W:
-        mCameraForwardDirection    -=  1.0f;
+        if (!ScarlettMath::IsEqualTo(mCameraForwardDirection, 0.0f))
+        {
+            mCameraForwardDirection    -= -1.0f;
+        }
         break;
     case Scarlett::KeyCode::KEY_S:
-        mCameraForwardDirection    -= -1.0f;
+        if (!ScarlettMath::IsEqualTo(mCameraForwardDirection, 0.0f))
+        {
+            mCameraForwardDirection    -=  1.0f;
+        }
         break;
     case Scarlett::KeyCode::KEY_A:
-        mCameraHorizontalDirection -= -1.0f;
+        if (!ScarlettMath::IsEqualTo(mCameraHorizontalDirection, 0.0f))
+        {
+            mCameraHorizontalDirection    -= -1.0f;
+        }
         break;
     case Scarlett::KeyCode::KEY_D:
-        mCameraHorizontalDirection -=  1.0f;
+        if (!ScarlettMath::IsEqualTo(mCameraHorizontalDirection, 0.0f))
+        {
+            mCameraHorizontalDirection    -=  1.0f;
+        }
         break;
     case Scarlett::KeyCode::KEY_E:
-        mCameraVerticalDirection   -=  1.0f;
+        if (!ScarlettMath::IsEqualTo(mCameraVerticalDirection, 0.0f))
+        {
+            mCameraVerticalDirection    -=  1.0f;
+        }
         break;
     case Scarlett::KeyCode::KEY_Q:
-        mCameraVerticalDirection   -= -1.0f;
+        if (!ScarlettMath::IsEqualTo(mCameraVerticalDirection, 0.0f))
+        {
+            mCameraVerticalDirection    -= -1.0f;
+        }
         break;
     default:
         return EditorInputLayer::OnKeyReleased(e);

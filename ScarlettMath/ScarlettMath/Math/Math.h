@@ -18,9 +18,9 @@ typedef glm::vec4 Vec4;
 typedef glm::mat3 Mat3;
 typedef glm::mat4 Mat4;
 
-static inline Mat4 LookAt(const Vec3 eye, const Vec3 center, const Vec3 up)
+static inline float Degrees(const float radians)
 {
-    return glm::lookAt(eye, center, up);
+    return glm::degrees(radians);
 }
 
 static inline float Radians(const float degrees)
@@ -53,6 +53,27 @@ static inline float Dot(const Vec3 v1, const Vec3 v2)
     return glm::dot(v1, v2);
 }
 
+static inline Mat4 LookAt(const Vec3 eye, const Vec3 center, const Vec3 up)
+{
+    const Vec3 f { Normalize(center - eye) };
+    const Vec3 s { Normalize(cross(f, up)) };
+    const Vec3 u { Cross(s, f) };
+
+    Mat4 result { 1 };
+    result[0][0] =  s.x;
+    result[1][0] =  s.y;
+    result[2][0] =  s.z;
+    result[0][1] =  u.x;
+    result[1][1] =  u.y;
+    result[2][1] =  u.z;
+    result[0][2] = -f.x;
+    result[1][2] = -f.y;
+    result[2][2] = -f.z;
+    result[3][0] = -dot(s, eye);
+    result[3][1] = -dot(u, eye);
+    result[3][2] =  dot(f, eye);
+    return result;
+}
 
 static inline float Clamp(const float value, const float min, const float max)
 {

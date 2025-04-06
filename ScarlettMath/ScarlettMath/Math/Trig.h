@@ -1,18 +1,45 @@
 ﻿#pragma once
 
 #include <cmath>
+#include <numbers>
 
 namespace ScarlettMath
 {
 
-static float Sin(const float angleRadians)
+class Trig
 {
-    return std::sin(angleRadians);
-}
+public:
+    [[nodiscard]] inline static float Sin(const float angleRadians)
+    {
+        return std::sin(angleRadians);
+    }
 
-static float Cos(const float angleRadians)
-{
-    return std::cos(angleRadians);
-}
+    [[nodiscard]] inline static float Cos(const float angleRadians)
+    {
+        return std::cos(angleRadians);
+    }
+
+    [[nodiscard]] inline static float Asin(const float value)
+    {
+        return std::asin(value);
+    }
+
+    [[nodiscard]] inline static float CorrectAngleTo0To2PiRange(float angle)
+    {
+        while (angle < 0.0f || angle >= 2 * std::numbers::pi_v<float>)
+        {
+            if (angle >= 2 * std::numbers::pi_v<float>)
+            {
+                angle -= 2 * std::numbers::pi_v<float>;
+            }
+            else if (angle < 0.0f)
+            {
+                angle += 2 * std::numbers::pi_v<float>;
+            }
+        }
+
+        return angle;
+    }
+};
 
 } // Namespace ScarlettMath.

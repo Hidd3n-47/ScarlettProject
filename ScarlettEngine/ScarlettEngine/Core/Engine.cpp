@@ -92,7 +92,7 @@ void Engine::InitEngine()
     auto square6 = ScarlettGame::GameCore::Instance().CreateEntity();
     const auto transform6 = square6.GetComponent<ScarlettGame::Transform>();
     transform6->translation = ScarlettMath::Vec3(0.0f, 0.0f, -0.5f);
-    square6.GetComponent<ScarlettGame::SquareSprite>()->color = ScarlettMath::Vec4(1.0f, 1.0f, 1.0f, 1.0f);
+    square6.GetComponent<ScarlettGame::SquareSprite>()->color = ScarlettMath::Vec4(0.0f, 0.0f, 0.0f, 1.0f);
 
     // Everything initialized okay, so we can run the engine.
     mRunning = true;

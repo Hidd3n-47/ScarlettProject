@@ -29,14 +29,14 @@ EditorView::EditorView()
     viewportCamera.RemoveComponent<ScarlettGame::SquareSprite>();
     //viewportCamera.RemoveComponent<ScarlettGame::Tag>(); // TODO remove later, just keeping this as it is handy to see camera position.
     viewportCamera.GetComponent<ScarlettGame::Transform>()->translation = { 0.0f, 2.0f, 6.0f };
-    viewportCamera.GetComponent<ScarlettGame::Transform>()->rotation = ScarlettMath::Quat { ScarlettMath::Radians(45.0f), ScarlettMath::Radians(90.0f), 0.0f };
     (void)viewportCamera.AddComponent<ViewportCamera>();
 
     //todo Add blending for the grid.
     ScarlEntt::EntityHandle viewportGrid = ScarlettGame::GameCore::Instance().CreateEntity();
+    viewportGrid.GetComponent<ScarlettGame::Transform>()->translation = { 0.0f, -0.5f, 0.0f };
+    viewportGrid.GetComponent<ScarlettGame::Transform>()->rotation = ScarlettMath::Quat { 0.0f, ScarlettMath::Radians(90.0f), 0.0f };
     viewportGrid.GetComponent<ScarlettGame::Transform>()->scale = { 100.0f, 100.0f, 0.0f };
-    viewportGrid.GetComponent<ScarlettGame::Transform>()->rotation = ScarlettMath::Quat { 0.0f, ScarlettMath::Radians(0.0f), 0.0f };
-    viewportGrid.GetComponent<ScarlettGame::SquareSprite>()->color = { 1.0f, 0.0f, 0.0f, 0.2f };
+    viewportGrid.GetComponent<ScarlettGame::SquareSprite>()->color = { 1.0f, 1.0f, 1.0f, 0.2f };
 
     AddPanel<ScenePanel>();
     AddPanel<ViewportPanel>();
