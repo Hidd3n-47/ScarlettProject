@@ -23,10 +23,6 @@ private:
 
     ScarlettMath::Vec2 mPreviousMousePosition   { -1.f };
 
-    float mCameraVerticalDirection      = 0.0f;
-    float mCameraHorizontalDirection    = 0.0f;
-    float mCameraForwardDirection       = 0.0f;
-
     bool OnMouseButtonPressed(const Scarlett::MouseButtonPressedEvent& e) override;
     bool OnMouseButtonReleased(const Scarlett::MouseButtonReleasedEvent& e) override;
 

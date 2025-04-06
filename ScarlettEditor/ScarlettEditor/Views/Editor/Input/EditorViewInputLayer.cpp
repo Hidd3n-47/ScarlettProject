@@ -9,6 +9,8 @@
 #include <ScarlettGameCore/Components/Transform.h>
 #include <ScarlettGameCore/Components/BoundingBox.h>
 
+#include "Input/EditorInputManager.h"
+
 #include "Views/Editor/ViewportCamera.h"
 #include "Views/Editor/View/EditorView.h"
 #include "Views/Editor/Panels/ViewportPanel.h"
@@ -129,38 +131,23 @@ bool EditorViewInputLayer::OnMouseMoved(const Scarlett::MouseMovedEvent& e)
 
 bool EditorViewInputLayer::OnKeyPressed(const Scarlett::KeyPressedEvent& e)
 {
-    //todo this should move into a viewport selection input manager.
     if (!mCameraFlying)
     {
         return EditorInputLayer::OnKeyPressed(e);
     }
 
-    // todo change this to be event based so that it can be smooth movement.
     switch (e.GetKeyCode())
     {
-        case Scarlett::KeyCode::KEY_W:
-            mCameraForwardDirection    += -1.0f;
-            break;
-        case Scarlett::KeyCode::KEY_S:
-            mCameraForwardDirection    +=  1.0f;
-            break;
-        case Scarlett::KeyCode::KEY_A:
-            mCameraHorizontalDirection += -1.0f;
-            break;
-        case Scarlett::KeyCode::KEY_D:
-            mCameraHorizontalDirection +=  1.0f;
-            break;
-        case Scarlett::KeyCode::KEY_E:
-            mCameraVerticalDirection   +=  1.0f;
-            break;
-        case Scarlett::KeyCode::KEY_Q:
-            mCameraVerticalDirection   += -1.0f;
-            break;
+    case Scarlett::KeyCode::KEY_W:
+    case Scarlett::KeyCode::KEY_S:
+    case Scarlett::KeyCode::KEY_A:
+    case Scarlett::KeyCode::KEY_D:
+    case Scarlett::KeyCode::KEY_E:
+    case Scarlett::KeyCode::KEY_Q:
+        return true;
     default:
         return EditorInputLayer::OnKeyPressed(e);
     }
-
-    return true;
 }
 
 bool EditorViewInputLayer::OnKeyReleased(const Scarlett::KeyReleasedEvent& e)
@@ -169,49 +156,19 @@ bool EditorViewInputLayer::OnKeyReleased(const Scarlett::KeyReleasedEvent& e)
     {
         return EditorInputLayer::OnKeyReleased(e);
     }
+
     switch (e.GetKeyCode())
     {
     case Scarlett::KeyCode::KEY_W:
-        if (!ScarlettMath::IsEqualTo(mCameraForwardDirection, 0.0f))
-        {
-            mCameraForwardDirection    -= -1.0f;
-        }
-        break;
     case Scarlett::KeyCode::KEY_S:
-        if (!ScarlettMath::IsEqualTo(mCameraForwardDirection, 0.0f))
-        {
-            mCameraForwardDirection    -=  1.0f;
-        }
-        break;
     case Scarlett::KeyCode::KEY_A:
-        if (!ScarlettMath::IsEqualTo(mCameraHorizontalDirection, 0.0f))
-        {
-            mCameraHorizontalDirection    -= -1.0f;
-        }
-        break;
     case Scarlett::KeyCode::KEY_D:
-        if (!ScarlettMath::IsEqualTo(mCameraHorizontalDirection, 0.0f))
-        {
-            mCameraHorizontalDirection    -=  1.0f;
-        }
-        break;
     case Scarlett::KeyCode::KEY_E:
-        if (!ScarlettMath::IsEqualTo(mCameraVerticalDirection, 0.0f))
-        {
-            mCameraVerticalDirection    -=  1.0f;
-        }
-        break;
     case Scarlett::KeyCode::KEY_Q:
-        if (!ScarlettMath::IsEqualTo(mCameraVerticalDirection, 0.0f))
-        {
-            mCameraVerticalDirection    -= -1.0f;
-        }
-        break;
+        return true;
     default:
         return EditorInputLayer::OnKeyReleased(e);
     }
-
-    return true;
 }
 
 bool EditorViewInputLayer::OnUpdateEvent(const Scarlett::OnUpdateEvent& e)
@@ -231,10 +188,36 @@ bool EditorViewInputLayer::OnUpdateEvent(const Scarlett::OnUpdateEvent& e)
 
     const ViewportCamera* camera = &viewportCameraArray[0];
 
-    // Todo (CameraIssue) Should you subtract camera forward?
-    entity.GetComponent<ScarlettGame::Transform>()->translation += camera->rightVector      * mCameraHorizontalDirection    * SPEED_SCALING_FACTOR
-                                                                 - camera->forwardVector    * mCameraForwardDirection       * SPEED_SCALING_FACTOR
-                                                                 + camera->upVector         * mCameraVerticalDirection      * SPEED_SCALING_FACTOR;
+    ScarlettMath::Vec3 cameraHorizontalDirection = { }, cameraVerticalDirection = { }, cameraForwardDirection = { };
+
+    if (EditorInputManager::IsKeyDown(Scarlett::KeyCode::KEY_W))
+    {
+        cameraForwardDirection += -1.0f;
+    }
+    if (EditorInputManager::IsKeyDown(Scarlett::KeyCode::KEY_S))
+    {
+        cameraForwardDirection += 1.0f;
+    }
+    if (EditorInputManager::IsKeyDown(Scarlett::KeyCode::KEY_A))
+    {
+        cameraHorizontalDirection += -1.0f;
+    }
+    if (EditorInputManager::IsKeyDown(Scarlett::KeyCode::KEY_D))
+    {
+        cameraHorizontalDirection += 1.0f;
+    }
+    if (EditorInputManager::IsKeyDown(Scarlett::KeyCode::KEY_E))
+    {
+        cameraVerticalDirection += 1.0f;
+    }
+    if (EditorInputManager::IsKeyDown(Scarlett::KeyCode::KEY_Q))
+    {
+        cameraVerticalDirection += -1.0f;
+    }
+
+    entity.GetComponent<ScarlettGame::Transform>()->translation += camera->rightVector      * cameraHorizontalDirection    * SPEED_SCALING_FACTOR
+                                                                 - camera->forwardVector    * cameraForwardDirection       * SPEED_SCALING_FACTOR
+                                                                 + camera->upVector         * cameraVerticalDirection      * SPEED_SCALING_FACTOR;
 
     return true;
 }

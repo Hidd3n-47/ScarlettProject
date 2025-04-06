@@ -1,18 +1,19 @@
 #include "ScarlettEnginePch.h"
 #include "Engine.h"
 
+#include <Editor/EditorManager.h>
+
+#include <ScarlettGameCore/Src/GameCore.h>
+#include <ScarlettGameCore/Components/Transform.h>
+#include <ScarlettGameCore/Components/SquareSprite.h>
+
 #include "WindowLayer.h"
 #include "Input/LayerStack.h"
 
 #include "Core/Window/WindowManager.h"
 #include "Rendering/Vulkan/VulkanRendererEditor.h"
 
-#include <ScarlettGameCore/Src/GameCore.h>
-#include <ScarlettGameCore/Components/Transform.h>
-#include <ScarlettGameCore/Components/SquareSprite.h>
-
-#include <Editor/EditorManager.h>
-
+#include "Input/InputManager.h"
 #include "Events/ApplicationEvents.h"
 #include "Systems/SquareSpriteSystem.h"
 
@@ -138,6 +139,8 @@ void Engine::OnEvent(Event& e) const
 #ifdef SCARLETT_EDITOR_ENABLED
     ScarlettEditor::EditorManager::Instance().OnEvent(e);
 #endif // SCARLETT_EDITOR_ENABLED.
+
+    InputManager::OnEvent(e);
 
     mLayerStack->OnEvent(e);
 }

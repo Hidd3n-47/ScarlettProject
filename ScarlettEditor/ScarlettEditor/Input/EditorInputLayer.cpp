@@ -3,11 +3,15 @@
 
 #include <imgui/imgui.h>
 
+#include "Input/EditorInputManager.h"
+
 namespace ScarlettEditor
 {
 
 void EditorInputLayer::OnEvent(Scarlett::Event& e)
 {
+    EditorInputManager::OnEvent(e);
+
     Scarlett::EventDispatcher dispatcher(e);
     dispatcher.Dispatch<Scarlett::MouseButtonPressedEvent>(SCARLETT_BIND_FUNCTION(EditorInputLayer::OnMouseButtonPressedInternal));
     dispatcher.Dispatch<Scarlett::MouseButtonReleasedEvent>(SCARLETT_BIND_FUNCTION(EditorInputLayer::OnMouseButtonReleasedInternal));
