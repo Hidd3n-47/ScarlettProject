@@ -56,9 +56,7 @@ void Engine::InitEngine()
 
     SCARLETT_DLOG("Engine Initialized");
 
-    SquareSpriteSystemProperties properties;
-    properties.device = Renderer::Instance().GetDevice();
-    ScarlettGame::GameCore::Instance().GetActiveScene()->RegisterSystem<SquareSpriteSystem>(&properties);
+    ScarlettGame::GameCore::Instance().GetActiveScene()->RegisterSystem<SquareSpriteSystem>();
 
     // Add a "Cube" to the scene.
     auto square1 = ScarlettGame::GameCore::Instance().CreateEntity();

@@ -2,16 +2,11 @@
 #include "SquareSpriteSystem.h"
 
 #include <ScarlEntt/Scene.h>
-#include <ScarlEntt/EntityHandle.h>
 
-#include "Rendering/Vulkan/Mesh.h"
-#include "Rendering/SpriteInfoStruct.h"
-
-#include <ScarlettGameCore/Components/Camera.h>
-#include <ScarlettGameCore/Components/Transform.h>
 #include <ScarlettGameCore/Components/SquareSprite.h>
 
 #include "Rendering/Renderer.h"
+#include "Rendering/Commands/SpriteCommand.h"
 
 namespace Scarlett
 {
@@ -22,72 +17,18 @@ SquareSpriteSystem::SquareSpriteSystem(ScarlEntt::Scene* sceneRef, ScarlEntt::Co
     mComponentManagerRef    = componentManagerRef;
 }
 
-void SquareSpriteSystem::InitSystem(ScarlEntt::ISystemProperties* properties)
-{
-    const SquareSpriteSystemProperties* props = reinterpret_cast<SquareSpriteSystemProperties*>(properties);
-
-    const vector<Vertex> verts
-    {
-        {{ -0.5f, -0.5f} },
-        {{ -0.5f,  0.5f} },
-        {{  0.5f,  0.5f} },
-    };
-    mTriOne = new Mesh(props->device, verts);
-
-    const vector<Vertex> verts2
-    {
-        {{  0.5f,  0.5f} },
-        {{  0.5f, -0.5f} },
-        {{ -0.5f, -0.5f} },
-    };
-    mTriTwo = new Mesh(props->device, verts2);
-}
-
 void SquareSpriteSystem::UpdateSystem()
 {
-    const VkCommandBuffer commandBuffer     = Renderer::Instance().GetCommandBuffer();
-    const VkPipelineLayout pipelineLayout   = Renderer::Instance().GetPipelineLayout();
-    const ScarlettGame::Camera* camera      = Renderer::Instance().GetRenderCamera();
-
     const auto& squareSprites = mComponentManagerRef->GetComponentArray<ScarlettGame::SquareSprite>();
     const auto& entityIds = squareSprites.GetCorrespondingEntityId();
     for (ScarlEntt::ComponentId i{0}; i < squareSprites.Size(); ++i)
     {
-        ScarlEntt::EntityHandle entity{entityIds[i], mSceneRef };
-        const ScarlettGame::Transform* transform = entity.GetComponent<ScarlettGame::Transform>();
+        // todo pool the commands to not hammer the new
+        // todo change to use the polymorphism
+        RenderCommand* command = new RenderCommand { squareSprites[i].color, ScarlEntt::ComponentRef(entityIds[i], &mComponentManagerRef->GetComponentArray<ScarlettGame::Transform>()) };
+        Renderer::Instance().AddCommand(RenderType::SPRITE, command);
 
-        const ScarlettMath::Mat4 scale{ transform->scale.x, 0.0f, 0.0f, 0.0, 0.0f, transform->scale.y, 0.0f, 0.0f, 0.0f, 0.0f, transform->scale.z, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f };
-
-        ScarlettMath::Mat4 trans{ 1.0f };
-        trans[3][0] = transform->translation.x;
-        trans[3][1] = transform->translation.y;
-        trans[3][2] = transform->translation.z;
-
-        const SpriteInfoStruct info
-        {
-            .color = squareSprites[i].color,
-            .view  = camera->viewMatrix,
-            .proj  = camera->projectionMatrix,
-            .model = trans * transform->rotation.GetRotationMatrix() * scale
-        };
-
-        vkCmdPushConstants(commandBuffer, pipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SpriteInfoStruct), &info);
-
-        mTriOne->Bind(commandBuffer);
-        mTriOne->Draw(commandBuffer);
-
-        mTriTwo->Bind(commandBuffer);
-        mTriTwo->Draw(commandBuffer);
     }
-}
-
-void SquareSpriteSystem::DestroySystem()
-{
-    delete mTriOne;
-    mTriOne = nullptr;
-
-    delete mTriTwo;
-    mTriTwo = nullptr;
 }
 
 } // Namespace Scarlett

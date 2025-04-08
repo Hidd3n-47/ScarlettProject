@@ -12,7 +12,8 @@ typedef uint32_t ComponentId;
 
 namespace Entity
 {
-constexpr ScarlEntt::EntityId InvalidEntityId = static_cast<ScarlEntt::EntityId>(-1);
+constexpr ScarlEntt::EntityId InvalidEntityId       = static_cast<ScarlEntt::EntityId>(-1);
+constexpr ScarlEntt::EntityId InvalidComponentId    = static_cast<ScarlEntt::ComponentId>(-1);
 } // Namespace Entity
 
 template <typename T, typename W>

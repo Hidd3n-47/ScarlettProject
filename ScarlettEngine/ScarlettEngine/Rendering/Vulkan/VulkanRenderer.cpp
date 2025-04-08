@@ -3,22 +3,22 @@
 
 #include <stdexcept>
 
-#ifdef SCARLETT_UI_ENABLED
-//#include <backends/imgui_impl_glfw.h>
-//#include <backends/imgui_impl_vulkan.h>
-#endif // SCARLETT_UI_ENABLED.
-
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image/stb_image.h>
 
+#include <ScarlettGameCore/Components/Camera.h>
+
+#include "Mesh.h"
 #include "VulkanUtils.h"
-#include "Rendering/SpriteInfoStruct.h"
 #include "Core/Window/Window.h"
+#include "Rendering/SpriteInfoStruct.h"
+#include "Rendering/Commands/SpriteCommand.h"
 
 namespace Scarlett
 {
+
 #ifndef SCARLETT_EDITOR_ENABLED
-        std::unique_ptr<Renderer> Renderer::mInstance = std::make_unique<VulkanRenderer>();
+    std::unique_ptr<Renderer> Renderer::mInstance = std::make_unique<VulkanRenderer>();
 #endif // SCARLETT_EDITOR_ENABLED.
 
 void VulkanRenderer::Init(const Window* windowRef)
@@ -106,6 +106,58 @@ void VulkanRenderer::Render()
 
 void VulkanRenderer::EndRender()
 {
+    const ScarlettGame::Camera* camera = GetRenderCamera();
+
+    // Sprites.
+    // todo move towards a vertex and index buffer to batch/instance render.
+    //vector<Vertex> mVertexBuffer;
+    //vector<uint32> mIndexBuffer;
+    for (size_t i{ 0 }; i < mCommands[RenderType::SPRITE].size(); ++i)
+    {
+        RenderCommand* command = (mCommands[RenderType::SPRITE][i]);
+
+        const vector<Vertex> verts
+        {
+            {{ -0.5f, -0.5f} },
+            {{ -0.5f,  0.5f} },
+            {{  0.5f,  0.5f} },
+        };
+        Mesh* triOne = new Mesh(&mDevice, verts);
+
+        const vector<Vertex> verts2
+        {
+            {{  0.5f,  0.5f} },
+            {{  0.5f, -0.5f} },
+            {{ -0.5f, -0.5f} },
+        };
+        Mesh* triTwo = new Mesh(&mDevice, verts2);
+
+        const ScarlettMath::Mat4 scale = ScarlettMath::ScaleMatrix(command->transform->scale);
+        ScarlettMath::Mat4 translation = ScarlettMath::TranslateMatrix(command->transform->translation);
+
+        const SpriteInfoStruct info
+        {
+            .color = command->color,
+            .view  = camera->viewMatrix,
+            .proj  = camera->projectionMatrix,
+            .model = translation * command->transform->rotation.GetRotationMatrix() * scale
+        };
+
+        vkCmdPushConstants(mCommandBuffers[mNextImageIndex], mPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SpriteInfoStruct), &info);
+
+        triOne->Bind(mCommandBuffers[mNextImageIndex]);
+        triOne->Draw(mCommandBuffers[mNextImageIndex]);
+
+        triTwo->Bind(mCommandBuffers[mNextImageIndex]);
+        triTwo->Draw(mCommandBuffers[mNextImageIndex]);
+
+        // todo this causes an error as we deleting before we finished render.
+        //delete triOne;
+        //delete triTwo;
+
+        delete command;
+    }
+    mCommands[RenderType::SPRITE].clear();
 
     vkCmdEndRenderPass(mCommandBuffers[mNextImageIndex]);
 

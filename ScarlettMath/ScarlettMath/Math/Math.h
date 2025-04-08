@@ -110,4 +110,18 @@ static bool IsEqualTo(const Mat4& lhs, const Mat4& rhs)
     return true;
 }
 
+static Mat4 ScaleMatrix(const Vec3 scale)
+{
+    return { scale.x, 0.0f, 0.0f, 0.0, 0.0f, scale.y, 0.0f, 0.0f, 0.0f, 0.0f, scale.z, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f };
+}
+
+static Mat4 TranslateMatrix(const Vec3 translation)
+{
+    Mat4 trans{ 1.0f };
+    trans[3][0] = translation.x;
+    trans[3][1] = translation.y;
+    trans[3][2] = translation.z;
+    return trans;
+}
+
 } // Namespace ScarlettMath.

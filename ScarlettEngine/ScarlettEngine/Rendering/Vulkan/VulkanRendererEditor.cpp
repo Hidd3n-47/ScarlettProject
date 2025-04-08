@@ -1,10 +1,10 @@
 #include "ScarlettEnginePch.h"
 #include "VulkanRendererEditor.h"
 
+#ifdef SCARLETT_EDITOR_ENABLED
+
 #include <ScarlettGameCore/Src/GameCore.h>
 #include <Views/Editor/ViewportCamera.h>
-
-#ifdef SCARLETT_EDITOR_ENABLED
 
 #include <imgui/imgui_impl_glfw.h>
 #include <imgui/imgui_impl_vulkan.h>
