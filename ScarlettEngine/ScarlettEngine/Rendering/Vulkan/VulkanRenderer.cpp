@@ -34,6 +34,20 @@ void VulkanRenderer::Init(const Window* windowRef)
         CreatePipeline();
 
         CreateCommandBuffers();
+
+        const vector<Vertex> verts
+        {
+                {{ -0.5f, -0.5f} },
+                {{ -0.5f,  0.5f} },
+                {{  0.5f,  0.5f} },
+                {{  0.5f, -0.5f} },
+            };
+        const vector<uint32> indices
+        {
+            0, 1, 2,
+            2, 3, 0
+        };
+        mSquare = new Mesh(&mDevice, verts, indices);
     }
     catch(const std::runtime_error& e)
     {
@@ -44,6 +58,8 @@ void VulkanRenderer::Init(const Window* windowRef)
 void VulkanRenderer::Destroy()
 {
     vkDeviceWaitIdle(mDevice.mDevice);
+
+    delete mSquare;
 
     FreeCommandBuffers();
 
@@ -70,7 +86,10 @@ void VulkanRenderer::BeginRender()
 
     constexpr VkCommandBufferBeginInfo beginInfo
     {
-        .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO
+        .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_BEGIN_INFO,
+        .pNext              = VK_NULL_HANDLE,
+        .flags              = 0,
+        .pInheritanceInfo   = VK_NULL_HANDLE
     };
 
     VK_CHECK(vkBeginCommandBuffer(mCommandBuffers[mNextImageIndex], &beginInfo), "Failed to begin recording Vulkan Command Buffer");
@@ -82,17 +101,18 @@ void VulkanRenderer::BeginRender()
     };
 
     std::array<VkClearValue, 2> clearValues;
-    clearValues[0].color = { { mClearColor[0], mClearColor[1], mClearColor[2], 1.0f} };
-    clearValues[1].depthStencil = { 1.0f, 0 };
+    clearValues[0].color            = { .float32 = { mClearColor[0], mClearColor[1], mClearColor[2], 1.0f } };
+    clearValues[1].depthStencil     = { .depth = 1.0f, .stencil = 0 };
 
     const VkRenderPassBeginInfo renderPassInfo
     {
         .sType = VK_STRUCTURE_TYPE_RENDER_PASS_BEGIN_INFO,
-        .renderPass = mSwapChain->GetRenderPass(),
-        .framebuffer = mSwapChain->GetFrameBuffer(static_cast<int>(mNextImageIndex)),
-        .renderArea = renderArea,
-        .clearValueCount = static_cast<uint32>(clearValues.size()),
-        .pClearValues = clearValues.data()
+        .pNext              = VK_NULL_HANDLE,
+        .renderPass         = mSwapChain->GetRenderPass(),
+        .framebuffer        = mSwapChain->GetFrameBuffer(static_cast<int>(mNextImageIndex)),
+        .renderArea         = renderArea,
+        .clearValueCount    = static_cast<uint32>(clearValues.size()),
+        .pClearValues       = clearValues.data()
     };
 
     vkCmdBeginRenderPass(mCommandBuffers[mNextImageIndex], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
@@ -114,48 +134,23 @@ void VulkanRenderer::EndRender()
     //vector<uint32> mIndexBuffer;
     for (size_t i{ 0 }; i < mCommands[RenderType::SPRITE].size(); ++i)
     {
-        RenderCommand* command = (mCommands[RenderType::SPRITE][i]);
+        const RenderCommand command = mCommands[RenderType::SPRITE][i];
 
-        const vector<Vertex> verts
-        {
-            {{ -0.5f, -0.5f} },
-            {{ -0.5f,  0.5f} },
-            {{  0.5f,  0.5f} },
-        };
-        Mesh* triOne = new Mesh(&mDevice, verts);
-
-        const vector<Vertex> verts2
-        {
-            {{  0.5f,  0.5f} },
-            {{  0.5f, -0.5f} },
-            {{ -0.5f, -0.5f} },
-        };
-        Mesh* triTwo = new Mesh(&mDevice, verts2);
-
-        const ScarlettMath::Mat4 scale = ScarlettMath::ScaleMatrix(command->transform->scale);
-        ScarlettMath::Mat4 translation = ScarlettMath::TranslateMatrix(command->transform->translation);
+        const ScarlettMath::Mat4 scale = ScarlettMath::ScaleMatrix(command.transform->scale);
+        ScarlettMath::Mat4 translation = ScarlettMath::TranslateMatrix(command.transform->translation);
 
         const SpriteInfoStruct info
         {
-            .color = command->color,
+            .color = command.color,
             .view  = camera->viewMatrix,
             .proj  = camera->projectionMatrix,
-            .model = translation * command->transform->rotation.GetRotationMatrix() * scale
+            .model = translation * command.transform->rotation.GetRotationMatrix() * scale
         };
 
         vkCmdPushConstants(mCommandBuffers[mNextImageIndex], mPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SpriteInfoStruct), &info);
 
-        triOne->Bind(mCommandBuffers[mNextImageIndex]);
-        triOne->Draw(mCommandBuffers[mNextImageIndex]);
-
-        triTwo->Bind(mCommandBuffers[mNextImageIndex]);
-        triTwo->Draw(mCommandBuffers[mNextImageIndex]);
-
-        // todo this causes an error as we deleting before we finished render.
-        //delete triOne;
-        //delete triTwo;
-
-        delete command;
+        mSquare->Bind(mCommandBuffers[mNextImageIndex]);
+        mSquare->Draw(mCommandBuffers[mNextImageIndex]);
     }
     mCommands[RenderType::SPRITE].clear();
 
@@ -179,16 +174,19 @@ void VulkanRenderer::OnWindowResize(const uint32 width, const uint32 height)
 
 void VulkanRenderer::CreatePipelineLayout()
 {
-    const VkPushConstantRange pushConstantRange
+    constexpr VkPushConstantRange pushConstantRange
     {
         .stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
         .offset = 0,
         .size = sizeof(SpriteInfoStruct)
     };
 
+    // ReSharper disable once CppVariableCanBeMadeConstexpr
     const VkPipelineLayoutCreateInfo pipelineLayoutCreateInfo
     {
         .sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,
+        .pNext                      = VK_NULL_HANDLE,
+        .flags                      = 0,
         .setLayoutCount             = 0,
         .pSetLayouts                = nullptr,
         .pushConstantRangeCount     = 1,
@@ -223,6 +221,7 @@ void VulkanRenderer::CreateCommandBuffers()
     const VkCommandBufferAllocateInfo commandBufferAllocInfo
     {
         .sType = VK_STRUCTURE_TYPE_COMMAND_BUFFER_ALLOCATE_INFO,
+        .pNext                  = VK_NULL_HANDLE,
         .commandPool            = mDevice.GetCommandPool(),
         .level                  = VK_COMMAND_BUFFER_LEVEL_PRIMARY,
         .commandBufferCount     = static_cast<uint32>(mCommandBuffers.size()),

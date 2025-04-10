@@ -1,7 +1,8 @@
 #include "ScarlettEnginepch.h"
 #include "Mesh.h"
 
-#include "Utilities.h"
+#include "VertexBuffer.h"
+#include "IndexBuffer.h"
 #include "Device.h"
 
 namespace Scarlett
@@ -35,28 +36,29 @@ vector<VkVertexInputAttributeDescription> Vertex::GetAttributeDescriptions()
     return bindingAttributes;
 }
 
-Mesh::Mesh(Device* device, const vector<Vertex>& vertices)
-    : mDevice(device)
-    , mVertexBuffer { new VertexBuffer{ device, sizeof(vertices), vertices.data()} }
-    , mVertexCount { static_cast<uint32>(vertices.size()) }
+Mesh::Mesh(Device* device, const vector<Vertex>& vertices, const vector<uint32_t>& indices)
+    : mVertexBuffer { new VertexBuffer{ device, sizeof(Vertex) * vertices.size(), vertices.data()} }
+    , mIndexBuffer  { new IndexBuffer { device, static_cast<uint32>(indices.size()), indices.data() }}
 {
     // Empty.
 }
 
 Mesh::~Mesh()
 {
+    delete mIndexBuffer;
     delete mVertexBuffer;
 }
 
 void Mesh::Bind(const VkCommandBuffer commandBuffer) const
 {
     mVertexBuffer->Bind(commandBuffer);
+    mIndexBuffer->Bind(commandBuffer);
 }
 
 
 void Mesh::Draw(const VkCommandBuffer commandBuffer) const
 {
-    vkCmdDraw(commandBuffer, mVertexCount, 1, 0, 0);
+    vkCmdDrawIndexed(commandBuffer, mIndexBuffer->GetNumberOfIndices(), 1, 0, 0, 0);
 }
 
 } // Namespace Scarlett.

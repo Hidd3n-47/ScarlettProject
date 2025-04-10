@@ -10,19 +10,22 @@
 namespace Scarlett
 {
 
+class Mesh;
+
 class VulkanRenderer : public Renderer
 {
     friend class VulkanRendererEditor;
 public:
     VulkanRenderer() = default;
+    ~VulkanRenderer() override = default;
 
     VulkanRenderer(const VulkanRenderer&)               = delete;
     VulkanRenderer(VulkanRenderer&&)                    = delete;
     VulkanRenderer& operator=(VulkanRenderer&&)         = delete;
     VulkanRenderer& operator=(const VulkanRenderer&)    = delete;
 
-    // Todo Change Renderer to use commands instead and remove references to these.
-    inline ScarlettGame::Camera*    GetRenderCamera()       override { return nullptr; } // todo add camera for release
+    // todo add camera for release
+    inline ScarlettGame::Camera*    GetRenderCamera() override { return nullptr; }
 
     void Init(const Window* windowRef) override;
     void Destroy() override;
@@ -49,6 +52,8 @@ private:
     vector<VkCommandBuffer>     mCommandBuffers;
 
     uint32 mNextImageIndex;
+
+    Mesh* mSquare;
 
     // Temp.
     float mClearColor[3] = { 0.1f, 0.1f, 0.1f };

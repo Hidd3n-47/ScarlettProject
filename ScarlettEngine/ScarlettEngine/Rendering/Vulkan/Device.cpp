@@ -8,9 +8,12 @@
 
 namespace Scarlett {
 
-static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
-    VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
-    VkDebugUtilsMessageTypeFlagsEXT messageType,
+namespace
+{
+
+static VkBool32 DebugCallback(
+    const VkDebugUtilsMessageSeverityFlagBitsEXT messageSeverity,
+    const VkDebugUtilsMessageTypeFlagsEXT messageType,
     const VkDebugUtilsMessengerCallbackDataEXT* pCallbackData,
     void* pUserData)
 {
@@ -53,9 +56,11 @@ static VKAPI_ATTR VkBool32 VKAPI_CALL debugCallback(
     return VK_FALSE;
 }
 
-VkResult CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger)
+} // Anonymous Namespace.
+
+static VkResult CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger)
 {
-    auto func = (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT");
+    const auto func = (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT");
     if (func != nullptr)
     {
         return func(instance, pCreateInfo, pAllocator, pDebugMessenger);
@@ -64,9 +69,9 @@ VkResult CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMes
     return VK_ERROR_EXTENSION_NOT_PRESENT;
 }
 
-void DestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT debugMessenger, const VkAllocationCallbacks* pAllocator)
+static void DestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT debugMessenger, const VkAllocationCallbacks* pAllocator)
 {
-    auto func = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT");
+    const auto func = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT");
     if (func != nullptr)
     {
         func(instance, debugMessenger, pAllocator);
@@ -85,7 +90,7 @@ void Device::Init(const Window* windowRef)
     CreateCommandPool();
 }
 
-void Device::Destroy()
+void Device::Destroy() const
 {
     vkDestroyCommandPool(mDevice, mGraphicsCommandPool, nullptr);
 
@@ -105,9 +110,9 @@ uint32 Device::FindMemoryType(const uint32_t typeFilter, const VkMemoryPropertyF
 
     vkGetPhysicalDeviceMemoryProperties(mPhysicalDevice, &memProperties);
 
-    for (uint32_t i = 0; i < memProperties.memoryTypeCount; ++i)
+    for (uint32_t i { 0 }; i < memProperties.memoryTypeCount; ++i)
     {
-        if ((typeFilter & (1 << i)) && (memProperties.memoryTypes[i].propertyFlags & properties) == properties) 
+        if ((typeFilter & (1 << i)) && (memProperties.memoryTypes[i].propertyFlags & properties) == properties)
         {
             return i;
         }
@@ -119,17 +124,17 @@ uint32 Device::FindMemoryType(const uint32_t typeFilter, const VkMemoryPropertyF
 
 VkFormat Device::FindSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features) const
 {
-    for (VkFormat format : candidates) 
+    for (const VkFormat format : candidates)
     {
         VkFormatProperties props;
         vkGetPhysicalDeviceFormatProperties(mPhysicalDevice, format, &props);
 
-        if (tiling == VK_IMAGE_TILING_LINEAR && (props.linearTilingFeatures & features) == features) 
+        if (tiling == VK_IMAGE_TILING_LINEAR && (props.linearTilingFeatures & features) == features)
         {
             return format;
         }
 
-        if (tiling == VK_IMAGE_TILING_OPTIMAL && (props.optimalTilingFeatures & features) == features) 
+        if (tiling == VK_IMAGE_TILING_OPTIMAL && (props.optimalTilingFeatures & features) == features)
         {
             return format;
         }
@@ -159,7 +164,7 @@ void Device::CreateImageWithInfo(const VkImageCreateInfo& imageInfo, const VkMem
 
 void Device::CreateBuffer(const VkDeviceSize size, const VkBufferUsageFlags usage, const VkMemoryPropertyFlags properties, VkBuffer &buffer, VkDeviceMemory &bufferMemory) const
 {
-    VkBufferCreateInfo bufferInfo
+    const VkBufferCreateInfo bufferInfo
     {
         .sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
         .size = size,
@@ -172,7 +177,7 @@ void Device::CreateBuffer(const VkDeviceSize size, const VkBufferUsageFlags usag
     VkMemoryRequirements memRequirements;
     vkGetBufferMemoryRequirements(mDevice, buffer, &memRequirements);
 
-    VkMemoryAllocateInfo allocInfo
+    const VkMemoryAllocateInfo allocInfo
     {
         .sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
         .allocationSize = memRequirements.size,
@@ -234,7 +239,7 @@ void Device::CreateDebugMessenger()
         .sType = VK_STRUCTURE_TYPE_DEBUG_UTILS_MESSENGER_CREATE_INFO_EXT,
         .messageSeverity    = VK_DEBUG_UTILS_MESSAGE_SEVERITY_VERBOSE_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_WARNING_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_SEVERITY_ERROR_BIT_EXT,
         .messageType        = VK_DEBUG_UTILS_MESSAGE_TYPE_GENERAL_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_VALIDATION_BIT_EXT | VK_DEBUG_UTILS_MESSAGE_TYPE_PERFORMANCE_BIT_EXT,
-        .pfnUserCallback    = debugCallback,
+        .pfnUserCallback    = DebugCallback,
         .pUserData          = nullptr
     };
 
@@ -254,7 +259,7 @@ void Device::ChoosePhysicalDevice()
 
     if (physicalDeviceCount == 0)
     {
-        throw std::runtime_error("No GPU's that support vulkan instance.");
+        throw std::runtime_error("No GPU that support vulkan instance.");
     }
 
     vector<VkPhysicalDevice> physicalDevices(physicalDeviceCount);
@@ -289,9 +294,9 @@ void Device::CreateLogicalDevice()
     mQueueFamilyIndices = GetQueueFamilyIndices(mPhysicalDevice);
 
     vector<VkDeviceQueueCreateInfo> queueCreateInfos;
-    std::set<int> queueFamilyIndices = { mQueueFamilyIndices.graphicsFamily, mQueueFamilyIndices.presentationFamily };
+    const std::set<int> queueFamilyIndices = { mQueueFamilyIndices.graphicsFamily, mQueueFamilyIndices.presentationFamily };
 
-    for (uint32 queueFamilyIndex : queueFamilyIndices)
+    for (const uint32 queueFamilyIndex : queueFamilyIndices)
     {
         float priority = 1.0f;
         VkDeviceQueueCreateInfo queueCreateInfo
@@ -327,8 +332,8 @@ void Device::CreateLogicalDevice()
 
 void Device::CreateCommandPool()
 {
-    VkCommandPoolCreateInfo poolInfo
-    { 
+    const VkCommandPoolCreateInfo poolInfo
+    {
         .sType = VK_STRUCTURE_TYPE_COMMAND_POOL_CREATE_INFO,
         .pNext              = nullptr,
         .flags              = VK_COMMAND_POOL_CREATE_RESET_COMMAND_BUFFER_BIT | VK_COMMAND_POOL_CREATE_TRANSIENT_BIT,
@@ -340,7 +345,7 @@ void Device::CreateCommandPool()
 
 vector<const char*> Device::GetRequiredExtensions()
 {
-    uint32_t glfwExtensionCount = 0;
+    uint32 glfwExtensionCount   = 0;
     const char** glfwExtensions = glfwGetRequiredInstanceExtensions(&glfwExtensionCount);
 
     vector<const char *> extensions(glfwExtensions, glfwExtensions + glfwExtensionCount);
@@ -465,7 +470,7 @@ bool Device::CheckDeviceSuitable(const VkPhysicalDevice device) const
     return indices.IsValid() && extensionsSupported && swapChainValid && features.samplerAnisotropy;
 }
 
-bool Device::CheckDeviceExtensionSupport(const VkPhysicalDevice device) const 
+bool Device::CheckDeviceExtensionSupport(const VkPhysicalDevice device) const
 {
     uint32 propertiesCount = 0;
     vkEnumerateDeviceExtensionProperties(device, nullptr, &propertiesCount, nullptr);

@@ -37,7 +37,7 @@ class Device
     Device& operator=(const Device&)    = delete;
 
     void Init(const Window* windowRef);
-    void Destroy();
+    void Destroy() const;
 
     [[nodiscard]]uint32     FindMemoryType(const uint32_t typeFilter, const VkMemoryPropertyFlags properties) const;
     [[nodiscard]]VkFormat   FindSupportedFormat(const std::vector<VkFormat>& candidates, const VkImageTiling tiling, const VkFormatFeatureFlags features) const;

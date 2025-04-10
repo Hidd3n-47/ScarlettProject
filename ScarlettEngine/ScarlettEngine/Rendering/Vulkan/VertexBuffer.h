@@ -7,10 +7,15 @@ namespace Scarlett {
 class VertexBuffer
 {
 public:
-    VertexBuffer(Device* device, const uint64 bufferSize, const void* data);
+    explicit VertexBuffer(Device* device, const uint64 bufferSize, const void* data);
     ~VertexBuffer();
 
-    void Bind(VkCommandBuffer commandBuffer) const;
+    VertexBuffer(const VertexBuffer&)               = delete;
+    VertexBuffer(VertexBuffer&&)                    = delete;
+    VertexBuffer& operator=(VertexBuffer&&)         = delete;
+    VertexBuffer& operator=(const VertexBuffer&)    = delete;
+
+    void Bind(const VkCommandBuffer commandBuffer) const;
 private:
     Device* mDevice;
 

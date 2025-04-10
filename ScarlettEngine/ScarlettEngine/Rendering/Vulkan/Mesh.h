@@ -4,12 +4,12 @@
 
 #include "Utilities.h"
 
-#include "VertexBuffer.h"
-
 namespace Scarlett
 {
 
 class Device;
+class VertexBuffer;
+class IndexBuffer;
 
 struct Vertex
 {
@@ -29,7 +29,7 @@ class Mesh
 {
 public:
     Mesh() = default;
-    Mesh(Device* device, const vector<Vertex>& vertices);
+    Mesh(Device* device, const vector<Vertex>& vertices, const vector<uint32_t>& indices);
     ~Mesh();
 
     Mesh(const Mesh&)               = delete;
@@ -40,10 +40,9 @@ public:
     void Bind(const VkCommandBuffer commandBuffer) const;
     void Draw(const VkCommandBuffer commandBuffer) const;
 private:
-    // TODO Remove device.
-    Device*         mDevice;
-    VertexBuffer*   mVertexBuffer;
-    uint32          mVertexCount;
+    const VertexBuffer*   mVertexBuffer;
+    const IndexBuffer*    mIndexBuffer;
+    const vector<uint32>  mIndices;
 };
 
 } // Namespace Scarlett.

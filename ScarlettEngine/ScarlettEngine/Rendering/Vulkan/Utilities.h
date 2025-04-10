@@ -30,29 +30,7 @@ struct SwapChainImage
     VkImageView imageView;
 };
 
-static vector<char> ReadFile(const std::string& fileName)
-{
-    std::ifstream fin(fileName, std::ios::binary | std::ios::ate);
-
-    if(!fin.is_open())
-    {
-        SCARLETT_ELOG("Failed to open file at path: {0}", fileName);
-        throw std::runtime_error("Failed to open file at path: " + fileName);
-    }
-
-    size_t fileSize = (size_t)fin.tellg();
-    vector<char> fileBuffer(fileSize);
-
-    fin.seekg(0);
-
-    fin.read(fileBuffer.data(), fileSize);
-
-    fin.close();
-
-    return fileBuffer;
-}
-
-uint32 static FindMemoryTypeIndex(VkPhysicalDevice physicalDevice, uint32 allowedTypes, VkMemoryPropertyFlags propertyFlags)
+uint32 static FindMemoryTypeIndex(const VkPhysicalDevice physicalDevice, const uint32 allowedTypes, const VkMemoryPropertyFlags propertyFlags)
 {
     VkPhysicalDeviceMemoryProperties memoryProperties;
     vkGetPhysicalDeviceMemoryProperties(physicalDevice, &memoryProperties);
@@ -69,40 +47,7 @@ uint32 static FindMemoryTypeIndex(VkPhysicalDevice physicalDevice, uint32 allowe
     return -1;
 }
 
-static void CreateBuffer(VkPhysicalDevice physicalDevice, VkDevice logicalDevice, VkDeviceSize bufferSize, VkBufferUsageFlags bufferUsageFlags, VkMemoryPropertyFlags bufferProperties, VkBuffer* buffer, VkDeviceMemory* bufferMemory)
-{
-    VkBufferCreateInfo bufferInfo = {};
-    bufferInfo.sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO;
-    bufferInfo.size = bufferSize;
-    bufferInfo.usage = bufferUsageFlags;
-    bufferInfo.sharingMode = VK_SHARING_MODE_EXCLUSIVE;
-
-    VkResult result = vkCreateBuffer(logicalDevice, &bufferInfo, nullptr, buffer);
-    if (result != VK_SUCCESS)
-    {
-        SCARLETT_FLOG("Failed to create a vulkan vertex buffer. Error code: {0}", (int)result);
-        throw std::runtime_error("Failed to create a vulkan vertex buffer.");
-    }
-
-    VkMemoryRequirements memoryRequirements;
-    vkGetBufferMemoryRequirements(logicalDevice, *buffer, &memoryRequirements);
-
-    VkMemoryAllocateInfo memoryAllocInfo = {};
-    memoryAllocInfo.sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO;
-    memoryAllocInfo.allocationSize = memoryRequirements.size;
-    memoryAllocInfo.memoryTypeIndex = FindMemoryTypeIndex(physicalDevice, memoryRequirements.memoryTypeBits, bufferProperties);
-
-    result = vkAllocateMemory(logicalDevice, &memoryAllocInfo, nullptr, bufferMemory);
-    if (result != VK_SUCCESS)
-    {
-        SCARLETT_FLOG("Failed to allocate vertex buffer memory (vulkan). Error code: {0}", (int)result);
-        throw std::runtime_error("Failed to allocate vertex buffer memory (vulkan).");
-    }
-
-    vkBindBufferMemory(logicalDevice, *buffer, *bufferMemory, 0);
-}
-
-static VkCommandBuffer BeginCommandBuffer(VkDevice device, VkCommandPool pool)
+static VkCommandBuffer BeginCommandBuffer(const VkDevice device, const VkCommandPool pool)
 {
     VkCommandBuffer commandBuffer;
 
@@ -123,7 +68,7 @@ static VkCommandBuffer BeginCommandBuffer(VkDevice device, VkCommandPool pool)
     return commandBuffer;
 }
 
-static void EndAndSubmitCommandBuffer(VkDevice device, VkCommandPool pool, VkQueue queue, VkCommandBuffer commandBuffer)
+static void EndAndSubmitCommandBuffer(const VkDevice device, const VkCommandPool pool, const VkQueue queue, const VkCommandBuffer commandBuffer)
 {
     vkEndCommandBuffer(commandBuffer);
 

@@ -23,11 +23,8 @@ void SquareSpriteSystem::UpdateSystem()
     const auto& entityIds = squareSprites.GetCorrespondingEntityId();
     for (ScarlEntt::ComponentId i{0}; i < squareSprites.Size(); ++i)
     {
-        // todo pool the commands to not hammer the new
-        // todo change to use the polymorphism
-        RenderCommand* command = new RenderCommand { squareSprites[i].color, ScarlEntt::ComponentRef(entityIds[i], &mComponentManagerRef->GetComponentArray<ScarlettGame::Transform>()) };
-        Renderer::Instance().AddCommand(RenderType::SPRITE, command);
-
+        Renderer::Instance().AddCommand(RenderType::SPRITE,
+            { squareSprites[i].color, ScarlEntt::ComponentRef(entityIds[i], &mComponentManagerRef->GetComponentArray<ScarlettGame::Transform>()) });
     }
 }
 

@@ -137,7 +137,6 @@ inline void LayerStack::PopLayer(WeakRef<Layer>& layer)
 inline void LayerStack::PopOverlay(WeakRef<Overlay>& overlay)
 {
     // Todo Strip some of the testing in release builds.
-
     if (!overlay.IsRefValid())
     {
         throw std::runtime_error("Attempting to pop invalid overlay.");
