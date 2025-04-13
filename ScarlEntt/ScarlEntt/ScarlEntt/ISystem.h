@@ -31,9 +31,9 @@ public:
     ISystem& operator=(ISystem&&)       = delete;
     ISystem& operator=(const ISystem&)  = delete;
 
-    virtual void InitSystem(ISystemProperties* properties = nullptr) = 0;
-    virtual void UpdateSystem()     = 0;
-    virtual void DestroySystem()    = 0;
+    virtual void InitSystem(ISystemProperties* properties = nullptr) { }
+    virtual void UpdateSystem() = 0;
+    virtual void DestroySystem() { }
 
 protected:
     Scene*              mSceneRef; // Todo Christian: Should the SystemManager be coupled to the scene.

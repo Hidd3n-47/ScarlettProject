@@ -9,7 +9,8 @@ namespace Scarlett
 
 enum class RenderType
 {
-    SPRITE
+    SPRITE,
+    LINE
 };
 
 class RenderCommand

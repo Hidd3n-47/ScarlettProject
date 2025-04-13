@@ -17,7 +17,8 @@ public:
     Renderer()          = default;
     virtual ~Renderer() = default;
 
-    static Renderer& Instance() { SCARLETT_ASSERT(mInstance && "Renderer never created. Create renderer before using."); return *mInstance; }
+    // todo re-look at the assert. Can't use SCARLETT_ASSERT due to including renderer in other projects such as editor.
+    static Renderer& Instance() { assert(mInstance && "Renderer never created. Create renderer before using."); return *mInstance; }
 
     virtual void Init(const Window* windowRef)  = 0;
     virtual void Destroy()                      = 0;

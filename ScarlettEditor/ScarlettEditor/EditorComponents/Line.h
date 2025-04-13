@@ -1,0 +1,25 @@
+﻿#pragma once
+
+#include <Math/Math.h>
+
+namespace ScarlettEditor
+{
+
+struct Line
+{
+    Line() = default;
+    Line(const ScarlettMath::Vec3 start, const ScarlettMath::Vec3 end)
+        : start(start), end(end), color({ 1.0f, 1.0f, 1.0f, 1.0f })
+    { /* Empty. */ }
+
+    Line(const ScarlettMath::Vec3 start, const ScarlettMath::Vec3 end, const ScarlettMath::Vec4 color)
+        : start(start), end(end), color(color)
+    { /* Empty. */ }
+
+    ScarlettMath::Vec3 start;
+    ScarlettMath::Vec3 end;
+
+    ScarlettMath::Vec4 color;
+};
+
+} // Namespace ScarlettEditor.

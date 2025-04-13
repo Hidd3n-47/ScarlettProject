@@ -6,7 +6,6 @@
 #include <ScarlettGameCore/Components/SquareSprite.h>
 
 #include "Rendering/Renderer.h"
-#include "Rendering/Commands/SpriteCommand.h"
 
 namespace Scarlett
 {

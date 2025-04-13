@@ -1,7 +1,8 @@
 #include "ScarlettEnginePch.h"
 #include "Engine.h"
 
-#include <Editor/EditorManager.h>
+#include <ScarlettEditor/Editor/EditorManager.h>
+#include <ScarlettEditor/EditorComponents/Line.h>
 
 #include <ScarlettGameCore/Src/GameCore.h>
 #include <ScarlettGameCore/Components/Transform.h>
@@ -15,6 +16,8 @@
 
 #include "Input/InputManager.h"
 #include "Events/ApplicationEvents.h"
+
+#include "Systems/LineRendererSystem.h"
 #include "Systems/SquareSpriteSystem.h"
 
 namespace Scarlett
@@ -52,11 +55,13 @@ void Engine::InitEngine()
 
     ScarlettGame::GameCore::Instance().Init();
 
+    ScarlettGame::GameCore::Instance().GetActiveScene()->RegisterSystem<SquareSpriteSystem>();
+    ScarlettGame::GameCore::Instance().GetActiveScene()->RegisterSystem<LineRendererSystem>();
+    ScarlettGame::GameCore::Instance().GetActiveScene()->RegisterComponent<ScarlettEditor::Line>();
+
     Renderer::Instance().Init(mMainWindow);
 
     SCARLETT_DLOG("Engine Initialized");
-
-    ScarlettGame::GameCore::Instance().GetActiveScene()->RegisterSystem<SquareSpriteSystem>();
 
     // Add a "Cube" to the scene.
     auto square1 = ScarlettGame::GameCore::Instance().CreateEntity();

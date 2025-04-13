@@ -12,7 +12,6 @@
 #include "VulkanUtils.h"
 #include "Core/Window/Window.h"
 #include "Rendering/SpriteInfoStruct.h"
-#include "Rendering/Commands/SpriteCommand.h"
 
 namespace Scarlett
 {
@@ -37,17 +36,19 @@ void VulkanRenderer::Init(const Window* windowRef)
 
         const vector<Vertex> verts
         {
-                {{ -0.5f, -0.5f} },
-                {{ -0.5f,  0.5f} },
-                {{  0.5f,  0.5f} },
-                {{  0.5f, -0.5f} },
-            };
+            {{ -0.5f, -0.5f, 0.0f } },
+            {{ -0.5f,  0.5f, 0.0f } },
+            {{  0.5f,  0.5f, 0.0f } },
+            {{  0.5f, -0.5f, 0.0f } },
+        };
         const vector<uint32> indices
         {
             0, 1, 2,
             2, 3, 0
         };
         mSquare = new Mesh(&mDevice, verts, indices);
+
+        mLine = new Mesh(&mDevice, "E:/Programming/ScarlettProject/Assets/Mesh/Cylinder.obj");
     }
     catch(const std::runtime_error& e)
     {
@@ -59,6 +60,7 @@ void VulkanRenderer::Destroy()
 {
     vkDeviceWaitIdle(mDevice.mDevice);
 
+    delete mLine;
     delete mSquare;
 
     FreeCommandBuffers();
@@ -153,6 +155,29 @@ void VulkanRenderer::EndRender()
         mSquare->Draw(mCommandBuffers[mNextImageIndex]);
     }
     mCommands[RenderType::SPRITE].clear();
+
+    //Lines.
+    for (size_t i{ 0 }; i < mCommands[RenderType::LINE].size(); ++i)
+    {
+        const RenderCommand command = mCommands[RenderType::LINE][i];
+
+        const ScarlettMath::Mat4 scale = ScarlettMath::ScaleMatrix(command.transform->scale);
+        ScarlettMath::Mat4 translation = ScarlettMath::TranslateMatrix(command.transform->translation);
+
+        const SpriteInfoStruct info
+        {
+            .color = command.color,
+            .view  = camera->viewMatrix,
+            .proj  = camera->projectionMatrix,
+            .model = translation * command.transform->rotation.GetRotationMatrix() * scale
+        };
+
+        vkCmdPushConstants(mCommandBuffers[mNextImageIndex], mPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SpriteInfoStruct), &info);
+
+        mLine->Bind(mCommandBuffers[mNextImageIndex]);
+        mLine->Draw(mCommandBuffers[mNextImageIndex]);
+    }
+    mCommands[RenderType::LINE].clear();
 
     vkCmdEndRenderPass(mCommandBuffers[mNextImageIndex]);
 

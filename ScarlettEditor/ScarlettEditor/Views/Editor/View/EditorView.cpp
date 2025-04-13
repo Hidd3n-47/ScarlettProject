@@ -5,9 +5,9 @@
 
 #include <ScarlettGameCore/Src/GameCore.h>
 #include <ScarlettGameCore/Components/Transform.h>
+#include <ScarlettGameCore/Components/SquareSprite.h>
 
 #include "Editor/EditorManager.h"
-#include "ScarlettGameCore/Components/SquareSprite.h"
 
 #include "Views/Editor/Panels/ScenePanel.h"
 #include "Views/Editor/Panels/ViewportPanel.h"

@@ -18,6 +18,11 @@ typedef glm::vec4 Vec4;
 typedef glm::mat3 Mat3;
 typedef glm::mat4 Mat4;
 
+static inline float Abs(const float value)
+{
+    return glm::abs(value);
+}
+
 static inline float Degrees(const float radians)
 {
     return glm::degrees(radians);
@@ -26,6 +31,11 @@ static inline float Degrees(const float radians)
 static inline float Radians(const float degrees)
 {
     return glm::radians(degrees);
+}
+
+static inline float Magnitude(const Vec3 vector)
+{
+    return glm::length(vector);
 }
 
 static inline Mat4 Perspective(const float fovDegrees, const float aspectRatio, const float zNear, const float zFar)

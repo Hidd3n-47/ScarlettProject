@@ -13,7 +13,7 @@ class IndexBuffer;
 
 struct Vertex
 {
-    ScarlettMath::Vec2 position;
+    ScarlettMath::Vec3 position;
 
     static vector<VkVertexInputBindingDescription> GetBindingDescriptions();
     static vector<VkVertexInputAttributeDescription> GetAttributeDescriptions();
@@ -30,6 +30,7 @@ class Mesh
 public:
     Mesh() = default;
     Mesh(Device* device, const vector<Vertex>& vertices, const vector<uint32_t>& indices);
+    Mesh(Device* device, const std::string& filepath);
     ~Mesh();
 
     Mesh(const Mesh&)               = delete;

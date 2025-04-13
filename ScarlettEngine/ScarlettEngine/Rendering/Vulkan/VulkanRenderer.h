@@ -54,6 +54,7 @@ private:
     uint32 mNextImageIndex;
 
     Mesh* mSquare;
+    Mesh* mLine;
 
     // Temp.
     float mClearColor[3] = { 0.1f, 0.1f, 0.1f };

@@ -1,7 +1,7 @@
 #version 450
 
 layout(location = 0)
-in vec2 position;
+in vec3 position;
 
 layout(push_constant)
 uniform Sprite
@@ -14,6 +14,6 @@ uniform Sprite
 
 void main()
 {
-    gl_Position = sprite.proj * sprite.view * sprite.model * vec4(position, 0.0, 1.0);
+    gl_Position = sprite.proj * sprite.view * sprite.model * vec4(position, 1.0);
     gl_Position.y *= -1.0;
 }

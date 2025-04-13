@@ -1,6 +1,9 @@
 #include "ScarlettEnginepch.h"
 #include "Mesh.h"
 
+#include <fstream>
+#include <strstream>
+
 #include "VertexBuffer.h"
 #include "IndexBuffer.h"
 #include "Device.h"
@@ -25,7 +28,7 @@ vector<VkVertexInputAttributeDescription> Vertex::GetAttributeDescriptions()
 
     bindingAttributes[0].binding        = 0;
     bindingAttributes[0].location       = 0;
-    bindingAttributes[0].format         = VK_FORMAT_R32G32_SFLOAT;
+    bindingAttributes[0].format         = VK_FORMAT_R32G32B32_SFLOAT;
     bindingAttributes[0].offset         = offsetof(Vertex, position);
 
     //bindingAttributes[1].binding        = 0;
@@ -38,9 +41,54 @@ vector<VkVertexInputAttributeDescription> Vertex::GetAttributeDescriptions()
 
 Mesh::Mesh(Device* device, const vector<Vertex>& vertices, const vector<uint32_t>& indices)
     : mVertexBuffer { new VertexBuffer{ device, sizeof(Vertex) * vertices.size(), vertices.data()} }
-    , mIndexBuffer  { new IndexBuffer { device, static_cast<uint32>(indices.size()), indices.data() }}
+    , mIndexBuffer  { new IndexBuffer { device, static_cast<uint32>(indices.size()), indices.data() } }
 {
     // Empty.
+}
+
+Mesh::Mesh(Device* device, const std::string& filepath)
+{
+    std::ifstream fin;
+    fin.open(filepath, std::ios::in);
+
+    if (fin.fail())
+    {
+        SCARLETT_FLOG("There was an error opening the obj file at: {0}", filepath);
+        return;
+    }
+
+    vector<Vertex> vertices;
+    vector<uint32> indices;
+
+    // todo refactor this.
+    std::string line;
+    while (std::getline(fin, line))
+    {
+        std::strstream s;
+        s << line;
+
+        char prefix;
+
+        if (line[0] == 'v')
+        {
+            ScarlettMath::Vec3 v;
+            s >> prefix >> v.x >> v.y >> v.z;
+            vertices.emplace_back(v);
+        }
+
+        if (line[0] == 'f')
+        {
+            int f[3];
+            s >> prefix >> f[0] >> f[1] >> f[2];
+            indices.emplace_back(f[0]);
+            indices.emplace_back(f[1]);
+            indices.emplace_back(f[2]);
+        }
+    }
+
+    mVertexBuffer = new VertexBuffer{ device, sizeof(Vertex) * vertices.size(), vertices.data() };
+
+    mIndexBuffer  = new IndexBuffer { device, static_cast<uint32>(indices.size()), indices.data() };
 }
 
 Mesh::~Mesh()
