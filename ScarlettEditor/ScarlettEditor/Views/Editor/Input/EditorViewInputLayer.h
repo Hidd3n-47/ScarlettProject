@@ -19,7 +19,8 @@ public:
 private:
     EditorView* mEditorView = nullptr;
 
-    bool mCameraFlying = false;
+    bool    mCameraFlying               = false;
+    float   mCameraFlyingMultiplier     = 1.0f;
 
     ScarlettMath::Vec2 mPreviousMousePosition   { -1.f };
 
@@ -27,6 +28,7 @@ private:
     bool OnMouseButtonReleased(const Scarlett::MouseButtonReleasedEvent& e) override;
 
     bool OnMouseMoved(const Scarlett::MouseMovedEvent& e) override;
+    bool OnMouseScrolledEvent(const Scarlett::MouseScrollEvent& e) override;
 
     bool OnKeyPressed(const Scarlett::KeyPressedEvent& e) override;
     bool OnKeyReleased(const Scarlett::KeyReleasedEvent& e) override;

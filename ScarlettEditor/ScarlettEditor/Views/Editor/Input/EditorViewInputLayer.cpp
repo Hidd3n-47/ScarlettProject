@@ -112,7 +112,7 @@ bool EditorViewInputLayer::OnMouseMoved(const Scarlett::MouseMovedEvent& e)
         ScarlEntt::EntityHandle entity{ entityIds[0], ScarlettGame::GameCore::Instance().GetActiveScene() };
         ScarlettGame::Transform* transform = entity.GetComponent<ScarlettGame::Transform>();
 
-        constexpr float SPEED_SCALING_FACTOR = 0.005f;
+        constexpr float SPEED_SCALING_FACTOR = 0.0025f;
         const ScarlettMath::Vec2 moveDelta = mousePosition - mPreviousMousePosition;
 
         float yaw, pitch, roll;
@@ -127,6 +127,21 @@ bool EditorViewInputLayer::OnMouseMoved(const Scarlett::MouseMovedEvent& e)
     mPreviousMousePosition = mousePosition;
 
     return EditorInputLayer::OnMouseMoved(e);
+}
+
+bool EditorViewInputLayer::OnMouseScrolledEvent(const Scarlett::MouseScrollEvent& e)
+{
+    if (mEditorView->GetPanel<ViewportPanel>()->IsHovered())
+    {
+        constexpr float SCROLLING_SPEED_FACTOR  = 0.1f;
+        constexpr float SPEED_MULTIPLIER_MIN    = 0.1f;
+        constexpr float SPEED_MULTIPLIER_MAX    = 2.0f;
+
+        mCameraFlyingMultiplier = ScarlettMath::Clamp(mCameraFlyingMultiplier + e.GetYOffset() * SCROLLING_SPEED_FACTOR, SPEED_MULTIPLIER_MIN, SPEED_MULTIPLIER_MAX);
+        EDITOR_DLOG("Camera flying speed multiplier: {0}", mCameraFlyingMultiplier);
+    }
+
+    return EditorInputLayer::OnMouseScrolledEvent(e);
 }
 
 bool EditorViewInputLayer::OnKeyPressed(const Scarlett::KeyPressedEvent& e)
@@ -144,6 +159,8 @@ bool EditorViewInputLayer::OnKeyPressed(const Scarlett::KeyPressedEvent& e)
     case Scarlett::KeyCode::KEY_D:
     case Scarlett::KeyCode::KEY_E:
     case Scarlett::KeyCode::KEY_Q:
+    case Scarlett::KeyCode::KEY_LEFT_SHIFT:
+    case Scarlett::KeyCode::KEY_RIGHT_SHIFT:
         return true;
     default:
         return EditorInputLayer::OnKeyPressed(e);
@@ -165,6 +182,8 @@ bool EditorViewInputLayer::OnKeyReleased(const Scarlett::KeyReleasedEvent& e)
     case Scarlett::KeyCode::KEY_D:
     case Scarlett::KeyCode::KEY_E:
     case Scarlett::KeyCode::KEY_Q:
+    case Scarlett::KeyCode::KEY_LEFT_SHIFT:
+    case Scarlett::KeyCode::KEY_RIGHT_SHIFT:
         return true;
     default:
         return EditorInputLayer::OnKeyReleased(e);
@@ -177,8 +196,6 @@ bool EditorViewInputLayer::OnUpdateEvent(const Scarlett::OnUpdateEvent& e)
     {
         return EditorInputLayer::OnUpdateEvent(e);
     }
-
-    constexpr float SPEED_SCALING_FACTOR = 0.01f;
 
     //todo this need to be improved as this cannot be the only way to get a component of an entity given a different component.
     const auto& viewportCameraArray = ScarlettGame::GameCore::Instance().GetActiveScene()->GetComponentManager()->GetComponentArray<ViewportCamera>();
@@ -215,9 +232,16 @@ bool EditorViewInputLayer::OnUpdateEvent(const Scarlett::OnUpdateEvent& e)
         cameraVerticalDirection += -1.0f;
     }
 
-    entity.GetComponent<ScarlettGame::Transform>()->translation += camera->rightVector      * cameraHorizontalDirection    * SPEED_SCALING_FACTOR
-                                                                 - camera->forwardVector    * cameraForwardDirection       * SPEED_SCALING_FACTOR
-                                                                 + camera->upVector         * cameraVerticalDirection      * SPEED_SCALING_FACTOR;
+    constexpr float SPEED_SCALING_FACTOR        = 0.005f;
+    constexpr float SHIFT_KEY_SPEED_MULTIPLIER  = 1.5f;
+
+    // todo change input manager to check for flags so that we can combine this into one check.
+    const float shiftKeySpeedBoost = EditorInputManager::IsKeyDown(Scarlett::KeyCode::KEY_LEFT_SHIFT) ? SHIFT_KEY_SPEED_MULTIPLIER : 1.0f;
+    const float totalSpeedMultiplier = SPEED_SCALING_FACTOR * shiftKeySpeedBoost * mCameraFlyingMultiplier;
+
+    entity.GetComponent<ScarlettGame::Transform>()->translation += camera->rightVector      * cameraHorizontalDirection    * totalSpeedMultiplier
+                                                                 - camera->forwardVector    * cameraForwardDirection       * totalSpeedMultiplier
+                                                                 + camera->upVector         * cameraVerticalDirection      * totalSpeedMultiplier;
 
     return true;
 }
