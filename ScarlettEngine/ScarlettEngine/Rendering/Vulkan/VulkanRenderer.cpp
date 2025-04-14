@@ -48,7 +48,7 @@ void VulkanRenderer::Init(const Window* windowRef)
         };
         mSquare = new Mesh(&mDevice, verts, indices);
 
-        mLine = new Mesh(&mDevice, "E:/Programming/ScarlettProject/Assets/Mesh/Cylinder.obj");
+        mLine = new Mesh(&mDevice, "E:/Programming/ScarlettProject/Assets/Mesh/CylinderLowPoly.obj");
     }
     catch(const std::runtime_error& e)
     {

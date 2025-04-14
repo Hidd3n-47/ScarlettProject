@@ -29,15 +29,12 @@ void LineRendererSystem::UpdateSystem()
 
         ScarlettGame::Transform* transform = entity.GetComponent<ScarlettGame::Transform>();
 
-        const ScarlettMath::Vec3 lineVec = components[i].end - components[i].start;
-        const float hypot = ScarlettMath::Magnitude(lineVec);
+        const ScarlettMath::Vec3 dVec = components[i].end - components[i].start;
+        const float dVecMag = ScarlettMath::Magnitude(dVec);
 
-        const float roll    = ScarlettMath::Trig::Asin(lineVec.x / hypot);
-        const float pitch   = ScarlettMath::Radians(90) - ScarlettMath::Trig::Asin(lineVec.y / hypot);
-
-        transform->translation = lineVec * 0.5f + components[i].start;
-        transform->scale = { 0.02f, hypot, 0.02f };
-        transform->rotation.SetYawPitchRoll(0.0f, pitch, roll);
+        transform->translation = components[i].start;
+        transform->scale = { dVecMag, 0.02f, 0.02f };
+        transform->rotation = ScarlettMath::Quat::GetRotationToRotateVectorToVector({ 1.0f, 0.0f, 0.0f }, dVec / dVecMag);
 
         Renderer::Instance().AddCommand(RenderType::LINE,
         { components[i].color, ScarlEntt::ComponentRef(entityIds[i], &mComponentManagerRef->GetComponentArray<ScarlettGame::Transform>()) });

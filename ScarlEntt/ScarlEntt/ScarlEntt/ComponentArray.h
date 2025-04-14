@@ -137,18 +137,27 @@ inline void ComponentArray<ComponentType>::RemoveComponent(const EntityId entity
 {
     assert(EntityManager::IsAlive(entityId) && "Entity is invalid and hence cannot remove a component from."); // todo change assert.
 
-    const ComponentId lastComponentId       = static_cast<ComponentId>(mComponentArray.size()) - 1;
-    const EntityId lastComponentEntity      = mComponentToEntityMap[lastComponentId];
-    const ComponentId removedComponentId    = mEntityToComponentMap[entityId];
+    const ComponentId   lastComponentId             = static_cast<ComponentId>(mComponentArray.size()) - 1;
+    const EntityId      lastComponentEntity         = mComponentToEntityMap[lastComponentId];
+    const ComponentId   removedComponentId          = mEntityToComponentMap[entityId];
 
-    mComponentArray[removedComponentId]         = std::move(mComponentArray.back());
-    mCorrespondingEntityId[removedComponentId]  = mCorrespondingEntityId.back();
+    // Only move the component if the last component is not being removed.
+    if (removedComponentId != lastComponentId)
+    {
+        mComponentArray[removedComponentId] = std::move(mComponentArray.back());
+        mCorrespondingEntityId[removedComponentId] = mCorrespondingEntityId.back();
+    }
+
     mEntityToComponentMap[lastComponentEntity]  = removedComponentId;
-    mComponentToEntityMap[removedComponentId]   = lastComponentEntity;
+    mComponentToEntityMap[removedComponentId]   = mCorrespondingEntityId.back();
 
-    mEntityToComponentMap.erase(entityId);
     mComponentArray.pop_back();
     mCorrespondingEntityId.pop_back();
+
+    //todo this causes a crash, potentially due to memory corruption, need to investigate why.
+    //mEntityToComponentMap.erase(entityId);
+    //mComponentToEntityMap.erase(lastComponentId);
+
 }
 
 template <typename ComponentType>

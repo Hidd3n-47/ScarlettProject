@@ -24,6 +24,16 @@ public:
         return std::asin(value);
     }
 
+    [[nodiscard]] inline static float Acos(const float value)
+    {
+        return std::acos(value);
+    }
+
+    [[nodiscard]] inline static float Atan(const float value)
+    {
+        return std::atan(value);
+    }
+
     [[nodiscard]] inline static float CorrectAngleTo0To2PiRange(float angle)
     {
         while (angle < 0.0f || angle >= 2 * std::numbers::pi_v<float>)

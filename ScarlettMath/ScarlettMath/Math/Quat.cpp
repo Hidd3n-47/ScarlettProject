@@ -5,7 +5,7 @@
 namespace ScarlettMath
 {
 
-Quat::Quat(const Vec3 point)
+Quat::Quat(const Vec3& point)
     : mX (point.x)
     , mY (point.y)
     , mZ (point.z)
@@ -13,7 +13,7 @@ Quat::Quat(const Vec3 point)
     // Empty.
 }
 
-Quat::Quat(const float angleRadians, const Vec3 axis)
+Quat::Quat(const float angleRadians, const Vec3& axis)
 {
     const float halfAngle = angleRadians * 0.5f;
 
@@ -57,7 +57,7 @@ void Quat::Normalise()
     }
 }
 
-Vec3 Quat::RotatePoint(const Vec3 point, const Quat& quaternion)
+Vec3 Quat::RotatePoint(const Vec3& point, const Quat& quaternion)
 {
     const Quat pointQuat { point };
     return (quaternion * pointQuat * quaternion.Inverse()).GetAxis();

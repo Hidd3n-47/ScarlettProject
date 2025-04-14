@@ -80,9 +80,9 @@ Mesh::Mesh(Device* device, const std::string& filepath)
         {
             int f[3];
             s >> prefix >> f[0] >> f[1] >> f[2];
-            indices.emplace_back(f[0]);
-            indices.emplace_back(f[1]);
-            indices.emplace_back(f[2]);
+            indices.emplace_back(f[0] - 1);
+            indices.emplace_back(f[1] - 1);
+            indices.emplace_back(f[2] - 1);
         }
     }
 

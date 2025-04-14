@@ -1,5 +1,7 @@
 #pragma once
 
+#include <numbers>
+
 #include "Math.h"
 
 namespace ScarlettMath
@@ -17,7 +19,13 @@ public:
      * This is useful when trying to rotate a point as quaternion multiplication can be used.
      * @param point The point in space that is being represented in quaternion form.
      */
-    explicit Quat(const Vec3 point);
+    explicit Quat(const Vec3& point);
+    /**
+     * @brief: Construct a quaternion to represent a rotation about a given axis.
+     * @param angleRadians The angle of rotation about the axis.
+     * @param axis The axis the rotation is about.
+     */
+    explicit Quat(const float angleRadians, const Vec3& axis);
     /**
      * @brief Construct a quaternion to represent a rotation from the given Yaw, Pitch and Roll rotation.
      * @param yawRadians The angle of rotation (in radians) about the z-axis.
@@ -45,7 +53,7 @@ public:
      * @param quaternion The quaternion used to rotate the point.
      * @return The rotated point.
      */
-    static Vec3 RotatePoint(const Vec3 point, const Quat& quaternion);
+    static Vec3 RotatePoint(const Vec3& point, const Quat& quaternion);
 
     /**
      * @brief Get if the quaternion is an identity quaternion.
@@ -127,13 +135,53 @@ public:
     }
 
     /**
+     * @brief Get the rotation needed to rotate a vector, \c vectorA, to another vector, \c vectorB.
+     * @param vectorA The normalised original vector direction that rotated to a certain vector direction. Ensure that the vector is normalised before use.
+     * @param vectorB The normalised vector direction that the original vector is being rotated to. Ensure that the vector is normalised before use.
+     * @return The rotation needed to rotate the original vector to the direction of the other.
+     */
+    inline static Quat GetRotationToRotateVectorToVector(const Vec3& vectorA, const Vec3& vectorB)
+    {
+        // Todo could do with adding some tests for this.
+        const float dot = Dot(vectorA, vectorB);
+
+        if (IsEqualTo(dot, 1.0f))
+        {
+            return Identity();
+        }
+
+        // Todo when writing tests see if this case is needed or if the optimised method will cover this case.
+        if (IsEqualTo(dot, -1.0f))
+        {
+            // Try to find an orthogonal vector to VectorA.
+            Vec3 orthogonal = Cross({1, 0, 0 }, vectorA);
+
+            // If the magnitude of the orthogonal vector is close to zero, try a different basis vector to check for orthogonality.
+            // This would occur if vectorA = (1,0,0), in which case (0,1,0) will guarantee give non-zero cross product.
+            if (IsEqualTo(Magnitude(orthogonal), 0.0f))
+            {
+                orthogonal = Cross({ 0, 1, 0 }, vectorA);
+            }
+
+            orthogonal = Normalize(orthogonal);
+
+            return Quat(std::numbers::pi_v<float>, orthogonal);
+        }
+
+        const Vec3 axis = Cross(vectorA, vectorB);
+
+        const float angle = std::sqrt((1 + dot) * 2);
+        const float inverseAngle = 1.0f / angle;
+
+        return Quat { -angle * 0.5f, axis.x * inverseAngle, axis.y * inverseAngle, axis.z * inverseAngle };
+    }
+
+    /**
      * @breif Get an identity quaternion.
      * @return An identity quaternion.
      */
     [[nodiscard]] static Quat Identity() { return Quat{ 1.0f, 0.0f, 0.0f, 0.0f }; }
 private:
-    explicit Quat(const float angleRadians, const Vec3 axis);
-
     float mW = 0.0f, mX = 0.0f, mY = 0.0f, mZ = 0.0f;
 
     float mYaw = 0.0f, mPitch = 0.0f, mRoll = 0.0f;
