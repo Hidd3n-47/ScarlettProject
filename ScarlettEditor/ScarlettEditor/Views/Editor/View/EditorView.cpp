@@ -7,6 +7,8 @@
 #include <ScarlettGameCore/Components/Transform.h>
 #include <ScarlettGameCore/Components/SquareSprite.h>
 
+#include "Serialization/SceneSerialization.h"
+
 #include "Editor/EditorManager.h"
 
 #include "Views/Editor/Panels/ScenePanel.h"
@@ -26,6 +28,8 @@ EditorView::EditorView()
 {
     ScarlettGame::GameCore::Instance().GetActiveScene()->RegisterSystem<ViewportCameraSystem>();
     ScarlettGame::GameCore::Instance().GetActiveScene()->RegisterComponent<ViewportCamera>();
+
+    SceneSerialization::DeserializeCurrentGameScene();
 
     ScarlEntt::EntityHandle viewportCamera = ScarlettGame::GameCore::Instance().CreateEntity();
     viewportCamera.RemoveComponent<ScarlettGame::SquareSprite>();
@@ -172,6 +176,8 @@ EditorView::EditorView()
 
 EditorView::~EditorView()
 {
+    SceneSerialization::SerializeCurrentGameScene();
+
     EditorManager::Instance().GetLayerStack()->PopOverlay(mEditorViewOverlay);
 }
 
