@@ -27,7 +27,7 @@ void LineRendererSystem::UpdateSystem()
     {
         ScarlEntt::EntityHandle entity{entityIds[i], mSceneRef };
 
-        ScarlettGame::Transform* transform = entity.GetComponent<ScarlettGame::Transform>();
+        const auto transform = entity.GetComponent<ScarlettGame::Transform>();
 
         const ScarlettMath::Vec3 dVec = components[i].end - components[i].start;
         const float dVecMag = ScarlettMath::Magnitude(dVec);

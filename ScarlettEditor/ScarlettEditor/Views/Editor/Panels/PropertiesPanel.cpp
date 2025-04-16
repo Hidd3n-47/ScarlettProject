@@ -24,7 +24,7 @@ void PropertiesPanel::Render()
 
         if (ImGui::CollapsingHeader("Transform"))
         {
-            auto* transform = selectedEntity->GetComponent<ScarlettGame::Transform>();
+            const auto transform = selectedEntity->GetComponent<ScarlettGame::Transform>();
 
             ImGui::DragFloat3((std::string("Position##") + entityName).c_str(), &transform->translation.x, 0.05f);
 
@@ -41,7 +41,7 @@ void PropertiesPanel::Render()
 
         if (ImGui::CollapsingHeader("Square Sprite"))
         {
-            auto* squareSprite = selectedEntity->GetComponent<ScarlettGame::SquareSprite>();
+            const auto squareSprite = selectedEntity->GetComponent<ScarlettGame::SquareSprite>();
             ImGui::DragFloat3((std::string("Colour##") + entityName).c_str(), &squareSprite->color.x, 0.01f);
         }
     }

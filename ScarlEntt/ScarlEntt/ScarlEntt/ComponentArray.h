@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#include <cassert>
+
 #include "EntityManager.h"
 
 namespace ScarlEntt
@@ -26,6 +28,7 @@ public:
 template <typename ComponentType>
 class ComponentArray final : public IComponentArray
 {
+friend class ComponentManager;
 public:
     ComponentArray()            = default;
     ~ComponentArray() override  = default;
@@ -36,30 +39,6 @@ public:
     ComponentArray& operator=(const ComponentArray&)    = delete;
 
     /**
-     * @brief Add a component to an entity.
-     * @tparam Args Arguments that are passed to the ComponentType constructor to construct a component with initial values.
-     * @param entityId The ID of the entity that the component is being attached to.
-     * @param args The arguments used to initialize the component.
-     * @return A reference to the created component.
-     */
-    template <typename ... Args>
-    [[maybe_unused]] ComponentType* AddComponent(const EntityId entityId, Args&& ...args);
-
-    /**
-     * @brief Add a component to an entity. The ownership of the passed in component is passed to the ComponentManager.
-     * @param entityId The entity ID that the component is being attached to.
-     * @param component The component that is being added to the entity.
-     * @return A reference to the added component.
-     */
-    [[maybe_unused]] ComponentType* AddComponent(const EntityId entityId, const ComponentType& component);
-
-    /**
-    * @brief Removes a _component_ from the __ComponentArray__ from the _entity_.
-    * @param entityId: The ID of the entity the component is being removed from.
-    */
-    void RemoveComponent(const EntityId entityId);
-
-    /**
     * @brief Gets the specific component, if any, that has been allocated to the _entity_
     * @param entityId: The ID of the entity the component has been requested for.
     * @return Returns the _component_ allocated to the entity, nullptr if it has not been allocated.
@@ -68,6 +47,8 @@ public:
 
     // Todo Christian: Find a better way to do this.
     [[nodiscard]] const vector<EntityId>& GetCorrespondingEntityId() const { return mCorrespondingEntityId;}
+
+    inline bool IsEntityInComponentArray(const EntityId entityId) const { return mEntityToComponentMap.contains(entityId); }
 
     /**
      * Get the size of the components in the component array.<br/>
@@ -94,14 +75,37 @@ private:
 
     std::unordered_map<EntityId, ComponentId> mEntityToComponentMap;
     std::unordered_map<ComponentId, EntityId> mComponentToEntityMap;
+
+    /**
+     * @brief Add a component to an entity.
+     * @tparam Args Arguments that are passed to the ComponentType constructor to construct a component with initial values.
+     * @param entityId The ID of the entity that the component is being attached to.
+     * @param args The arguments used to initialize the component.
+     * @return A reference to the created component.
+     */
+    template <typename ... Args>
+    [[maybe_unused]] ComponentType* AddComponent(const EntityId entityId, Args&& ...args);
+
+    /**
+     * @brief Add a component to an entity. The ownership of the passed in component is passed to the ComponentManager.
+     * @param entityId The entity ID that the component is being attached to.
+     * @param component The component that is being added to the entity.
+     * @return A reference to the added component.
+     */
+    [[maybe_unused]] ComponentType* AddComponent(const EntityId entityId, const ComponentType& component);
+
+    /**
+    * @brief Removes a _component_ from the __ComponentArray__ from the _entity_.
+    * @param entityId: The ID of the entity the component is being removed from.
+    */
+    void RemoveComponent(const EntityId entityId);
+
 };
 
 /*
   ======================================================================================================================================================
                                                                                                                                                         */
 
-// Todo Christian Make this return a component ref as this could be stale if a
-// vector resize occurs after adding/getting the component.
 template <typename ComponentType>
 template <typename ... Args>
 inline ComponentType* ComponentArray<ComponentType>::AddComponent(const EntityId entityId, Args&& ...args)

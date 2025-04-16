@@ -134,7 +134,7 @@ public:
             entities[i].AddComponent<ComponentA>()->value = i;
         }
 
-        auto* componentEntityThree = entities[3].GetComponent<ComponentA>();
+        const ScarlEntt::ComponentRef<ComponentA> componentEntityThree = entities[3].GetComponent<ComponentA>();
 
         for (int i{0}; i < NUM_ENTITIES; ++i)
         {
@@ -181,7 +181,7 @@ public:
 
         for (int i{0}; i < NUM_ENTITIES; ++i)
         {
-            passed &= entities[i].GetComponent<ComponentA>() == nullptr;
+            passed &= !entities[i].GetComponent<ComponentA>().IsValid();
         }
 
         passed &= scene.GetComponentManager()->GetComponentArray<ComponentA>().Size() == 0;

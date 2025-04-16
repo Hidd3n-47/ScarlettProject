@@ -24,15 +24,14 @@ public:
     inline static bool AddingComponentToEntity()
     {
         bool passed = true;
-        ScarlEntt::EntityManager entityManager;
-        ScarlEntt::ComponentManager componentManager;
+        ScarlEntt::Scene scene;
 
-        componentManager.RegisterComponent<ComponentA>();
+        scene.RegisterComponent<ComponentA>();
 
-        const auto entity = entityManager.CreateEntity();
-        componentManager.AddComponent<ComponentA>(entity);
+        auto entity = scene.CreateEntity();
+        (void)entity.AddComponent<ComponentA>();
 
-        passed &= componentManager.GetComponent<ComponentA>(entity) != nullptr;
+        passed &= entity.GetComponent<ComponentA>().IsValid();
 
         return passed;
     }
@@ -42,19 +41,18 @@ public:
         constexpr int COMPONENT_A_VALUE = 1;
 
         bool passed = true;
-        ScarlEntt::EntityManager entityManager;
-        ScarlEntt::ComponentManager componentManager;
+        ScarlEntt::Scene scene;
 
-        componentManager.RegisterComponent<ComponentA>();
+        scene.RegisterComponent<ComponentA>();
 
-        const auto entity = entityManager.CreateEntity();
-        componentManager.AddComponent<ComponentA>(entity, COMPONENT_A_VALUE);
+        auto entity = scene.CreateEntity();
+        (void)entity.AddComponent<ComponentA>(COMPONENT_A_VALUE);
 
-        const ComponentA* componentA = componentManager.GetComponent<ComponentA>(entity);
-        passed &= componentA != nullptr && componentA->value == COMPONENT_A_VALUE;
+        const ScarlEntt::ComponentRef<ComponentA> componentA = entity.GetComponent<ComponentA>();
+        passed &= componentA.IsValid() && componentA->value == COMPONENT_A_VALUE;
 
-        componentManager.RemoveComponent<ComponentA>(entity);
-        passed &= componentManager.GetComponent<ComponentA>(entity) == nullptr;
+        entity.RemoveComponent<ComponentA>();
+        passed &= !entity.GetComponent<ComponentA>().IsValid();
 
         return passed;
     }
@@ -64,21 +62,20 @@ public:
         constexpr int COMPONENT_A_VALUE = 4;
 
         bool passed = true;
-        ScarlEntt::EntityManager entityManager;
-        ScarlEntt::ComponentManager componentManager;
+        ScarlEntt::Scene scene;
 
-        componentManager.RegisterComponent<ComponentA>();
+        scene.RegisterComponent<ComponentA>();
 
         ComponentA componentA { COMPONENT_A_VALUE };
 
-        const auto entity = entityManager.CreateEntity();
-        componentManager.AddComponent<ComponentA>(entity, componentA);
+        auto entity = scene.CreateEntity();
+        (void)entity.AddComponent<ComponentA>(componentA);
 
-        const ComponentA* componentA_FromGet = componentManager.GetComponent<ComponentA>(entity);
-        passed &= componentA_FromGet != nullptr && componentA_FromGet->value == COMPONENT_A_VALUE;
+        const ScarlEntt::ComponentRef<ComponentA> componentA_FromGet = entity.GetComponent<ComponentA>();
+        passed &= componentA_FromGet.IsValid() && componentA_FromGet->value == COMPONENT_A_VALUE;
 
-        componentManager.RemoveComponent<ComponentA>(entity);
-        passed &= componentManager.GetComponent<ComponentA>(entity) == nullptr;
+        entity.RemoveComponent<ComponentA>();
+        passed &= !entity.GetComponent<ComponentA>().IsValid();
 
         return passed;
     }
@@ -89,28 +86,27 @@ public:
         constexpr int COMPONENT_A_NEW_VALUE   = 5;
 
         bool passed = true;
-        ScarlEntt::EntityManager entityManager;
-        ScarlEntt::ComponentManager componentManager;
+        ScarlEntt::Scene scene;
 
-        componentManager.RegisterComponent<ComponentA>();
+        scene.RegisterComponent<ComponentA>();
 
-        const auto entity = entityManager.CreateEntity();
-        componentManager.AddComponent<ComponentA>(entity, COMPONENT_A_VALUE);
+        auto entity = scene.CreateEntity();
+        (void)entity.AddComponent<ComponentA>(COMPONENT_A_VALUE);
 
-        ComponentA* componentA_FromGet = componentManager.GetComponent<ComponentA>(entity);
+        const ScarlEntt::ComponentRef<ComponentA> componentA_FromGet = entity.GetComponent<ComponentA>();
 
         componentA_FromGet->value = COMPONENT_A_NEW_VALUE;
 
-        passed &= componentManager.GetComponent<ComponentA>(entity)->value == COMPONENT_A_NEW_VALUE;
+        passed &= entity.GetComponent<ComponentA>()->value == COMPONENT_A_NEW_VALUE;
 
         return passed;
     }
 
     static constexpr int OUT_OF_SCOPE_COMPONENT_VALUE = 100;
     template <typename ComponentType>
-    inline static void OutOfScopeComponentUpdate(const ScarlEntt::EntityId entityId, ScarlEntt::ComponentManager& componentManager)
+    inline static void OutOfScopeComponentUpdate(ScarlEntt::EntityHandle entity)
     {
-        componentManager.GetComponent<ComponentType>(entityId)->value = OUT_OF_SCOPE_COMPONENT_VALUE;
+        entity.GetComponent<ComponentType>()->value = OUT_OF_SCOPE_COMPONENT_VALUE;
     }
 
     inline static bool ComponentValuesUpdateOutOfScope()
@@ -118,27 +114,26 @@ public:
         constexpr int COMPONENT_A_VALUE = 4;
 
         bool passed = true;
-        ScarlEntt::EntityManager entityManager;
-        ScarlEntt::ComponentManager componentManager;
+        ScarlEntt::Scene scene;
 
-        componentManager.RegisterComponent<ComponentA>();
+        scene.RegisterComponent<ComponentA>();
 
-        const auto entity = entityManager.CreateEntity();
-        componentManager.AddComponent<ComponentA>(entity, COMPONENT_A_VALUE);
+        auto entity = scene.CreateEntity();
+        (void)entity.AddComponent<ComponentA>(COMPONENT_A_VALUE);
 
-        (void)componentManager.GetComponent<ComponentA>(entity);
+        (void)entity.GetComponent<ComponentA>();
 
-        OutOfScopeComponentUpdate<ComponentA>(entity, componentManager);
+        OutOfScopeComponentUpdate<ComponentA>(entity);
 
-        passed &= componentManager.GetComponent<ComponentA>(entity)->value == OUT_OF_SCOPE_COMPONENT_VALUE;
+        passed &= entity.GetComponent<ComponentA>()->value == OUT_OF_SCOPE_COMPONENT_VALUE;
 
         return passed;
     }
 
     template <typename ComponentType>
-    inline static void OutOfScopeComponentRemove(const ScarlEntt::EntityId entityId, ScarlEntt::ComponentManager& componentManager)
+    inline static void OutOfScopeComponentRemove(const ScarlEntt::EntityHandle entity)
     {
-        componentManager.RemoveComponent<ComponentType>(entityId);
+        entity.RemoveComponent<ComponentType>();
     }
 
     inline static bool ComponentRemoveOutOfScope()
@@ -146,19 +141,18 @@ public:
         constexpr int COMPONENT_A_VALUE = 4;
 
         bool passed = true;
-        ScarlEntt::EntityManager entityManager;
-        ScarlEntt::ComponentManager componentManager;
+        ScarlEntt::Scene scene;
 
-        componentManager.RegisterComponent<ComponentA>();
+        scene.RegisterComponent<ComponentA>();
 
-        const auto entity = entityManager.CreateEntity();
-        componentManager.AddComponent<ComponentA>(entity, COMPONENT_A_VALUE);
+        auto entity = scene.CreateEntity();
+        (void)entity.AddComponent<ComponentA>(COMPONENT_A_VALUE);
 
-        (void)componentManager.GetComponent<ComponentA>(entity);
+        (void)entity.GetComponent<ComponentA>();
 
-        OutOfScopeComponentRemove<ComponentA>(entity, componentManager);
+        OutOfScopeComponentRemove<ComponentA>(entity);
 
-        passed &= componentManager.GetComponent<ComponentA>(entity) == nullptr;
+        passed &= !entity.GetComponent<ComponentA>().IsValid();
 
         return passed;
     }
@@ -183,16 +177,15 @@ public:
         constexpr bool      COMPONENT_C_VALUE_ENT_3     = true;
 
         bool passed = true;
-        ScarlEntt::EntityManager entityManager;
-        ScarlEntt::ComponentManager componentManager;
+        ScarlEntt::Scene scene;
 
-        componentManager.RegisterComponent<ComponentA>();
-        componentManager.RegisterComponent<ComponentB>();
-        componentManager.RegisterComponent<ComponentC>();
+        scene.RegisterComponent<ComponentA>();
+        scene.RegisterComponent<ComponentB>();
+        scene.RegisterComponent<ComponentC>();
 
-        const auto ent1 = entityManager.CreateEntity();
-        const auto ent2 = entityManager.CreateEntity();
-        const auto ent3 = entityManager.CreateEntity();
+        auto ent1 = scene.CreateEntity();
+        auto ent2 = scene.CreateEntity();
+        auto ent3 = scene.CreateEntity();
 
 
         // ComponentArrayA [  100,    1,    3 ]
@@ -203,23 +196,23 @@ public:
 
         // ComponentArrayC [    T,            ]
         // Entity -> CompA [    3,            ]
-        componentManager.AddComponent<ComponentA>(ent1, COMPONENT_A_VALUE_ENT_1);
-        componentManager.AddComponent<ComponentB>(ent1, COMPONENT_B_VALUE_ENT_1);
+        (void)ent1.AddComponent<ComponentA>(COMPONENT_A_VALUE_ENT_1);
+        (void)ent1.AddComponent<ComponentB>(COMPONENT_B_VALUE_ENT_1);
 
-        componentManager.AddComponent<ComponentA>(ent2, COMPONENT_A_VALUE_ENT_2);
-        componentManager.AddComponent<ComponentB>(ent2, COMPONENT_B_VALUE_ENT_2);
+        (void)ent2.AddComponent<ComponentA>(COMPONENT_A_VALUE_ENT_2);
+        (void)ent2.AddComponent<ComponentB>(COMPONENT_B_VALUE_ENT_2);
 
-        componentManager.AddComponent<ComponentA>(ent3, COMPONENT_A_VALUE_ENT_3);
-        componentManager.AddComponent<ComponentB>(ent3, COMPONENT_B_VALUE_ENT_3);
-        componentManager.AddComponent<ComponentC>(ent3, COMPONENT_C_VALUE_ENT_3);
+        (void)ent3.AddComponent<ComponentA>(COMPONENT_A_VALUE_ENT_3);
+        (void)ent3.AddComponent<ComponentB>(COMPONENT_B_VALUE_ENT_3);
+        (void)ent3.AddComponent<ComponentC>(COMPONENT_C_VALUE_ENT_3);
 
-        componentManager.RemoveComponent<ComponentA>(ent2);
-        componentManager.RemoveComponent<ComponentB>(ent2);
-        componentManager.RemoveComponent<ComponentB>(ent3);
+        ent2.RemoveComponent<ComponentA>();
+        ent2.RemoveComponent<ComponentB>();
+        ent3.RemoveComponent<ComponentB>();
 
-        passed &= componentManager.GetComponent<ComponentA>(ent2) == nullptr;
-        passed &= componentManager.GetComponent<ComponentB>(ent2) == nullptr;
-        passed &= componentManager.GetComponent<ComponentB>(ent3) == nullptr;
+        passed &= !ent2.GetComponent<ComponentA>().IsValid();
+        passed &= !ent2.GetComponent<ComponentB>().IsValid();
+        passed &= !ent3.GetComponent<ComponentB>().IsValid();
 
 
         // ComponentArrayA [  100,  3 ]
@@ -231,16 +224,16 @@ public:
         // ComponentArrayC [        T ]
         // Entity -> CompA [        3 ]
 
-        passed &= componentManager.GetComponent<ComponentA>(ent1)->value == COMPONENT_A_VALUE_ENT_1;
-        passed &= componentManager.GetComponent<ComponentA>(ent3)->value == COMPONENT_A_VALUE_ENT_3;
+        passed &= ent1.GetComponent<ComponentA>()->value == COMPONENT_A_VALUE_ENT_1;
+        passed &= ent3.GetComponent<ComponentA>()->value == COMPONENT_A_VALUE_ENT_3;
 
-        passed &= IsCloseTo(componentManager.GetComponent<ComponentB>(ent1)->value, COMPONENT_B_VALUE_ENT_1);
+        passed &= IsCloseTo(ent1.GetComponent<ComponentB>()->value, COMPONENT_B_VALUE_ENT_1);
 
-        passed &= componentManager.GetComponent<ComponentC>(ent3)->value == COMPONENT_C_VALUE_ENT_3;
+        passed &= ent3.GetComponent<ComponentC>()->value == COMPONENT_C_VALUE_ENT_3;
 
-        ScarlEntt::ComponentArray<ComponentA>& componentsA = componentManager.GetComponentArray<ComponentA>();
-        ScarlEntt::ComponentArray<ComponentB>& componentsB = componentManager.GetComponentArray<ComponentB>();
-        ScarlEntt::ComponentArray<ComponentC>& componentsC = componentManager.GetComponentArray<ComponentC>();
+        ScarlEntt::ComponentArray<ComponentA>& componentsA = scene.GetComponentManager()->GetComponentArray<ComponentA>();
+        ScarlEntt::ComponentArray<ComponentB>& componentsB = scene.GetComponentManager()->GetComponentArray<ComponentB>();
+        ScarlEntt::ComponentArray<ComponentC>& componentsC = scene.GetComponentManager()->GetComponentArray<ComponentC>();
 
         passed &= componentsA[0].value == COMPONENT_A_VALUE_ENT_1;
         passed &= componentsA[1].value == COMPONENT_A_VALUE_ENT_3;
@@ -254,24 +247,23 @@ public:
 
     inline static bool ComponentArrayIteratingAndChangingOverTenEntities()
     {
-        constexpr int       NUM_ENTITIES    = 10;
-        constexpr int     MULTIPLY_VALUE    = 10;
+        constexpr int       NUM_ENTITIES      = 10;
+        constexpr int       MULTIPLY_VALUE    = 10;
 
         bool passed = true;
-        ScarlEntt::EntityManager entityManager;
-        ScarlEntt::ComponentManager componentManager;
+        ScarlEntt::Scene scene;
 
-        componentManager.RegisterComponent<ComponentA>();
+        scene.RegisterComponent<ComponentA>();
 
         // Create entities and add components with ID as the value.
-        ScarlEntt::EntityId entities [NUM_ENTITIES];
-        for (ScarlEntt::EntityId i {0}; i < NUM_ENTITIES; ++i)
+        ScarlEntt::EntityHandle entities [NUM_ENTITIES];
+        for (int i {0}; i < NUM_ENTITIES; ++i)
         {
-            entities[i] = entityManager.CreateEntity();
-            componentManager.AddComponent<ComponentA>(entities[i], static_cast<int>(i));
+            entities[i] = scene.CreateEntity();
+            (void)entities[i].AddComponent<ComponentA>(i);
         }
 
-        ScarlEntt::ComponentArray<ComponentA>& componentsA = componentManager.GetComponentArray<ComponentA>();
+        ScarlEntt::ComponentArray<ComponentA>& componentsA = scene.GetComponentManager()->GetComponentArray<ComponentA>();
 
         // Test iterating over components.
         for (ScarlEntt::ComponentId i {0}; i < componentsA.Size(); ++i)
@@ -291,7 +283,7 @@ public:
             passed &= componentsA[i].value == static_cast<int>(i) * MULTIPLY_VALUE;
         }
 
-        componentManager.RemoveComponent<ComponentA>(entities[std::size(entities) - 1]);
+        entities[std::size(entities) - 1].RemoveComponent<ComponentA>();
 
         passed &= componentsA.Size() == 9;
         for (ScarlEntt::ComponentId i {0}; i < componentsA.Size(); ++i)

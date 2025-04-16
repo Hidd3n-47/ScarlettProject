@@ -1,4 +1,6 @@
 ﻿#pragma once
+
+#include "ComponentRef.h"
 #include "ComponentManager.h"
 
 namespace ScarlEntt
@@ -49,7 +51,7 @@ public:
     * @return Returns the __component__ if found, __nullptr__ otherwise.
     */
     template <typename ComponentType>
-    [[nodiscard]] ComponentType* GetComponent();
+    [[nodiscard]] ComponentRef<ComponentType> GetComponent();
 
     /**
     * @brief Get the ID of the entity.
@@ -85,7 +87,7 @@ inline void EntityHandle::RemoveComponent() const
 }
 
 template <typename ComponentType>
-inline ComponentType* EntityHandle::GetComponent()
+inline ComponentRef<ComponentType> EntityHandle::GetComponent()
 {
     return mComponentManagerRef->GetComponent<ComponentType>(mEntityId);
 }

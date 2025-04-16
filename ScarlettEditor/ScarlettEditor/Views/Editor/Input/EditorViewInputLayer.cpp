@@ -44,7 +44,7 @@ bool EditorViewInputLayer::OnMouseButtonPressed(const Scarlett::MouseButtonPress
         for (ScarlEntt::ComponentId i{ 0 }; i < bb.Size(); ++i)
         {
             ScarlEntt::EntityHandle entity{ entityIds[i], ScarlettGame::GameCore::Instance().GetActiveScene() };
-            const ScarlettGame::Transform* transform = entity.GetComponent<ScarlettGame::Transform>();
+            const ScarlEntt::ComponentRef<ScarlettGame::Transform> transform = entity.GetComponent<ScarlettGame::Transform>();
 
             const ScarlettMath::Vec3 boundingBoxCenter = bb[i].GetCenter();
 
@@ -110,7 +110,7 @@ bool EditorViewInputLayer::OnMouseMoved(const Scarlett::MouseMovedEvent& e)
         const auto& viewportCamera = ScarlettGame::GameCore::Instance().GetActiveScene()->GetComponentManager()->GetComponentArray<ViewportCamera>();
         const auto& entityIds = viewportCamera.GetCorrespondingEntityId();
         ScarlEntt::EntityHandle entity{ entityIds[0], ScarlettGame::GameCore::Instance().GetActiveScene() };
-        ScarlettGame::Transform* transform = entity.GetComponent<ScarlettGame::Transform>();
+        const ScarlEntt::ComponentRef<ScarlettGame::Transform> transform = entity.GetComponent<ScarlettGame::Transform>();
 
         constexpr float SPEED_SCALING_FACTOR = 0.0025f;
         const ScarlettMath::Vec2 moveDelta = mousePosition - mPreviousMousePosition;

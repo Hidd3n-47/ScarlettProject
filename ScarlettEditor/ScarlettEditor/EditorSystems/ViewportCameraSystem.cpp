@@ -24,7 +24,7 @@ void ViewportCameraSystem::UpdateSystem()
     ViewportCamera* camera = &viewportCamera[0];
 
     ScarlEntt::EntityHandle entity{entityIds[0], mSceneRef };
-    const ScarlettGame::Transform* transform = entity.GetComponent<ScarlettGame::Transform>();
+    const ScarlEntt::ComponentRef<ScarlettGame::Transform> transform = entity.GetComponent<ScarlettGame::Transform>();
 
     //todo implement is dirty
     if (camera->IsDirty())

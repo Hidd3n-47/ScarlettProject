@@ -18,6 +18,7 @@ namespace ScarlEntt
  */
 class ComponentManager
 {
+friend class EntityHandle;
 public:
     ComponentManager() = default;
     ~ComponentManager();
@@ -41,6 +42,9 @@ public:
     */
     template<typename ComponentType>
     [[nodiscard]] ComponentArray<ComponentType>& GetComponentArray();
+
+private:
+    unordered_map<std::string, IComponentArray*> mComponents;
 
     /**
     * @brief Add a component to an entity.
@@ -66,12 +70,13 @@ public:
 
     /**
     * @brief Retrieve a pointer to the component of a specific _entity_.
-    * @note This is a raw pointer and should not be cached due to memory potentially changing.
+    * @note This should be used if any caching is needed as this retains a reference to the component, and will check if its valid before use.
+    * @see \c ComponentRef
     * @param entityId: The entity ID for which we are requesting the component.
-    * @return Returns the __component__ if found, __nullptr__ otherwise.
+    * @return Returns a \c ComponentRef to a component.
     */
     template <typename ComponentType>
-    [[nodiscard]] ComponentType* GetComponent(const EntityId entityId);
+    [[nodiscard]] ComponentRef<ComponentType> GetComponent(const EntityId entityId);
 
     /**
     * @brief Remove a component (if found) of a specific _entity_.
@@ -79,8 +84,6 @@ public:
     */
     template <typename ComponentType>
     void RemoveComponent(EntityId entityId);
-private:
-    unordered_map<std::string, IComponentArray*> mComponents;
 };
 
 /*
@@ -132,9 +135,9 @@ inline ComponentType* ComponentManager::AddComponent(const EntityId entityId, co
 }
 
 template <typename ComponentType>
-inline ComponentType* ComponentManager::GetComponent(const EntityId entityId)
+inline ComponentRef<ComponentType> ComponentManager::GetComponent(const EntityId entityId)
 {
-    return GetComponentArray<ComponentType>().GetComponent(entityId);
+    return ComponentRef<ComponentType>{ entityId, &GetComponentArray<ComponentType>() };
 }
 
 template <typename T>
