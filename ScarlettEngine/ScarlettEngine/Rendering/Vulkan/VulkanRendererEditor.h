@@ -28,8 +28,6 @@ public:
     void BeginRenderEditor() const;
     void RenderEditor();
     void EndRenderEditor() const;
-
-    ScarlettGame::Camera* GetRenderCamera() override;
 private:
     VkDescriptorPool        mImGuiPool;
     VkSampler               mSampler;

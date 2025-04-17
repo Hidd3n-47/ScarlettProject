@@ -46,10 +46,10 @@ project "ScarlettGameCore"
 
     filter "configurations:Dev"
         runtime "Debug"
-        defines "SCARLETT_GAME_CORE_DEBUG"
+        defines { "SCARLETT_GAME_CORE_EXPORT", "SCARLETT_GAME_CORE_DEBUG" }
         symbols "on"
 
     filter "configurations:Release"
         runtime "Release"
-        defines "SCARLETT_GAME_CORE_RELEASE"
+        defines { "SCARLETT_GAME_CORE_EXPORT", "SCARLETT_GAME_CORE_RELEASE" }
         optimize "on"

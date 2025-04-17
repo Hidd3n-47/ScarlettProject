@@ -6,6 +6,7 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image/stb_image.h>
 
+#include <ScarlettGameCore/Src/GameCore.h>
 #include <ScarlettGameCore/Components/Camera.h>
 
 #include "Mesh.h"
@@ -128,7 +129,7 @@ void VulkanRenderer::Render()
 
 void VulkanRenderer::EndRender()
 {
-    const ScarlettGame::Camera* camera = GetRenderCamera();
+    const ScarlettGame::Camera* camera = &ScarlettGame::GameCore::Instance().GetActiveScene()->GetComponentManager()->GetComponentArray<ScarlettGame::Camera>()[0];
 
     // Sprites.
     // todo move towards a vertex and index buffer to batch/instance render.
@@ -144,8 +145,8 @@ void VulkanRenderer::EndRender()
         const SpriteInfoStruct info
         {
             .color = command.color,
-            .view  = camera->viewMatrix,
-            .proj  = camera->projectionMatrix,
+            .view  = camera->GetViewMatrix(),
+            .proj  = camera->GetProjectionMatrix(),
             .model = translation * command.transform->rotation.GetRotationMatrix() * scale
         };
 
@@ -167,8 +168,8 @@ void VulkanRenderer::EndRender()
         const SpriteInfoStruct info
         {
             .color = command.color,
-            .view  = camera->viewMatrix,
-            .proj  = camera->projectionMatrix,
+            .view  = camera->GetViewMatrix(),
+            .proj  = camera->GetProjectionMatrix(),
             .model = translation * command.transform->rotation.GetRotationMatrix() * scale
         };
 

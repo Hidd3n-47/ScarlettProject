@@ -1,8 +1,6 @@
 ﻿#include "ScarlettEditorPch.h"
 #include "EditorManager.h"
 
-#include <ScarlEntt/Scene.h>
-
 #include <Core/Input/LayerStack.h>
 
 #include "Src/ScarlettEditorDefines.h"
@@ -42,7 +40,9 @@ void EditorManager::CreateInstance(ImGuiContext* uiContext, ImGuiMemAllocFunc* a
 
     mInstance = new EditorManager();
 
+#ifdef SCARLETT_EDITOR_DEBUG
     Scarlett::Log::Init(true, "ScarlettEditor");
+#endif // SCARLETT_EDITOR_DEBUG.
 
     ImGui::SetCurrentContext(uiContext);
     ImGui::SetAllocatorFunctions(*allocateFunction, *freeFunction, data);

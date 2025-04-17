@@ -15,7 +15,6 @@
 #include "Views/Editor/Panels/ViewportPanel.h"
 #include "Views/Editor/Panels/PropertiesPanel.h"
 
-#include "EditorSystems/ViewportCameraSystem.h"
 
 #include "Views/Editor/Input/EditorViewInputLayer.h"
 
@@ -26,16 +25,7 @@ namespace ScarlettEditor
 
 EditorView::EditorView()
 {
-    ScarlettGame::GameCore::Instance().GetActiveScene()->RegisterSystem<ViewportCameraSystem>();
-    ScarlettGame::GameCore::Instance().GetActiveScene()->RegisterComponent<ViewportCamera>();
-
     SceneSerialization::DeserializeCurrentGameScene();
-
-    ScarlEntt::EntityHandle viewportCamera = ScarlettGame::GameCore::Instance().CreateEntity();
-    viewportCamera.RemoveComponent<ScarlettGame::SquareSprite>();
-    //viewportCamera.RemoveComponent<ScarlettGame::Tag>(); // TODO remove later, just keeping this as it is handy to see camera position.
-    viewportCamera.GetComponent<ScarlettGame::Transform>()->translation = { 0.0f, 2.0f, 6.0f };
-    (void)viewportCamera.AddComponent<ViewportCamera>();
 
     //todo Add blending for the grid.
     ScarlEntt::EntityHandle viewportGrid = ScarlettGame::GameCore::Instance().CreateEntity();

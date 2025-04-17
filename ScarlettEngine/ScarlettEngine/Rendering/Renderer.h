@@ -27,8 +27,6 @@ public:
     virtual void Render()       = 0;
     virtual void EndRender()    = 0;
 
-    virtual ScarlettGame::Camera* GetRenderCamera() = 0;
-
     inline void AddCommand(const RenderType renderType, const RenderCommand& command) { mCommands[renderType].emplace_back(command); }
 
     virtual void OnWindowResize(const uint32 width, const uint32 height) = 0;

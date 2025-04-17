@@ -5,7 +5,7 @@
 #include <ScarlettEditor/EditorComponents/Line.h>
 
 #include <ScarlettGameCore/Src/GameCore.h>
-#include <ScarlettGameCore/Components/Transform.h>
+#include <ScarlettGameCore/Components/Camera.h>
 #include <ScarlettGameCore/Components/SquareSprite.h>
 
 #include "WindowLayer.h"
@@ -17,6 +17,7 @@
 #include "Input/InputManager.h"
 #include "Events/ApplicationEvents.h"
 
+#include "Systems/CameraSystem.h"
 #include "Systems/LineRendererSystem.h"
 #include "Systems/SquareSpriteSystem.h"
 
@@ -30,13 +31,12 @@ void Engine::InitEngine()
     SCARLETT_ASSERT(mInstance == nullptr && "Engine has already been initialized, can only initialize engine once.");
     mInstance = this;
 
-    Log::Init();
-
     mLayerStack = new LayerStack();
 
     std::string windowConfiguration;
 #if defined(SCARLETT_DEBUG)
     windowConfiguration = " - Dev";
+    Log::Init();
 #elif defined(SCARLETT_RELEASE)
     windowConfiguration = " - Release";
 #else
@@ -60,6 +60,14 @@ void Engine::InitEngine()
     ScarlettGame::GameCore::Instance().GetActiveScene()->RegisterComponent<ScarlettEditor::Line>();
 
     Renderer::Instance().Init(mMainWindow);
+
+    ScarlettGame::GameCore::Instance().GetActiveScene()->RegisterSystem<CameraSystem>();
+    ScarlettGame::GameCore::Instance().GetActiveScene()->RegisterComponent<ScarlettGame::Camera>();
+    ScarlEntt::EntityHandle gameCamera = ScarlettGame::GameCore::Instance().CreateEntity();
+    gameCamera.RemoveComponent<ScarlettGame::SquareSprite>();
+    gameCamera.GetComponent<ScarlettGame::Transform>()->translation = { 0.0f, 2.0f, 6.0f };
+    (void)gameCamera.AddComponent<ScarlettGame::Camera>();
+
 
     SCARLETT_DLOG("Engine Initialized");
 

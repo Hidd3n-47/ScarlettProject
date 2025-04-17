@@ -61,5 +61,5 @@ project "ScarlettEditor"
 
     filter "configurations:Release"
         runtime "Release"
-        defines "SCARLETT_EDITOR_RELEASE"
+        defines { "SCARLETT_EDITOR_RELEASE", "SCARLETT_EDITOR_EXPORT" }
         optimize "on"

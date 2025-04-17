@@ -1,6 +1,8 @@
 ﻿#include "ScarlettEditorPch.h"
 #include "XmlSerializer.h"
 
+#include <unordered_map>
+
 namespace ScarlettEditor
 {
 

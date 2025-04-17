@@ -24,9 +24,6 @@ public:
     VulkanRenderer& operator=(VulkanRenderer&&)         = delete;
     VulkanRenderer& operator=(const VulkanRenderer&)    = delete;
 
-    // todo add camera for release
-    inline ScarlettGame::Camera*    GetRenderCamera() override { return nullptr; }
-
     void Init(const Window* windowRef) override;
     void Destroy() override;
 

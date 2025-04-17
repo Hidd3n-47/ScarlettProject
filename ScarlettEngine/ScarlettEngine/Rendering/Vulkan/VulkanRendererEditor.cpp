@@ -4,7 +4,6 @@
 #ifdef SCARLETT_EDITOR_ENABLED
 
 #include <ScarlettGameCore/Src/GameCore.h>
-#include <Views/Editor/ViewportCamera.h>
 
 #include <imgui/imgui_impl_glfw.h>
 #include <imgui/imgui_impl_vulkan.h>
@@ -201,13 +200,6 @@ void VulkanRendererEditor::EndRenderEditor() const
     VK_CHECK(vkEndCommandBuffer(mCommandBuffers[mNextImageIndex]), "Failed to end recording Vulkan Command Buffer.");
 
     VK_CHECK(mSwapChain->SubmitCommandBuffers(&mCommandBuffers[mNextImageIndex], &mNextImageIndex), "Failed to present Vulkan Swap Chain Image");
-}
-
-ScarlettGame::Camera* VulkanRendererEditor::GetRenderCamera()
-{
-    const auto& viewportCamera = ScarlettGame::GameCore::Instance().GetActiveScene()->GetComponentManager()->GetComponentArray<ScarlettEditor::ViewportCamera>();
-    //todo add asserts here to ensure the correct number of [viewport] camera's active.
-    return (ScarlettGame::Camera*)(&viewportCamera[0]);
 }
 
 } // Namespace Scarlett.

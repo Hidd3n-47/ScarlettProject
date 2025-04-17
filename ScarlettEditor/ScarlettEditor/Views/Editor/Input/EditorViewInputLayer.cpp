@@ -10,8 +10,8 @@
 #include <ScarlettGameCore/Components/BoundingBox.h>
 
 #include "Input/EditorInputManager.h"
+#include "ScarlettGameCore/Components/Camera.h"
 
-#include "Views/Editor/ViewportCamera.h"
 #include "Views/Editor/View/EditorView.h"
 #include "Views/Editor/Panels/ViewportPanel.h"
 
@@ -32,11 +32,11 @@ bool EditorViewInputLayer::OnMouseButtonPressed(const Scarlett::MouseButtonPress
         const auto& entityIds = bb.GetCorrespondingEntityId();
 
         // todo, again, need a better way.
-        const auto& cameras = scene->GetComponentManager()->GetComponentArray<ViewportCamera>();
+        const auto& cameras = scene->GetComponentManager()->GetComponentArray<ScarlettGame::Camera>();
         ScarlEntt::EntityHandle cameraEntity{ cameras.GetCorrespondingEntityId()[0], ScarlettGame::GameCore::Instance().GetActiveScene() };
 
         const ScarlettMath::Vec3 cameraCenter = cameraEntity.GetComponent<ScarlettGame::Transform>()->translation;
-        const ScarlettMath::Vec3 cameraDirection = cameras[0].forwardVector;
+        const ScarlettMath::Vec3 cameraDirection = cameras[0].GetForwardVector();
 
         vector<std::pair<ScarlEntt::EntityHandle*, ScarlettMath::Vec3>> collidedWithEntities;
 
@@ -107,7 +107,7 @@ bool EditorViewInputLayer::OnMouseMoved(const Scarlett::MouseMovedEvent& e)
     if (mCameraFlying)
     {
         //todo cache camera as there will only be one.
-        const auto& viewportCamera = ScarlettGame::GameCore::Instance().GetActiveScene()->GetComponentManager()->GetComponentArray<ViewportCamera>();
+        auto& viewportCamera = ScarlettGame::GameCore::Instance().GetActiveScene()->GetComponentManager()->GetComponentArray<ScarlettGame::Camera>();
         const auto& entityIds = viewportCamera.GetCorrespondingEntityId();
         ScarlEntt::EntityHandle entity{ entityIds[0], ScarlettGame::GameCore::Instance().GetActiveScene() };
         const ScarlEntt::ComponentRef<ScarlettGame::Transform> transform = entity.GetComponent<ScarlettGame::Transform>();
@@ -122,6 +122,8 @@ bool EditorViewInputLayer::OnMouseMoved(const Scarlett::MouseMovedEvent& e)
         pitch  -= moveDelta.y * SPEED_SCALING_FACTOR;
 
         transform->rotation.SetYawPitchRoll(yaw, pitch, roll);
+
+        viewportCamera[0].SetDirty();
     }
 
     mPreviousMousePosition = mousePosition;
@@ -198,12 +200,12 @@ bool EditorViewInputLayer::OnUpdateEvent(const Scarlett::OnUpdateEvent& e)
     }
 
     //todo this need to be improved as this cannot be the only way to get a component of an entity given a different component.
-    const auto& viewportCameraArray = ScarlettGame::GameCore::Instance().GetActiveScene()->GetComponentManager()->GetComponentArray<ViewportCamera>();
+    auto& viewportCameraArray = ScarlettGame::GameCore::Instance().GetActiveScene()->GetComponentManager()->GetComponentArray<ScarlettGame::Camera>();
     const auto& entityIds = viewportCameraArray.GetCorrespondingEntityId();
 
     ScarlEntt::EntityHandle entity{ entityIds[0], ScarlettGame::GameCore::Instance().GetActiveScene() };
 
-    const ViewportCamera* camera = &viewportCameraArray[0];
+    ScarlettGame::Camera* camera = &viewportCameraArray[0];
 
     ScarlettMath::Vec3 cameraHorizontalDirection = { }, cameraVerticalDirection = { }, cameraForwardDirection = { };
 
@@ -232,16 +234,18 @@ bool EditorViewInputLayer::OnUpdateEvent(const Scarlett::OnUpdateEvent& e)
         cameraVerticalDirection += -1.0f;
     }
 
-    constexpr float SPEED_SCALING_FACTOR        = 0.005f;
+    constexpr float SPEED_SCALING_FACTOR        = 0.01f;
     constexpr float SHIFT_KEY_SPEED_MULTIPLIER  = 1.5f;
 
     // todo change input manager to check for flags so that we can combine this into one check.
     const float shiftKeySpeedBoost = EditorInputManager::IsKeyDown(Scarlett::KeyCode::KEY_LEFT_SHIFT) ? SHIFT_KEY_SPEED_MULTIPLIER : 1.0f;
     const float totalSpeedMultiplier = SPEED_SCALING_FACTOR * shiftKeySpeedBoost * mCameraFlyingMultiplier;
 
-    entity.GetComponent<ScarlettGame::Transform>()->translation += camera->rightVector      * cameraHorizontalDirection    * totalSpeedMultiplier
-                                                                 - camera->forwardVector    * cameraForwardDirection       * totalSpeedMultiplier
-                                                                 + camera->upVector         * cameraVerticalDirection      * totalSpeedMultiplier;
+    entity.GetComponent<ScarlettGame::Transform>()->translation += camera->GetRightVector()      * cameraHorizontalDirection    * totalSpeedMultiplier
+                                                                 - camera->GetForwardVector()    * cameraForwardDirection       * totalSpeedMultiplier
+                                                                 + camera->GetUpVector()         * cameraVerticalDirection      * totalSpeedMultiplier;
+
+    camera->SetDirty();
 
     return true;
 }
