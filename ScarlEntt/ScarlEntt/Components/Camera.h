@@ -2,16 +2,12 @@
 
 #include <Math/Math.h>
 
-#include "ScarlettGameCore/Src/ScarlettGame.h"
-
-namespace ScarlettGame
+namespace Scarlett::Component
 {
 
-struct SCARLETT_GAME_CORE_API Camera
+struct Camera
 {
 public:
-    Camera();
-
     inline void UpdateViewAndProjectionMatrix(const ScarlettMath::Vec3& eyePosition)
     {
         mViewMatrix         = ScarlettMath::LookAt(eyePosition, eyePosition + mForwardVector, mUpVector);
@@ -52,4 +48,4 @@ private:
     float mAspectRatio = 16.0f / 9.0f;
 };
 
-} // Namespace ScarlettGame.
+} // Namespace Scarlett::Component.

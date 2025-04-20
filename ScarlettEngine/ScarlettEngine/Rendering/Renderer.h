@@ -2,12 +2,8 @@
 
 #include "RenderCommand.h"
 
-namespace ScarlettGame
+namespace Scarlett
 {
-struct Camera;
-}
-
-namespace Scarlett {
 
 class Window;
 

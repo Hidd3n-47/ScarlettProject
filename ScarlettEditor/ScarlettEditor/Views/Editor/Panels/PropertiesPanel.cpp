@@ -5,9 +5,9 @@
 
 #include <ScarlEntt/EntityHandle.h>
 
-#include <ScarlettGameCore/Components/Tag.h>
-#include <ScarlettGameCore/Components/Transform.h>
-#include <ScarlettGameCore/Components/SquareSprite.h>
+#include <Components/Tag.h>
+#include <Components/Transform.h>
+#include <Components/SquareSprite.h>
 
 #include "Views/Editor/View/EditorView.h"
 
@@ -20,11 +20,11 @@ void PropertiesPanel::Render()
 
     if (selectedEntity != nullptr)
     {
-        const std::string entityName = selectedEntity->GetComponent<ScarlettGame::Tag>()->name.c_str();
+        const std::string entityName = selectedEntity->GetComponent<Scarlett::Component::Tag>()->name.c_str();
 
         if (ImGui::CollapsingHeader("Transform"))
         {
-            const auto transform = selectedEntity->GetComponent<ScarlettGame::Transform>();
+            const auto transform = selectedEntity->GetComponent<Scarlett::Component::Transform>();
 
             ImGui::DragFloat3((std::string("Position##") + entityName).c_str(), &transform->translation.x, 0.05f);
 
@@ -41,7 +41,7 @@ void PropertiesPanel::Render()
 
         if (ImGui::CollapsingHeader("Square Sprite"))
         {
-            const auto squareSprite = selectedEntity->GetComponent<ScarlettGame::SquareSprite>();
+            const auto squareSprite = selectedEntity->GetComponent<Scarlett::Component::SquareSprite>();
             ImGui::DragFloat3((std::string("Colour##") + entityName).c_str(), &squareSprite->color.x, 0.01f);
         }
     }

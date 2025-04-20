@@ -2,10 +2,10 @@
 
 #include <Math/Math.h>
 
-//todo make this editor only.
-namespace ScarlettGame
+namespace Scarlett::Component
 {
 
+//todo make this editor only.
 struct BoundingBox
 {
     ScarlettMath::Vec3 localMinimum { -0.5f, -0.5f, -0.01f };
@@ -14,4 +14,4 @@ struct BoundingBox
     inline ScarlettMath::Vec3 GetCenter() const { return (localMinimum + localMaximum) * 0.5f; }
 };
 
-} // Namespace ScarlettGameCore.
+} // Namespace Scarlett::Component.

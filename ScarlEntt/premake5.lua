@@ -22,6 +22,12 @@ project "ScarlEntt"
     {
         "$(SolutionDir)Scarlett/",
         "$(SolutionDir)ScarlEntt/ScarlEntt/",
+        "$(SolutionDir)ScarlettMath/ScarlettMath/",
+    }
+
+    links
+    {
+        "ScarlettMath"
     }
 
     filter "system:windows"

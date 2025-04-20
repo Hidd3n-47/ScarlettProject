@@ -1,12 +1,10 @@
 #pragma once
 
-#include "ScarlettGameCore/Src/ScarlettGame.h"
-
 //todo need to move this and change the hardcoded 50. (Should this be a string stl implementation or just for tag component?
 namespace ScarlettStl
 {
 
-class SCARLETT_GAME_CORE_API String
+class String
 {
 public:
     explicit String(const std::string& str)

@@ -3,7 +3,7 @@
 
 #include <ScarlEntt/Scene.h>
 
-#include <ScarlettGameCore/Components/SquareSprite.h>
+#include <Components/SquareSprite.h>
 
 #include "Rendering/Renderer.h"
 
@@ -18,12 +18,12 @@ SquareSpriteSystem::SquareSpriteSystem(ScarlEntt::Scene* sceneRef, ScarlEntt::Co
 
 void SquareSpriteSystem::UpdateSystem()
 {
-    const auto& squareSprites = mComponentManagerRef->GetComponentArray<ScarlettGame::SquareSprite>();
+    const auto& squareSprites = mComponentManagerRef->GetComponentArray<Component::SquareSprite>();
     const auto& entityIds = squareSprites.GetCorrespondingEntityId();
     for (ScarlEntt::ComponentId i{0}; i < squareSprites.Size(); ++i)
     {
         Renderer::Instance().AddCommand(RenderType::SPRITE,
-            { squareSprites[i].color, ScarlEntt::ComponentRef(entityIds[i], &mComponentManagerRef->GetComponentArray<ScarlettGame::Transform>()) });
+            { squareSprites[i].color, ScarlEntt::ComponentRef(entityIds[i], &mComponentManagerRef->GetComponentArray<Component::Transform>()) });
     }
 }
 

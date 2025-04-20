@@ -2,7 +2,7 @@
 
 #include <ScarlEntt/ComponentRef.h>
 
-#include <ScarlettGameCore/Components/Transform.h>
+#include <Components/Transform.h>
 
 namespace Scarlett
 {
@@ -18,12 +18,12 @@ class RenderCommand
 public:
     RenderCommand() = default;
 
-    RenderCommand(const ScarlettMath::Vec4 color, const ScarlEntt::ComponentRef<ScarlettGame::Transform> transform)
+    RenderCommand(const ScarlettMath::Vec4 color, const ScarlEntt::ComponentRef<Component::Transform> transform)
         : color(color), transform(transform)
     { /* Empty. */ }
 
     ScarlettMath::Vec4 color;
-    ScarlEntt::ComponentRef<ScarlettGame::Transform> transform;
+    ScarlEntt::ComponentRef<Component::Transform> transform;
 };
 
 }

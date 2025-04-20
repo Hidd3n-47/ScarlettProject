@@ -6,11 +6,12 @@
 #include <Core/Input/KeyCodes.h>
 
 #include <ScarlettGameCore/Src/GameCore.h>
-#include <ScarlettGameCore/Components/Transform.h>
-#include <ScarlettGameCore/Components/BoundingBox.h>
+
+#include <Components/Camera.h>
+#include <Components/Transform.h>
+#include <Components/BoundingBox.h>
 
 #include "Input/EditorInputManager.h"
-#include "ScarlettGameCore/Components/Camera.h"
 
 #include "Views/Editor/View/EditorView.h"
 #include "Views/Editor/Panels/ViewportPanel.h"
@@ -28,14 +29,14 @@ bool EditorViewInputLayer::OnMouseButtonPressed(const Scarlett::MouseButtonPress
     if (e.GetMouseButton() == Scarlett::KeyCode::MOUSE_BUTTON_1)
     {
         ScarlEntt::Scene* scene = ScarlettGame::GameCore::Instance().GetActiveScene();
-        const auto& bb = scene->GetComponentManager()->GetComponentArray<ScarlettGame::BoundingBox>();
+        const auto& bb = scene->GetComponentManager()->GetComponentArray<Scarlett::Component::BoundingBox>();
         const auto& entityIds = bb.GetCorrespondingEntityId();
 
         // todo, again, need a better way.
-        const auto& cameras = scene->GetComponentManager()->GetComponentArray<ScarlettGame::Camera>();
+        const auto& cameras = scene->GetComponentManager()->GetComponentArray<Scarlett::Component::Camera>();
         ScarlEntt::EntityHandle cameraEntity{ cameras.GetCorrespondingEntityId()[0], ScarlettGame::GameCore::Instance().GetActiveScene() };
 
-        const ScarlettMath::Vec3 cameraCenter = cameraEntity.GetComponent<ScarlettGame::Transform>()->translation;
+        const ScarlettMath::Vec3 cameraCenter = cameraEntity.GetComponent<Scarlett::Component::Transform>()->translation;
         const ScarlettMath::Vec3 cameraDirection = cameras[0].GetForwardVector();
 
         vector<std::pair<ScarlEntt::EntityHandle*, ScarlettMath::Vec3>> collidedWithEntities;
@@ -44,7 +45,7 @@ bool EditorViewInputLayer::OnMouseButtonPressed(const Scarlett::MouseButtonPress
         for (ScarlEntt::ComponentId i{ 0 }; i < bb.Size(); ++i)
         {
             ScarlEntt::EntityHandle entity{ entityIds[i], ScarlettGame::GameCore::Instance().GetActiveScene() };
-            const ScarlEntt::ComponentRef<ScarlettGame::Transform> transform = entity.GetComponent<ScarlettGame::Transform>();
+            const ScarlEntt::ComponentRef<Scarlett::Component::Transform> transform = entity.GetComponent<Scarlett::Component::Transform>();
 
             const ScarlettMath::Vec3 boundingBoxCenter = bb[i].GetCenter();
 
@@ -68,7 +69,7 @@ bool EditorViewInputLayer::OnMouseButtonPressed(const Scarlett::MouseButtonPress
         ScarlEntt::EntityHandle* closestEntity = nullptr;
         for (const auto& [ent, boundingBoxCenter] : collidedWithEntities)
         {
-            const float distance = glm::length(boundingBoxCenter - cameraCenter);
+            const float distance = ScarlettMath::Magnitude(boundingBoxCenter - cameraCenter);
             if (distance < minDistance)
             {
                 minDistance = distance;
@@ -107,10 +108,10 @@ bool EditorViewInputLayer::OnMouseMoved(const Scarlett::MouseMovedEvent& e)
     if (mCameraFlying)
     {
         //todo cache camera as there will only be one.
-        auto& viewportCamera = ScarlettGame::GameCore::Instance().GetActiveScene()->GetComponentManager()->GetComponentArray<ScarlettGame::Camera>();
+        auto& viewportCamera = ScarlettGame::GameCore::Instance().GetActiveScene()->GetComponentManager()->GetComponentArray<Scarlett::Component::Camera>();
         const auto& entityIds = viewportCamera.GetCorrespondingEntityId();
         ScarlEntt::EntityHandle entity{ entityIds[0], ScarlettGame::GameCore::Instance().GetActiveScene() };
-        const ScarlEntt::ComponentRef<ScarlettGame::Transform> transform = entity.GetComponent<ScarlettGame::Transform>();
+        const ScarlEntt::ComponentRef<Scarlett::Component::Transform> transform = entity.GetComponent<Scarlett::Component::Transform>();
 
         constexpr float SPEED_SCALING_FACTOR = 0.0025f;
         const ScarlettMath::Vec2 moveDelta = mousePosition - mPreviousMousePosition;
@@ -200,12 +201,12 @@ bool EditorViewInputLayer::OnUpdateEvent(const Scarlett::OnUpdateEvent& e)
     }
 
     //todo this need to be improved as this cannot be the only way to get a component of an entity given a different component.
-    auto& viewportCameraArray = ScarlettGame::GameCore::Instance().GetActiveScene()->GetComponentManager()->GetComponentArray<ScarlettGame::Camera>();
+    auto& viewportCameraArray = ScarlettGame::GameCore::Instance().GetActiveScene()->GetComponentManager()->GetComponentArray<Scarlett::Component::Camera>();
     const auto& entityIds = viewportCameraArray.GetCorrespondingEntityId();
 
     ScarlEntt::EntityHandle entity{ entityIds[0], ScarlettGame::GameCore::Instance().GetActiveScene() };
 
-    ScarlettGame::Camera* camera = &viewportCameraArray[0];
+    Scarlett::Component::Camera* camera = &viewportCameraArray[0];
 
     ScarlettMath::Vec3 cameraHorizontalDirection = { }, cameraVerticalDirection = { }, cameraForwardDirection = { };
 
@@ -241,9 +242,9 @@ bool EditorViewInputLayer::OnUpdateEvent(const Scarlett::OnUpdateEvent& e)
     const float shiftKeySpeedBoost = EditorInputManager::IsKeyDown(Scarlett::KeyCode::KEY_LEFT_SHIFT) ? SHIFT_KEY_SPEED_MULTIPLIER : 1.0f;
     const float totalSpeedMultiplier = SPEED_SCALING_FACTOR * shiftKeySpeedBoost * mCameraFlyingMultiplier;
 
-    entity.GetComponent<ScarlettGame::Transform>()->translation += camera->GetRightVector()      * cameraHorizontalDirection    * totalSpeedMultiplier
-                                                                 - camera->GetForwardVector()    * cameraForwardDirection       * totalSpeedMultiplier
-                                                                 + camera->GetUpVector()         * cameraVerticalDirection      * totalSpeedMultiplier;
+    entity.GetComponent<Scarlett::Component::Transform>()->translation += camera->GetRightVector()      * cameraHorizontalDirection    * totalSpeedMultiplier
+                                                                        - camera->GetForwardVector()    * cameraForwardDirection       * totalSpeedMultiplier
+                                                                        + camera->GetUpVector()         * cameraVerticalDirection      * totalSpeedMultiplier;
 
     camera->SetDirty();
 

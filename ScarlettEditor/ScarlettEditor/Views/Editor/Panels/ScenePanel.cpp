@@ -4,7 +4,8 @@
 #include <ScarlEntt/Scene.h>
 
 #include <ScarlettGameCore/Src/GameCore.h>
-#include <ScarlettGameCore/Components/Tag.h>
+
+#include <Components/Tag.h>
 
 #include "Views/Editor/View/EditorView.h"
 
@@ -16,7 +17,7 @@ void ScenePanel::Render()
     EditorView* editorView = dynamic_cast<EditorView*>(mView);
 
     ScarlEntt::ComponentManager* componentManager = ScarlettGame::GameCore::Instance().GetActiveScene()->GetComponentManager();
-    auto& tags = componentManager->GetComponentArray<ScarlettGame::Tag>();
+    auto& tags = componentManager->GetComponentArray<Scarlett::Component::Tag>();
 
     // ----------- Title Bar ----------------
     ImGui::BeginGroup();

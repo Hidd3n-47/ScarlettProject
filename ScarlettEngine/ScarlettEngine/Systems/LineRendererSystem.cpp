@@ -1,11 +1,9 @@
 ﻿#include "ScarlettEnginePch.h"
 #include "LineRendererSystem.h"
 
-#include <Math/Trig.h>
-
 #include <ScarlEntt/Scene.h>
 
-#include <ScarlettEditor/EditorComponents/Line.h>
+#include <Components/Line.h>
 
 #include "Rendering/Renderer.h"
 
@@ -20,14 +18,14 @@ LineRendererSystem::LineRendererSystem(ScarlEntt::Scene* sceneRef, ScarlEntt::Co
 
 void LineRendererSystem::UpdateSystem()
 {
-    const auto& components = mComponentManagerRef->GetComponentArray<ScarlettEditor::Line>();
+    const auto& components = mComponentManagerRef->GetComponentArray<Component::Line>();
     const auto& entityIds = components.GetCorrespondingEntityId();
 
     for (ScarlEntt::ComponentId i{0}; i < components.Size(); ++i)
     {
         ScarlEntt::EntityHandle entity{entityIds[i], mSceneRef };
 
-        const auto transform = entity.GetComponent<ScarlettGame::Transform>();
+        const auto transform = entity.GetComponent<Component::Transform>();
 
         const ScarlettMath::Vec3 dVec = components[i].end - components[i].start;
         const float dVecMag = ScarlettMath::Magnitude(dVec);
@@ -37,7 +35,7 @@ void LineRendererSystem::UpdateSystem()
         transform->rotation = ScarlettMath::Quat::GetRotationToRotateVectorToVector({ 1.0f, 0.0f, 0.0f }, dVec / dVecMag);
 
         Renderer::Instance().AddCommand(RenderType::LINE,
-        { components[i].color, ScarlEntt::ComponentRef(entityIds[i], &mComponentManagerRef->GetComponentArray<ScarlettGame::Transform>()) });
+        { components[i].color, ScarlEntt::ComponentRef(entityIds[i], &mComponentManagerRef->GetComponentArray<Component::Transform>()) });
     }
 }
 

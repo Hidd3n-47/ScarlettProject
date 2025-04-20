@@ -2,7 +2,7 @@
 
 #include <Math/Math.h>
 
-namespace ScarlettGame
+namespace Scarlett::Component
 {
 
 struct SquareSprite
@@ -10,4 +10,4 @@ struct SquareSprite
     ScarlettMath::Vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
 };
 
-} // Namespace ScarlettGame.
+} // Namespace Scarlett::Component.

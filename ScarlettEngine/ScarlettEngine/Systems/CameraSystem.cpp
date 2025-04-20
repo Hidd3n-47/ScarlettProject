@@ -3,8 +3,8 @@
 
 #include <ScarlettGameCore/Src/GameCore.h>
 
-#include <ScarlettGameCore/Components/Camera.h>
-#include <ScarlettGameCore/Components/Transform.h>
+#include <Components/Camera.h>
+#include <Components/Transform.h>
 
 namespace Scarlett
 {
@@ -17,13 +17,13 @@ CameraSystem::CameraSystem(ScarlEntt::Scene* sceneRef, ScarlEntt::ComponentManag
 
 void CameraSystem::UpdateSystem()
 {
-    auto& cameraArray = ScarlettGame::GameCore::Instance().GetActiveScene()->GetComponentManager()->GetComponentArray<ScarlettGame::Camera>();
+    auto& cameraArray = ScarlettGame::GameCore::Instance().GetActiveScene()->GetComponentManager()->GetComponentArray<Scarlett::Component::Camera>();
     const auto& entityIds = cameraArray.GetCorrespondingEntityId();
 
-    ScarlettGame::Camera* camera = &cameraArray[0];
+    Component::Camera* camera = &cameraArray[0];
 
     ScarlEntt::EntityHandle entity{entityIds[0], mSceneRef };
-    const ScarlEntt::ComponentRef<ScarlettGame::Transform> transform = entity.GetComponent<ScarlettGame::Transform>();
+    const ScarlEntt::ComponentRef<Component::Transform> transform = entity.GetComponent<Component::Transform>();
 
     if (camera->IsDirty())
     {

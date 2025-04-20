@@ -1,10 +1,10 @@
 ﻿#pragma once
 
-#include "ScarlettGameCore/String.h"
-
+#include "String.h"
+#include "ScarlEntt/EntityHandle.h"
 
 //todo make this editor only.
-namespace  ScarlettGame
+namespace  Scarlett::Component
 {
 
 struct Tag
@@ -13,4 +13,4 @@ struct Tag
     ScarlEntt::EntityHandle entity;
 };
 
-} // Namespace ScarlettGame.
+} // Namespace Scarlett::Component.

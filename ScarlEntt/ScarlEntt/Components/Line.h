@@ -2,9 +2,10 @@
 
 #include <Math/Math.h>
 
-namespace ScarlettEditor
+namespace Scarlett::Component
 {
 
+//todo make this editor only.
 struct Line
 {
     Line() = default;
@@ -22,4 +23,4 @@ struct Line
     ScarlettMath::Vec4 color;
 };
 
-} // Namespace ScarlettEditor.
+} // Namespace Scarlett::Component.
