@@ -34,7 +34,7 @@ project "ScarlEntt"
         systemversion "latest"
 
     filter "configurations:Dev"
-        defines "SCARLENTT_DEBUG"
+        defines { "DEV_CONFIGURATION", "SCARLENTT_DEBUG" }
         symbols "on"
         runtime "Debug"
 

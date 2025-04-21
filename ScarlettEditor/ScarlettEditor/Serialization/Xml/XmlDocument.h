@@ -9,6 +9,9 @@ class XmlDocument
 {
 friend class XmlSerializer;
 public:
+    explicit XmlDocument(XmlNode* parentNode)
+        : mParentNode(parentNode)
+    { /* Empty. */ }
     XmlDocument() = default;
     ~XmlDocument();
 
@@ -18,10 +21,6 @@ public:
     XmlDocument& operator=(const XmlDocument&)    = delete;
 
 private:
-    explicit XmlDocument(XmlNode* parentNode)
-        : mParentNode(parentNode)
-    { /* Empty. */ }
-
     XmlNode* mParentNode = nullptr;
 };
 
@@ -34,9 +33,14 @@ public:
     explicit inline XmlNode(std::string tag)
         : mTagName(std::move(tag))
     { /* Empty. */ }
+    explicit inline XmlNode(std::string tag, std::string value)
+        : mTagName(std::move(tag)), mValue(std::move(value))
+    { /* Empty. */ }
 
     inline std::string GetTagName() const { return mTagName; }
     inline std::string GetValue()   const { return mValue; }
+
+    inline void AddChildNode(XmlNode* child) { mChildren.push_back(child); }
 private:
     vector<XmlNode*> mChildren;
 

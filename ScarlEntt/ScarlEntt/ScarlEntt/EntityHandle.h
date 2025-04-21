@@ -3,6 +3,8 @@
 #include "ComponentRef.h"
 #include "ComponentManager.h"
 
+#include "Debug.h"
+
 namespace ScarlEntt
 {
 
@@ -31,7 +33,7 @@ public:
     [[maybe_unused]] ComponentType* AddComponent(Args ...args) const;
     /**
     * @brief Add the passed in component to the entity.<br/>
-    * Note: The ownership of the __component__ is passed to the ComponentManager once called, therefore cannot be used after adding to Entity.
+    * Note: The ownership of the __component__ is passed to the ComponentManager once called, therefore, cannot be used after adding to Entity.
     * @tparam ComponentType The class of the Component.
     * @param component The component that is being added to the component array. Ownership of this component is passed over to ComponentManger after function call.
     * @return A reference to the created component.
@@ -48,10 +50,20 @@ public:
     /**
     * @brief Retrieve a pointer to the component of the entity.
     * @note This is a raw pointer and should not be cached due to memory potentially changing.
-    * @return Returns the __component__ if found, __nullptr__ otherwise.
+    * @return Returns the __component__ if found, \c nullptr otherwise.
     */
     template <typename ComponentType>
     [[nodiscard]] ComponentRef<ComponentType> GetComponent();
+
+#ifdef DEV_CONFIGURATION
+    /**
+    * @brief Retrieve a vector of \c ComponentView for the components of the entity.
+    * @note This is only available in Dev Configuration and is meant to be used for debugging.
+    * @see \c ComponentView
+    * @return Returns a \c ComponentView for each of the components on the entity.
+    */
+    [[nodiscard]] const vector<ComponentView>& GetComponents() const;
+#endif // DEV_CONFIGURATION.
 
     /**
     * @brief Get the ID of the entity.
@@ -91,5 +103,12 @@ inline ComponentRef<ComponentType> EntityHandle::GetComponent()
 {
     return mComponentManagerRef->GetComponent<ComponentType>(mEntityId);
 }
+
+#ifdef DEV_CONFIGURATION
+inline const vector<ComponentView>& EntityHandle::GetComponents() const
+{
+    return mComponentManagerRef->GetComponents(mEntityId);
+}
+#endif // DEV_CONFIGURATION.
 
 } // Namespace ScarlEntt

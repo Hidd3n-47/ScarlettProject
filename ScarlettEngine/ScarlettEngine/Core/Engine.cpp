@@ -131,9 +131,9 @@ void Engine::Run() const
 
 void Engine::DestroyEngine()
 {
-    ScarlettGame::GameCore::Destroy();
-
     Renderer::Instance().Destroy();
+
+    ScarlettGame::GameCore::Destroy();
 
     WindowManager::DestroyWindow(mMainWindow);
     WindowManager::TerminateApi();

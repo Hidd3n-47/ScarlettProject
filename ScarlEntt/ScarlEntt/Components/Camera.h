@@ -35,6 +35,12 @@ public:
     inline void SetDirty() { mIsDirty = true; }
     inline void SetClean() { mIsDirty = false; }
     [[nodiscard]] bool IsDirty() const { return mIsDirty; }
+
+    COMPONENT_SERIALIZATION(
+        { "forwardVector", "1,1,1" },
+        { "rightVector", "1,1,1" },
+        { "upVector", "1,1,1" },
+        { "aspectRatio", "1.77777777778" })
 private:
     bool mIsDirty = true;
 

@@ -1,0 +1,1110 @@
+<Scene>
+	<Entity>
+		<struct Scarlett::Component::Tag>
+			<name>
+				Entity 0
+			</name>
+		</struct Scarlett::Component::Tag>
+		<struct Scarlett::Component::BoundingBox>
+			<localMaximum>
+				1,1,1
+			</localMaximum>
+			<localMinimum>
+				1,1,1
+			</localMinimum>
+		</struct Scarlett::Component::BoundingBox>
+		<struct Scarlett::Component::Transform>
+			<position>
+				1,1,1
+			</position>
+			<rotation>
+				1,1,1,1
+			</rotation>
+			<scale>
+				1,1,1
+			</scale>
+		</struct Scarlett::Component::Transform>
+		<struct Scarlett::Component::SquareSprite>
+			<color>
+				1,1,1,1
+			</color>
+		</struct Scarlett::Component::SquareSprite>
+	</Entity>
+	<Entity>
+		<struct Scarlett::Component::Tag>
+			<name>
+				Entity 1
+			</name>
+		</struct Scarlett::Component::Tag>
+		<struct Scarlett::Component::BoundingBox>
+			<localMaximum>
+				1,1,1
+			</localMaximum>
+			<localMinimum>
+				1,1,1
+			</localMinimum>
+		</struct Scarlett::Component::BoundingBox>
+		<struct Scarlett::Component::Transform>
+			<position>
+				1,1,1
+			</position>
+			<rotation>
+				1,1,1,1
+			</rotation>
+			<scale>
+				1,1,1
+			</scale>
+		</struct Scarlett::Component::Transform>
+		<struct Scarlett::Component::Line>
+			<color>
+				1,1,1,1
+			</color>
+			<end>
+				1,1,1
+			</end>
+			<start>
+				1,1,1
+			</start>
+		</struct Scarlett::Component::Line>
+	</Entity>
+	<Entity>
+		<struct Scarlett::Component::Tag>
+			<name>
+				Entity 2
+			</name>
+		</struct Scarlett::Component::Tag>
+		<struct Scarlett::Component::BoundingBox>
+			<localMaximum>
+				1,1,1
+			</localMaximum>
+			<localMinimum>
+				1,1,1
+			</localMinimum>
+		</struct Scarlett::Component::BoundingBox>
+		<struct Scarlett::Component::Transform>
+			<position>
+				1,1,1
+			</position>
+			<rotation>
+				1,1,1,1
+			</rotation>
+			<scale>
+				1,1,1
+			</scale>
+		</struct Scarlett::Component::Transform>
+		<struct Scarlett::Component::Line>
+			<color>
+				1,1,1,1
+			</color>
+			<end>
+				1,1,1
+			</end>
+			<start>
+				1,1,1
+			</start>
+		</struct Scarlett::Component::Line>
+	</Entity>
+	<Entity>
+		<struct Scarlett::Component::Tag>
+			<name>
+				Entity 3
+			</name>
+		</struct Scarlett::Component::Tag>
+		<struct Scarlett::Component::BoundingBox>
+			<localMaximum>
+				1,1,1
+			</localMaximum>
+			<localMinimum>
+				1,1,1
+			</localMinimum>
+		</struct Scarlett::Component::BoundingBox>
+		<struct Scarlett::Component::Transform>
+			<position>
+				1,1,1
+			</position>
+			<rotation>
+				1,1,1,1
+			</rotation>
+			<scale>
+				1,1,1
+			</scale>
+		</struct Scarlett::Component::Transform>
+		<struct Scarlett::Component::Line>
+			<color>
+				1,1,1,1
+			</color>
+			<end>
+				1,1,1
+			</end>
+			<start>
+				1,1,1
+			</start>
+		</struct Scarlett::Component::Line>
+	</Entity>
+	<Entity>
+		<struct Scarlett::Component::Tag>
+			<name>
+				Entity 4
+			</name>
+		</struct Scarlett::Component::Tag>
+		<struct Scarlett::Component::BoundingBox>
+			<localMaximum>
+				1,1,1
+			</localMaximum>
+			<localMinimum>
+				1,1,1
+			</localMinimum>
+		</struct Scarlett::Component::BoundingBox>
+		<struct Scarlett::Component::Transform>
+			<position>
+				1,1,1
+			</position>
+			<rotation>
+				1,1,1,1
+			</rotation>
+			<scale>
+				1,1,1
+			</scale>
+		</struct Scarlett::Component::Transform>
+		<struct Scarlett::Component::Line>
+			<color>
+				1,1,1,1
+			</color>
+			<end>
+				1,1,1
+			</end>
+			<start>
+				1,1,1
+			</start>
+		</struct Scarlett::Component::Line>
+	</Entity>
+	<Entity>
+		<struct Scarlett::Component::Tag>
+			<name>
+				Entity 5
+			</name>
+		</struct Scarlett::Component::Tag>
+		<struct Scarlett::Component::BoundingBox>
+			<localMaximum>
+				1,1,1
+			</localMaximum>
+			<localMinimum>
+				1,1,1
+			</localMinimum>
+		</struct Scarlett::Component::BoundingBox>
+		<struct Scarlett::Component::Transform>
+			<position>
+				1,1,1
+			</position>
+			<rotation>
+				1,1,1,1
+			</rotation>
+			<scale>
+				1,1,1
+			</scale>
+		</struct Scarlett::Component::Transform>
+		<struct Scarlett::Component::Line>
+			<color>
+				1,1,1,1
+			</color>
+			<end>
+				1,1,1
+			</end>
+			<start>
+				1,1,1
+			</start>
+		</struct Scarlett::Component::Line>
+	</Entity>
+	<Entity>
+		<struct Scarlett::Component::Tag>
+			<name>
+				Entity 6
+			</name>
+		</struct Scarlett::Component::Tag>
+		<struct Scarlett::Component::BoundingBox>
+			<localMaximum>
+				1,1,1
+			</localMaximum>
+			<localMinimum>
+				1,1,1
+			</localMinimum>
+		</struct Scarlett::Component::BoundingBox>
+		<struct Scarlett::Component::Transform>
+			<position>
+				1,1,1
+			</position>
+			<rotation>
+				1,1,1,1
+			</rotation>
+			<scale>
+				1,1,1
+			</scale>
+		</struct Scarlett::Component::Transform>
+		<struct Scarlett::Component::Line>
+			<color>
+				1,1,1,1
+			</color>
+			<end>
+				1,1,1
+			</end>
+			<start>
+				1,1,1
+			</start>
+		</struct Scarlett::Component::Line>
+	</Entity>
+	<Entity>
+		<struct Scarlett::Component::Tag>
+			<name>
+				Entity 7
+			</name>
+		</struct Scarlett::Component::Tag>
+		<struct Scarlett::Component::BoundingBox>
+			<localMaximum>
+				1,1,1
+			</localMaximum>
+			<localMinimum>
+				1,1,1
+			</localMinimum>
+		</struct Scarlett::Component::BoundingBox>
+		<struct Scarlett::Component::Transform>
+			<position>
+				1,1,1
+			</position>
+			<rotation>
+				1,1,1,1
+			</rotation>
+			<scale>
+				1,1,1
+			</scale>
+		</struct Scarlett::Component::Transform>
+		<struct Scarlett::Component::Line>
+			<color>
+				1,1,1,1
+			</color>
+			<end>
+				1,1,1
+			</end>
+			<start>
+				1,1,1
+			</start>
+		</struct Scarlett::Component::Line>
+	</Entity>
+	<Entity>
+		<struct Scarlett::Component::Tag>
+			<name>
+				Entity 8
+			</name>
+		</struct Scarlett::Component::Tag>
+		<struct Scarlett::Component::BoundingBox>
+			<localMaximum>
+				1,1,1
+			</localMaximum>
+			<localMinimum>
+				1,1,1
+			</localMinimum>
+		</struct Scarlett::Component::BoundingBox>
+		<struct Scarlett::Component::Transform>
+			<position>
+				1,1,1
+			</position>
+			<rotation>
+				1,1,1,1
+			</rotation>
+			<scale>
+				1,1,1
+			</scale>
+		</struct Scarlett::Component::Transform>
+		<struct Scarlett::Component::Line>
+			<color>
+				1,1,1,1
+			</color>
+			<end>
+				1,1,1
+			</end>
+			<start>
+				1,1,1
+			</start>
+		</struct Scarlett::Component::Line>
+	</Entity>
+	<Entity>
+		<struct Scarlett::Component::Tag>
+			<name>
+				Entity 9
+			</name>
+		</struct Scarlett::Component::Tag>
+		<struct Scarlett::Component::BoundingBox>
+			<localMaximum>
+				1,1,1
+			</localMaximum>
+			<localMinimum>
+				1,1,1
+			</localMinimum>
+		</struct Scarlett::Component::BoundingBox>
+		<struct Scarlett::Component::Transform>
+			<position>
+				1,1,1
+			</position>
+			<rotation>
+				1,1,1,1
+			</rotation>
+			<scale>
+				1,1,1
+			</scale>
+		</struct Scarlett::Component::Transform>
+		<struct Scarlett::Component::Line>
+			<color>
+				1,1,1,1
+			</color>
+			<end>
+				1,1,1
+			</end>
+			<start>
+				1,1,1
+			</start>
+		</struct Scarlett::Component::Line>
+	</Entity>
+	<Entity>
+		<struct Scarlett::Component::Tag>
+			<name>
+				Entity 10
+			</name>
+		</struct Scarlett::Component::Tag>
+		<struct Scarlett::Component::BoundingBox>
+			<localMaximum>
+				1,1,1
+			</localMaximum>
+			<localMinimum>
+				1,1,1
+			</localMinimum>
+		</struct Scarlett::Component::BoundingBox>
+		<struct Scarlett::Component::Transform>
+			<position>
+				1,1,1
+			</position>
+			<rotation>
+				1,1,1,1
+			</rotation>
+			<scale>
+				1,1,1
+			</scale>
+		</struct Scarlett::Component::Transform>
+		<struct Scarlett::Component::Line>
+			<color>
+				1,1,1,1
+			</color>
+			<end>
+				1,1,1
+			</end>
+			<start>
+				1,1,1
+			</start>
+		</struct Scarlett::Component::Line>
+	</Entity>
+	<Entity>
+		<struct Scarlett::Component::Tag>
+			<name>
+				Entity 11
+			</name>
+		</struct Scarlett::Component::Tag>
+		<struct Scarlett::Component::BoundingBox>
+			<localMaximum>
+				1,1,1
+			</localMaximum>
+			<localMinimum>
+				1,1,1
+			</localMinimum>
+		</struct Scarlett::Component::BoundingBox>
+		<struct Scarlett::Component::Transform>
+			<position>
+				1,1,1
+			</position>
+			<rotation>
+				1,1,1,1
+			</rotation>
+			<scale>
+				1,1,1
+			</scale>
+		</struct Scarlett::Component::Transform>
+		<struct Scarlett::Component::Line>
+			<color>
+				1,1,1,1
+			</color>
+			<end>
+				1,1,1
+			</end>
+			<start>
+				1,1,1
+			</start>
+		</struct Scarlett::Component::Line>
+	</Entity>
+	<Entity>
+		<struct Scarlett::Component::Tag>
+			<name>
+				Entity 12
+			</name>
+		</struct Scarlett::Component::Tag>
+		<struct Scarlett::Component::BoundingBox>
+			<localMaximum>
+				1,1,1
+			</localMaximum>
+			<localMinimum>
+				1,1,1
+			</localMinimum>
+		</struct Scarlett::Component::BoundingBox>
+		<struct Scarlett::Component::Transform>
+			<position>
+				1,1,1
+			</position>
+			<rotation>
+				1,1,1,1
+			</rotation>
+			<scale>
+				1,1,1
+			</scale>
+		</struct Scarlett::Component::Transform>
+		<struct Scarlett::Component::Line>
+			<color>
+				1,1,1,1
+			</color>
+			<end>
+				1,1,1
+			</end>
+			<start>
+				1,1,1
+			</start>
+		</struct Scarlett::Component::Line>
+	</Entity>
+	<Entity>
+		<struct Scarlett::Component::Tag>
+			<name>
+				Entity 13
+			</name>
+		</struct Scarlett::Component::Tag>
+		<struct Scarlett::Component::BoundingBox>
+			<localMaximum>
+				1,1,1
+			</localMaximum>
+			<localMinimum>
+				1,1,1
+			</localMinimum>
+		</struct Scarlett::Component::BoundingBox>
+		<struct Scarlett::Component::Transform>
+			<position>
+				1,1,1
+			</position>
+			<rotation>
+				1,1,1,1
+			</rotation>
+			<scale>
+				1,1,1
+			</scale>
+		</struct Scarlett::Component::Transform>
+		<struct Scarlett::Component::Line>
+			<color>
+				1,1,1,1
+			</color>
+			<end>
+				1,1,1
+			</end>
+			<start>
+				1,1,1
+			</start>
+		</struct Scarlett::Component::Line>
+	</Entity>
+	<Entity>
+		<struct Scarlett::Component::Tag>
+			<name>
+				Entity 14
+			</name>
+		</struct Scarlett::Component::Tag>
+		<struct Scarlett::Component::BoundingBox>
+			<localMaximum>
+				1,1,1
+			</localMaximum>
+			<localMinimum>
+				1,1,1
+			</localMinimum>
+		</struct Scarlett::Component::BoundingBox>
+		<struct Scarlett::Component::Transform>
+			<position>
+				1,1,1
+			</position>
+			<rotation>
+				1,1,1,1
+			</rotation>
+			<scale>
+				1,1,1
+			</scale>
+		</struct Scarlett::Component::Transform>
+		<struct Scarlett::Component::Line>
+			<color>
+				1,1,1,1
+			</color>
+			<end>
+				1,1,1
+			</end>
+			<start>
+				1,1,1
+			</start>
+		</struct Scarlett::Component::Line>
+	</Entity>
+	<Entity>
+		<struct Scarlett::Component::Tag>
+			<name>
+				Entity 15
+			</name>
+		</struct Scarlett::Component::Tag>
+		<struct Scarlett::Component::BoundingBox>
+			<localMaximum>
+				1,1,1
+			</localMaximum>
+			<localMinimum>
+				1,1,1
+			</localMinimum>
+		</struct Scarlett::Component::BoundingBox>
+		<struct Scarlett::Component::Transform>
+			<position>
+				1,1,1
+			</position>
+			<rotation>
+				1,1,1,1
+			</rotation>
+			<scale>
+				1,1,1
+			</scale>
+		</struct Scarlett::Component::Transform>
+		<struct Scarlett::Component::Line>
+			<color>
+				1,1,1,1
+			</color>
+			<end>
+				1,1,1
+			</end>
+			<start>
+				1,1,1
+			</start>
+		</struct Scarlett::Component::Line>
+	</Entity>
+	<Entity>
+		<struct Scarlett::Component::Tag>
+			<name>
+				Entity 16
+			</name>
+		</struct Scarlett::Component::Tag>
+		<struct Scarlett::Component::BoundingBox>
+			<localMaximum>
+				1,1,1
+			</localMaximum>
+			<localMinimum>
+				1,1,1
+			</localMinimum>
+		</struct Scarlett::Component::BoundingBox>
+		<struct Scarlett::Component::Transform>
+			<position>
+				1,1,1
+			</position>
+			<rotation>
+				1,1,1,1
+			</rotation>
+			<scale>
+				1,1,1
+			</scale>
+		</struct Scarlett::Component::Transform>
+		<struct Scarlett::Component::Line>
+			<color>
+				1,1,1,1
+			</color>
+			<end>
+				1,1,1
+			</end>
+			<start>
+				1,1,1
+			</start>
+		</struct Scarlett::Component::Line>
+	</Entity>
+	<Entity>
+		<struct Scarlett::Component::Tag>
+			<name>
+				Entity 17
+			</name>
+		</struct Scarlett::Component::Tag>
+		<struct Scarlett::Component::BoundingBox>
+			<localMaximum>
+				1,1,1
+			</localMaximum>
+			<localMinimum>
+				1,1,1
+			</localMinimum>
+		</struct Scarlett::Component::BoundingBox>
+		<struct Scarlett::Component::Transform>
+			<position>
+				1,1,1
+			</position>
+			<rotation>
+				1,1,1,1
+			</rotation>
+			<scale>
+				1,1,1
+			</scale>
+		</struct Scarlett::Component::Transform>
+		<struct Scarlett::Component::Line>
+			<color>
+				1,1,1,1
+			</color>
+			<end>
+				1,1,1
+			</end>
+			<start>
+				1,1,1
+			</start>
+		</struct Scarlett::Component::Line>
+	</Entity>
+	<Entity>
+		<struct Scarlett::Component::Tag>
+			<name>
+				Entity 18
+			</name>
+		</struct Scarlett::Component::Tag>
+		<struct Scarlett::Component::BoundingBox>
+			<localMaximum>
+				1,1,1
+			</localMaximum>
+			<localMinimum>
+				1,1,1
+			</localMinimum>
+		</struct Scarlett::Component::BoundingBox>
+		<struct Scarlett::Component::Transform>
+			<position>
+				1,1,1
+			</position>
+			<rotation>
+				1,1,1,1
+			</rotation>
+			<scale>
+				1,1,1
+			</scale>
+		</struct Scarlett::Component::Transform>
+		<struct Scarlett::Component::Line>
+			<color>
+				1,1,1,1
+			</color>
+			<end>
+				1,1,1
+			</end>
+			<start>
+				1,1,1
+			</start>
+		</struct Scarlett::Component::Line>
+	</Entity>
+	<Entity>
+		<struct Scarlett::Component::Tag>
+			<name>
+				Entity 19
+			</name>
+		</struct Scarlett::Component::Tag>
+		<struct Scarlett::Component::BoundingBox>
+			<localMaximum>
+				1,1,1
+			</localMaximum>
+			<localMinimum>
+				1,1,1
+			</localMinimum>
+		</struct Scarlett::Component::BoundingBox>
+		<struct Scarlett::Component::Transform>
+			<position>
+				1,1,1
+			</position>
+			<rotation>
+				1,1,1,1
+			</rotation>
+			<scale>
+				1,1,1
+			</scale>
+		</struct Scarlett::Component::Transform>
+		<struct Scarlett::Component::Line>
+			<color>
+				1,1,1,1
+			</color>
+			<end>
+				1,1,1
+			</end>
+			<start>
+				1,1,1
+			</start>
+		</struct Scarlett::Component::Line>
+	</Entity>
+	<Entity>
+		<struct Scarlett::Component::Tag>
+			<name>
+				Entity 20
+			</name>
+		</struct Scarlett::Component::Tag>
+		<struct Scarlett::Component::BoundingBox>
+			<localMaximum>
+				1,1,1
+			</localMaximum>
+			<localMinimum>
+				1,1,1
+			</localMinimum>
+		</struct Scarlett::Component::BoundingBox>
+		<struct Scarlett::Component::Transform>
+			<position>
+				1,1,1
+			</position>
+			<rotation>
+				1,1,1,1
+			</rotation>
+			<scale>
+				1,1,1
+			</scale>
+		</struct Scarlett::Component::Transform>
+		<struct Scarlett::Component::Line>
+			<color>
+				1,1,1,1
+			</color>
+			<end>
+				1,1,1
+			</end>
+			<start>
+				1,1,1
+			</start>
+		</struct Scarlett::Component::Line>
+	</Entity>
+	<Entity>
+		<struct Scarlett::Component::Tag>
+			<name>
+				Entity 21
+			</name>
+		</struct Scarlett::Component::Tag>
+		<struct Scarlett::Component::BoundingBox>
+			<localMaximum>
+				1,1,1
+			</localMaximum>
+			<localMinimum>
+				1,1,1
+			</localMinimum>
+		</struct Scarlett::Component::BoundingBox>
+		<struct Scarlett::Component::Transform>
+			<position>
+				1,1,1
+			</position>
+			<rotation>
+				1,1,1,1
+			</rotation>
+			<scale>
+				1,1,1
+			</scale>
+		</struct Scarlett::Component::Transform>
+		<struct Scarlett::Component::Line>
+			<color>
+				1,1,1,1
+			</color>
+			<end>
+				1,1,1
+			</end>
+			<start>
+				1,1,1
+			</start>
+		</struct Scarlett::Component::Line>
+	</Entity>
+	<Entity>
+		<struct Scarlett::Component::Tag>
+			<name>
+				Entity 22
+			</name>
+		</struct Scarlett::Component::Tag>
+		<struct Scarlett::Component::BoundingBox>
+			<localMaximum>
+				1,1,1
+			</localMaximum>
+			<localMinimum>
+				1,1,1
+			</localMinimum>
+		</struct Scarlett::Component::BoundingBox>
+		<struct Scarlett::Component::Transform>
+			<position>
+				1,1,1
+			</position>
+			<rotation>
+				1,1,1,1
+			</rotation>
+			<scale>
+				1,1,1
+			</scale>
+		</struct Scarlett::Component::Transform>
+		<struct Scarlett::Component::Line>
+			<color>
+				1,1,1,1
+			</color>
+			<end>
+				1,1,1
+			</end>
+			<start>
+				1,1,1
+			</start>
+		</struct Scarlett::Component::Line>
+	</Entity>
+	<Entity>
+		<struct Scarlett::Component::Tag>
+			<name>
+				Entity 23
+			</name>
+		</struct Scarlett::Component::Tag>
+		<struct Scarlett::Component::BoundingBox>
+			<localMaximum>
+				1,1,1
+			</localMaximum>
+			<localMinimum>
+				1,1,1
+			</localMinimum>
+		</struct Scarlett::Component::BoundingBox>
+		<struct Scarlett::Component::Transform>
+			<position>
+				1,1,1
+			</position>
+			<rotation>
+				1,1,1,1
+			</rotation>
+			<scale>
+				1,1,1
+			</scale>
+		</struct Scarlett::Component::Transform>
+		<struct Scarlett::Component::Line>
+			<color>
+				1,1,1,1
+			</color>
+			<end>
+				1,1,1
+			</end>
+			<start>
+				1,1,1
+			</start>
+		</struct Scarlett::Component::Line>
+	</Entity>
+	<Entity>
+		<struct Scarlett::Component::Tag>
+			<name>
+				Entity 24
+			</name>
+		</struct Scarlett::Component::Tag>
+		<struct Scarlett::Component::BoundingBox>
+			<localMaximum>
+				1,1,1
+			</localMaximum>
+			<localMinimum>
+				1,1,1
+			</localMinimum>
+		</struct Scarlett::Component::BoundingBox>
+		<struct Scarlett::Component::Transform>
+			<position>
+				1,1,1
+			</position>
+			<rotation>
+				1,1,1,1
+			</rotation>
+			<scale>
+				1,1,1
+			</scale>
+		</struct Scarlett::Component::Transform>
+		<struct Scarlett::Component::Camera>
+			<aspectRatio>
+				1.77777777778
+			</aspectRatio>
+			<forwardVector>
+				1,1,1
+			</forwardVector>
+			<rightVector>
+				1,1,1
+			</rightVector>
+			<upVector>
+				1,1,1
+			</upVector>
+		</struct Scarlett::Component::Camera>
+	</Entity>
+	<Entity>
+		<struct Scarlett::Component::Tag>
+			<name>
+				Entity 25
+			</name>
+		</struct Scarlett::Component::Tag>
+		<struct Scarlett::Component::BoundingBox>
+			<localMaximum>
+				1,1,1
+			</localMaximum>
+			<localMinimum>
+				1,1,1
+			</localMinimum>
+		</struct Scarlett::Component::BoundingBox>
+		<struct Scarlett::Component::Transform>
+			<position>
+				1,1,1
+			</position>
+			<rotation>
+				1,1,1,1
+			</rotation>
+			<scale>
+				1,1,1
+			</scale>
+		</struct Scarlett::Component::Transform>
+		<struct Scarlett::Component::SquareSprite>
+			<color>
+				1,1,1,1
+			</color>
+		</struct Scarlett::Component::SquareSprite>
+	</Entity>
+	<Entity>
+		<struct Scarlett::Component::Tag>
+			<name>
+				Entity 26
+			</name>
+		</struct Scarlett::Component::Tag>
+		<struct Scarlett::Component::BoundingBox>
+			<localMaximum>
+				1,1,1
+			</localMaximum>
+			<localMinimum>
+				1,1,1
+			</localMinimum>
+		</struct Scarlett::Component::BoundingBox>
+		<struct Scarlett::Component::Transform>
+			<position>
+				1,1,1
+			</position>
+			<rotation>
+				1,1,1,1
+			</rotation>
+			<scale>
+				1,1,1
+			</scale>
+		</struct Scarlett::Component::Transform>
+		<struct Scarlett::Component::SquareSprite>
+			<color>
+				1,1,1,1
+			</color>
+		</struct Scarlett::Component::SquareSprite>
+	</Entity>
+	<Entity>
+		<struct Scarlett::Component::Tag>
+			<name>
+				Entity 27
+			</name>
+		</struct Scarlett::Component::Tag>
+		<struct Scarlett::Component::BoundingBox>
+			<localMaximum>
+				1,1,1
+			</localMaximum>
+			<localMinimum>
+				1,1,1
+			</localMinimum>
+		</struct Scarlett::Component::BoundingBox>
+		<struct Scarlett::Component::Transform>
+			<position>
+				1,1,1
+			</position>
+			<rotation>
+				1,1,1,1
+			</rotation>
+			<scale>
+				1,1,1
+			</scale>
+		</struct Scarlett::Component::Transform>
+		<struct Scarlett::Component::SquareSprite>
+			<color>
+				1,1,1,1
+			</color>
+		</struct Scarlett::Component::SquareSprite>
+	</Entity>
+	<Entity>
+		<struct Scarlett::Component::Tag>
+			<name>
+				Entity 28
+			</name>
+		</struct Scarlett::Component::Tag>
+		<struct Scarlett::Component::BoundingBox>
+			<localMaximum>
+				1,1,1
+			</localMaximum>
+			<localMinimum>
+				1,1,1
+			</localMinimum>
+		</struct Scarlett::Component::BoundingBox>
+		<struct Scarlett::Component::Transform>
+			<position>
+				1,1,1
+			</position>
+			<rotation>
+				1,1,1,1
+			</rotation>
+			<scale>
+				1,1,1
+			</scale>
+		</struct Scarlett::Component::Transform>
+		<struct Scarlett::Component::SquareSprite>
+			<color>
+				1,1,1,1
+			</color>
+		</struct Scarlett::Component::SquareSprite>
+	</Entity>
+	<Entity>
+		<struct Scarlett::Component::Tag>
+			<name>
+				Entity 29
+			</name>
+		</struct Scarlett::Component::Tag>
+		<struct Scarlett::Component::BoundingBox>
+			<localMaximum>
+				1,1,1
+			</localMaximum>
+			<localMinimum>
+				1,1,1
+			</localMinimum>
+		</struct Scarlett::Component::BoundingBox>
+		<struct Scarlett::Component::Transform>
+			<position>
+				1,1,1
+			</position>
+			<rotation>
+				1,1,1,1
+			</rotation>
+			<scale>
+				1,1,1
+			</scale>
+		</struct Scarlett::Component::Transform>
+		<struct Scarlett::Component::SquareSprite>
+			<color>
+				1,1,1,1
+			</color>
+		</struct Scarlett::Component::SquareSprite>
+	</Entity>
+	<Entity>
+		<struct Scarlett::Component::Tag>
+			<name>
+				Entity 30
+			</name>
+		</struct Scarlett::Component::Tag>
+		<struct Scarlett::Component::BoundingBox>
+			<localMaximum>
+				1,1,1
+			</localMaximum>
+			<localMinimum>
+				1,1,1
+			</localMinimum>
+		</struct Scarlett::Component::BoundingBox>
+		<struct Scarlett::Component::Transform>
+			<position>
+				1,1,1
+			</position>
+			<rotation>
+				1,1,1,1
+			</rotation>
+			<scale>
+				1,1,1
+			</scale>
+		</struct Scarlett::Component::Transform>
+		<struct Scarlett::Component::SquareSprite>
+			<color>
+				1,1,1,1
+			</color>
+		</struct Scarlett::Component::SquareSprite>
+	</Entity>
+</Scene>

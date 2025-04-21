@@ -21,6 +21,11 @@ struct Line
     ScarlettMath::Vec3 end;
 
     ScarlettMath::Vec4 color;
+
+    COMPONENT_SERIALIZATION(
+        { "start", "1,1,1" },
+        { "end", "1,1,1" },
+        { "color", "1,1,1,1" })
 };
 
 } // Namespace Scarlett::Component.

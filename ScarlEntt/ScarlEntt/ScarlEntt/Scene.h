@@ -10,7 +10,7 @@ namespace ScarlEntt
 
 /**
  * @class Scene: A scene is a collection of Entities, Components and systems.<br/>
- * Entities, Components and Systems registration, creation, updating  and destruction is all interfaced through their respective scene.<br/>
+ * Entities, Components and Systems registration, creation, updating  and destruction are all interfaced through their respective scene.<br/>
  * This means that the scene is the direct owner of all entities, components and systems and control the life-time of each.
  */
 class Scene
@@ -25,7 +25,7 @@ public:
     Scene& operator=(const Scene& )   = delete;
 
     /**
-    * @brief Create an entity and get a \c EntityHandle to the created entity.
+    * @brief Create an entity and get an \c EntityHandle to the created entity.
     * @see EntityHandle
     * @return A handle to the created entity.
     */
@@ -47,7 +47,7 @@ public:
     * @brief Register a system. Registering a system adds it the update queue with required priority.
     * @tparam System The class of the System that is being registered. Note that this class must inherit from \c ISystem.
     * @param properties The properties used to initialize the system. @see ISystemProperties.
-    * @param priority The priority that the system is updated at. The lower the priority, the sooner it will be updated, i.e. priority 0 will be updated before priority 1.
+    * @param priority The priority that the system is updated at. The lower the priority, the sooner it will be updated, i.e., priority 0 will be updated before priority 1.
     */
     template <typename System>
     inline void RegisterSystem(ISystemProperties* properties, const uint32 priority = std::numeric_limits<uint32>::max()) { mSystemManager.RegisterSystem<System>(this, &mComponentManager, properties, priority); }
@@ -55,7 +55,7 @@ public:
     /**
     * @brief Register a system. Registering a system adds it the update queue with required priority.
     * @tparam System The class of the System that is being registered. Note that this class must inherit from \c ISystem.
-    * @param priority The priority that the system is updated at. The lower the priority, the sooner it will be updated, i.e. priority 0 will be updated before priority 1.
+    * @param priority The priority that the system is updated at. The lower the priority, the sooner it will be updated, i.e., priority 0 will be updated before priority 1.
     */
     template <typename System>
     inline void RegisterSystem(const uint32 priority = std::numeric_limits<uint32>::max()) { this, mSystemManager.RegisterSystem<System>(this, &mComponentManager, nullptr, priority); }
@@ -66,6 +66,17 @@ public:
     * @return A reference to the component manager of the scene.
     */
     [[nodiscard]] inline ComponentManager* GetComponentManager() { return &mComponentManager; }
+
+#ifdef DEV_CONFIGURATION
+    /**
+     * @brief Get all active/living entities in the scene.
+     * @return A vector of all living entities in the scene.
+     */
+    [[nodiscard]] inline const vector<EntityHandle>& GetEntities() const { return mEntities; }
+private:
+    vector<EntityHandle> mEntities;
+#endif // DEV_CONFIGURATION.
+
 private:
     EntityManager       mEntityManager;
     ComponentManager    mComponentManager;

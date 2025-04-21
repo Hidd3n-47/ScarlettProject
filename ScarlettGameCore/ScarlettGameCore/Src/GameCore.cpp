@@ -44,7 +44,7 @@ ScarlEntt::EntityHandle GameCore::CreateEntity() const
 {
     const ScarlEntt::EntityHandle ent = mCurrentScene->CreateEntity();
 
-    (void)ent.AddComponent<Scarlett::Component::Tag>(ScarlettStl::String{ "Entity " + std::to_string(ent.GetId()) }, ent);
+    (void)ent.AddComponent<Scarlett::Component::Tag>("Entity " + std::to_string(ent.GetId()), ent);
     (void)ent.AddComponent<Scarlett::Component::BoundingBox>();
 
     (void)ent.AddComponent<Scarlett::Component::Transform>();

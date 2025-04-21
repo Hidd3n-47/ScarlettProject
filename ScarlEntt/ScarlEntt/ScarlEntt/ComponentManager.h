@@ -5,6 +5,9 @@
 #include <ranges>
 #include <string>
 
+#include <stdexcept>
+#include "Debug.h"
+
 #include "ComponentArray.h"
 #include "ScarlEntt.h"
 
@@ -43,6 +46,8 @@ public:
     template<typename ComponentType>
     [[nodiscard]] ComponentArray<ComponentType>& GetComponentArray();
 
+    template <typename ComponentType>
+    static inline std::string GetComponentTypeId() { return { typeid(ComponentType).name() }; }
 private:
     unordered_map<std::string, IComponentArray*> mComponents;
 
@@ -59,7 +64,7 @@ private:
 
     /**
      * @brief Add a passed in component to the entity.
-     * @note The ownership of the __component__ is passed to the ComponentManager once called, therefore cannot be used after adding to Entity.
+     * @note The ownership of the __component__ is passed to the ComponentManager once called, therefore, cannot be used after adding to Entity.
      * @tparam ComponentType The class of the Component.
      * @param entityId The ID of the entity the component is being added to.
      * @param component The component that is being added to the component array. Ownership of this component is passed over to ComponentManger after function call.
@@ -70,13 +75,26 @@ private:
 
     /**
     * @brief Retrieve a pointer to the component of a specific _entity_.
-    * @note This should be used if any caching is needed as this retains a reference to the component, and will check if its valid before use.
+    * @note This should be used if any caching is needed as this retains a reference to the component, and will check if it's valid before use.
     * @see \c ComponentRef
     * @param entityId: The entity ID for which we are requesting the component.
     * @return Returns a \c ComponentRef to a component.
     */
     template <typename ComponentType>
     [[nodiscard]] ComponentRef<ComponentType> GetComponent(const EntityId entityId);
+
+#ifdef DEV_CONFIGURATION
+    unordered_map<EntityId, vector<ComponentView>> mEntityToComponentMap;
+
+    /**
+    * @brief Retrieve a vector of \c ComponentView for the components the requested entity.
+    * @note This is only available in Dev Configuration and should only be used for debugging.
+    * @see \c ComponentView
+    * @param entityId: The entity ID for which we are requesting the components.
+    * @return Returns a \c ComponentView for each of the components on the entity.
+    */
+    inline const vector<ComponentView>& GetComponents(const EntityId entityId) { return mEntityToComponentMap[entityId]; }
+#endif // DEV_CONFIGURATION.
 
     /**
     * @brief Remove a component (if found) of a specific _entity_.
@@ -101,9 +119,7 @@ inline ComponentManager::~ComponentManager()
 template <typename ComponentType>
 inline void ComponentManager::RegisterComponent()
 {
-    const char* id = typeid(ComponentType).name();
-    const std::string typeName(id);
-    //ComponentType::TypeName(typeName); // TODO remove if we don't need.
+    const std::string typeName = GetComponentTypeId<ComponentType>();
     SCARLENTT_ASSERT(!mComponents.contains(typeName) && "Registering component type more than once.");
     assert(!mComponents.contains(typeName) && "Registering component type more than once."); // todo remove.
 
@@ -113,9 +129,7 @@ inline void ComponentManager::RegisterComponent()
 template<typename ComponentType>
 inline ComponentArray<ComponentType>& ComponentManager::GetComponentArray()
 {
-    const char* id = typeid(ComponentType).name();
-    const std::string typeName(id);
-    //ComponentType::TypeName(typeName); // TODO remove if we don't need.
+    const std::string typeName = GetComponentTypeId<ComponentType>();
     SCARLENTT_ASSERT(mComponents.contains(typeName) && "Component not registered before use.");
     assert(mComponents.contains(typeName) && "Component not registered before use."); // todo remove.
 
@@ -125,13 +139,49 @@ inline ComponentArray<ComponentType>& ComponentManager::GetComponentArray()
 template <typename ComponentType, typename... Args>
 inline ComponentType* ComponentManager::AddComponent(const EntityId entityId, Args&&... args)
 {
+#ifdef DEV_CONFIGURATION
+    // We need to construct the component before we can create the reference.
+    ComponentType* component = GetComponentArray<ComponentType>().AddComponent(entityId, std::forward<Args>(args)...);
+
+    vector<ComponentView>& entityComponents = mEntityToComponentMap[entityId];
+    if (std::find(entityComponents.begin(), entityComponents.end(), GetComponentTypeId<ComponentType>()) == entityComponents.end())
+    {
+        ComponentRef<ComponentType> componentRef { entityId, &GetComponentArray<ComponentType>() };
+        entityComponents.emplace_back(GetComponentTypeId<ComponentType>(), [componentRef]() { return componentRef->GetSerializedFunction(); });
+    }
+    else
+    {
+        throw std::runtime_error("Component Type already added to entity.");
+    }
+
+    return component;
+#else // DEV_CONFIGURATION.
     return GetComponentArray<ComponentType>().AddComponent(entityId, std::forward<Args>(args)...);
+#endif // Else DEV_CONFIGURATION.
 }
 
 template <typename ComponentType>
 inline ComponentType* ComponentManager::AddComponent(const EntityId entityId, const ComponentType& component)
 {
+#ifdef DEV_CONFIGURATION
+    // We need to construct the component before we can create the reference.
+    ComponentType* c = GetComponentArray<ComponentType>().AddComponent(entityId, component);
+
+    vector<ComponentView>& entityComponents = mEntityToComponentMap[entityId];
+    if (std::find(entityComponents.begin(), entityComponents.end(), GetComponentTypeId<ComponentType>()) == entityComponents.end())
+    {
+        ComponentRef<ComponentType> componentRef { entityId, &GetComponentArray<ComponentType>() };
+        entityComponents.emplace_back(GetComponentTypeId<ComponentType>(), [componentRef]() { return componentRef->GetSerializedFunction(); });
+    }
+    else
+    {
+        throw std::runtime_error("Component Type already added to entity.");
+    }
+
+    return c;
+#else // DEV_CONFIGURATION
     return GetComponentArray<ComponentType>().AddComponent(entityId, component);
+#endif // Else DEV_CONFIGURATION.
 }
 
 template <typename ComponentType>
@@ -140,10 +190,22 @@ inline ComponentRef<ComponentType> ComponentManager::GetComponent(const EntityId
     return ComponentRef<ComponentType>{ entityId, &GetComponentArray<ComponentType>() };
 }
 
-template <typename T>
+template <typename ComponentType>
 inline void ComponentManager::RemoveComponent(EntityId entityId)
 {
-    GetComponentArray<T>().RemoveComponent(entityId);
+#ifdef DEV_CONFIGURATION
+    vector<ComponentView>& entityComponents = mEntityToComponentMap[entityId];
+    if (const auto it = std::find(entityComponents.begin(), entityComponents.end(), GetComponentTypeId<ComponentType>()); it != entityComponents.end())
+    {
+        entityComponents.erase(it);
+    }
+    else
+    {
+        throw std::runtime_error("Component Type already added to entity.");
+    }
+#endif // DEV_CONFIGURATION.
+
+    GetComponentArray<ComponentType>().RemoveComponent(entityId);
 }
 
 } // Namespace ScarlEntt
