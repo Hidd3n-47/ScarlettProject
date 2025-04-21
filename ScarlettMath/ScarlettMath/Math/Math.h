@@ -2,8 +2,6 @@
 
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/glm.hpp>
-#include <glm/gtc/quaternion.hpp>
-#include <glm/gtx/rotate_vector.hpp>
 #include <glm/ext/matrix_clip_space.hpp>
 
 namespace ScarlettMath

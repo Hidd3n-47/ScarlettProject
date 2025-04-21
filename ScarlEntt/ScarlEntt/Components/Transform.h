@@ -14,9 +14,9 @@ struct Transform
     ScarlettMath::Vec3 scale         { 1.0f };
 
     COMPONENT_SERIALIZATION(
-        { "position", "1,1,1" },
-        { "rotation", "1,1,1,1" },
-        { "scale", "1,1,1" })
+        { "position" , SerializationUtils::ToString(translation) },
+        { "rotation" , SerializationUtils::ToString(rotation) },
+        { "scale"    , SerializationUtils::ToString(scale) })
 };
 
 } // Namespace Scarlett::Component.

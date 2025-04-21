@@ -3,9 +3,12 @@
 #include <map>
 #include <functional>
 
+#include "Components/SerializationUtils.h"
+
 #ifdef DEV_CONFIGURATION
 
 #define COMPONENT_SERIALIZATION(...)                                    \
+public:                                                                 \
 inline std::map<std::string, std::string>* GetSerializedFunction()      \
 { return &mSerializationMap; }                                          \
 private:                                                                \

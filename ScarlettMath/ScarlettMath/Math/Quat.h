@@ -177,6 +177,12 @@ public:
     }
 
     /**
+     * Get a vector 4 representation of the quaternion.
+     * @return A vector 4 representation of the quaternion as (w, x, y, z), or, (w, *v*).
+     */
+    [[nodiscard]] inline Vec4 ToVector4() const { return { mW, mX, mY, mZ }; }
+
+    /**
      * @breif Get an identity quaternion.
      * @return An identity quaternion.
      */

@@ -7,26 +7,26 @@
 		</struct Scarlett::Component::Tag>
 		<struct Scarlett::Component::BoundingBox>
 			<localMaximum>
-				1,1,1
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum>
-				1,1,1
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</struct Scarlett::Component::BoundingBox>
 		<struct Scarlett::Component::Transform>
 			<position>
-				1,1,1
+				0.000000,0.000000,0.000000
 			</position>
 			<rotation>
-				1,1,1,1
+				1.000000,0.000000,0.000000,0.000000
 			</rotation>
 			<scale>
-				1,1,1
+				1.000000,1.000000,1.000000
 			</scale>
 		</struct Scarlett::Component::Transform>
 		<struct Scarlett::Component::SquareSprite>
 			<color>
-				1,1,1,1
+				1.000000,1.000000,1.000000,1.000000
 			</color>
 		</struct Scarlett::Component::SquareSprite>
 	</Entity>
@@ -38,32 +38,32 @@
 		</struct Scarlett::Component::Tag>
 		<struct Scarlett::Component::BoundingBox>
 			<localMaximum>
-				1,1,1
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum>
-				1,1,1
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</struct Scarlett::Component::BoundingBox>
 		<struct Scarlett::Component::Transform>
 			<position>
-				1,1,1
+				0.000000,0.000000,0.000000
 			</position>
 			<rotation>
-				1,1,1,1
+				1.000000,0.000000,0.000000,0.000000
 			</rotation>
 			<scale>
-				1,1,1
+				1.000000,1.000000,1.000000
 			</scale>
 		</struct Scarlett::Component::Transform>
 		<struct Scarlett::Component::Line>
 			<color>
-				1,1,1,1
+				0.160000,0.780000,1.000000,1.000000
 			</color>
 			<end>
-				1,1,1
+				0.500000,0.500000,0.500000
 			</end>
 			<start>
-				1,1,1
+				-0.500000,0.500000,0.500000
 			</start>
 		</struct Scarlett::Component::Line>
 	</Entity>
@@ -75,32 +75,32 @@
 		</struct Scarlett::Component::Tag>
 		<struct Scarlett::Component::BoundingBox>
 			<localMaximum>
-				1,1,1
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum>
-				1,1,1
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</struct Scarlett::Component::BoundingBox>
 		<struct Scarlett::Component::Transform>
 			<position>
-				1,1,1
+				0.000000,0.000000,0.000000
 			</position>
 			<rotation>
-				1,1,1,1
+				1.000000,0.000000,0.000000,0.000000
 			</rotation>
 			<scale>
-				1,1,1
+				1.000000,1.000000,1.000000
 			</scale>
 		</struct Scarlett::Component::Transform>
 		<struct Scarlett::Component::Line>
 			<color>
-				1,1,1,1
+				0.160000,0.780000,1.000000,1.000000
 			</color>
 			<end>
-				1,1,1
+				0.500000,-0.500000,0.500000
 			</end>
 			<start>
-				1,1,1
+				-0.500000,-0.500000,0.500000
 			</start>
 		</struct Scarlett::Component::Line>
 	</Entity>
@@ -112,32 +112,32 @@
 		</struct Scarlett::Component::Tag>
 		<struct Scarlett::Component::BoundingBox>
 			<localMaximum>
-				1,1,1
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum>
-				1,1,1
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</struct Scarlett::Component::BoundingBox>
 		<struct Scarlett::Component::Transform>
 			<position>
-				1,1,1
+				0.000000,0.000000,0.000000
 			</position>
 			<rotation>
-				1,1,1,1
+				1.000000,0.000000,0.000000,0.000000
 			</rotation>
 			<scale>
-				1,1,1
+				1.000000,1.000000,1.000000
 			</scale>
 		</struct Scarlett::Component::Transform>
 		<struct Scarlett::Component::Line>
 			<color>
-				1,1,1,1
+				0.160000,0.780000,1.000000,1.000000
 			</color>
 			<end>
-				1,1,1
+				-0.500000,0.500000,0.500000
 			</end>
 			<start>
-				1,1,1
+				-0.500000,-0.500000,0.500000
 			</start>
 		</struct Scarlett::Component::Line>
 	</Entity>
@@ -149,32 +149,32 @@
 		</struct Scarlett::Component::Tag>
 		<struct Scarlett::Component::BoundingBox>
 			<localMaximum>
-				1,1,1
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum>
-				1,1,1
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</struct Scarlett::Component::BoundingBox>
 		<struct Scarlett::Component::Transform>
 			<position>
-				1,1,1
+				0.000000,0.000000,0.000000
 			</position>
 			<rotation>
-				1,1,1,1
+				1.000000,0.000000,0.000000,0.000000
 			</rotation>
 			<scale>
-				1,1,1
+				1.000000,1.000000,1.000000
 			</scale>
 		</struct Scarlett::Component::Transform>
 		<struct Scarlett::Component::Line>
 			<color>
-				1,1,1,1
+				0.160000,0.780000,1.000000,1.000000
 			</color>
 			<end>
-				1,1,1
+				0.500000,0.500000,0.500000
 			</end>
 			<start>
-				1,1,1
+				0.500000,-0.500000,0.500000
 			</start>
 		</struct Scarlett::Component::Line>
 	</Entity>
@@ -186,32 +186,32 @@
 		</struct Scarlett::Component::Tag>
 		<struct Scarlett::Component::BoundingBox>
 			<localMaximum>
-				1,1,1
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum>
-				1,1,1
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</struct Scarlett::Component::BoundingBox>
 		<struct Scarlett::Component::Transform>
 			<position>
-				1,1,1
+				0.000000,0.000000,0.000000
 			</position>
 			<rotation>
-				1,1,1,1
+				1.000000,0.000000,0.000000,0.000000
 			</rotation>
 			<scale>
-				1,1,1
+				1.000000,1.000000,1.000000
 			</scale>
 		</struct Scarlett::Component::Transform>
 		<struct Scarlett::Component::Line>
 			<color>
-				1,1,1,1
+				0.160000,0.780000,1.000000,1.000000
 			</color>
 			<end>
-				1,1,1
+				-0.500000,0.500000,-0.500000
 			</end>
 			<start>
-				1,1,1
+				-0.500000,0.500000,0.500000
 			</start>
 		</struct Scarlett::Component::Line>
 	</Entity>
@@ -223,32 +223,32 @@
 		</struct Scarlett::Component::Tag>
 		<struct Scarlett::Component::BoundingBox>
 			<localMaximum>
-				1,1,1
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum>
-				1,1,1
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</struct Scarlett::Component::BoundingBox>
 		<struct Scarlett::Component::Transform>
 			<position>
-				1,1,1
+				0.000000,0.000000,0.000000
 			</position>
 			<rotation>
-				1,1,1,1
+				1.000000,0.000000,0.000000,0.000000
 			</rotation>
 			<scale>
-				1,1,1
+				1.000000,1.000000,1.000000
 			</scale>
 		</struct Scarlett::Component::Transform>
 		<struct Scarlett::Component::Line>
 			<color>
-				1,1,1,1
+				0.160000,0.780000,1.000000,1.000000
 			</color>
 			<end>
-				1,1,1
+				-0.500000,-0.500000,-0.500000
 			</end>
 			<start>
-				1,1,1
+				-0.500000,-0.500000,0.500000
 			</start>
 		</struct Scarlett::Component::Line>
 	</Entity>
@@ -260,32 +260,32 @@
 		</struct Scarlett::Component::Tag>
 		<struct Scarlett::Component::BoundingBox>
 			<localMaximum>
-				1,1,1
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum>
-				1,1,1
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</struct Scarlett::Component::BoundingBox>
 		<struct Scarlett::Component::Transform>
 			<position>
-				1,1,1
+				0.000000,0.000000,0.000000
 			</position>
 			<rotation>
-				1,1,1,1
+				1.000000,0.000000,0.000000,0.000000
 			</rotation>
 			<scale>
-				1,1,1
+				1.000000,1.000000,1.000000
 			</scale>
 		</struct Scarlett::Component::Transform>
 		<struct Scarlett::Component::Line>
 			<color>
-				1,1,1,1
+				0.160000,0.780000,1.000000,1.000000
 			</color>
 			<end>
-				1,1,1
+				-0.500000,0.500000,-0.500000
 			</end>
 			<start>
-				1,1,1
+				-0.500000,-0.500000,-0.500000
 			</start>
 		</struct Scarlett::Component::Line>
 	</Entity>
@@ -297,32 +297,32 @@
 		</struct Scarlett::Component::Tag>
 		<struct Scarlett::Component::BoundingBox>
 			<localMaximum>
-				1,1,1
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum>
-				1,1,1
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</struct Scarlett::Component::BoundingBox>
 		<struct Scarlett::Component::Transform>
 			<position>
-				1,1,1
+				0.000000,0.000000,0.000000
 			</position>
 			<rotation>
-				1,1,1,1
+				1.000000,0.000000,0.000000,0.000000
 			</rotation>
 			<scale>
-				1,1,1
+				1.000000,1.000000,1.000000
 			</scale>
 		</struct Scarlett::Component::Transform>
 		<struct Scarlett::Component::Line>
 			<color>
-				1,1,1,1
+				0.160000,0.780000,1.000000,1.000000
 			</color>
 			<end>
-				1,1,1
+				0.500000,0.500000,0.500000
 			</end>
 			<start>
-				1,1,1
+				0.500000,0.500000,-0.500000
 			</start>
 		</struct Scarlett::Component::Line>
 	</Entity>
@@ -334,32 +334,32 @@
 		</struct Scarlett::Component::Tag>
 		<struct Scarlett::Component::BoundingBox>
 			<localMaximum>
-				1,1,1
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum>
-				1,1,1
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</struct Scarlett::Component::BoundingBox>
 		<struct Scarlett::Component::Transform>
 			<position>
-				1,1,1
+				0.000000,0.000000,0.000000
 			</position>
 			<rotation>
-				1,1,1,1
+				1.000000,0.000000,0.000000,0.000000
 			</rotation>
 			<scale>
-				1,1,1
+				1.000000,1.000000,1.000000
 			</scale>
 		</struct Scarlett::Component::Transform>
 		<struct Scarlett::Component::Line>
 			<color>
-				1,1,1,1
+				0.160000,0.780000,1.000000,1.000000
 			</color>
 			<end>
-				1,1,1
+				0.500000,-0.500000,0.500000
 			</end>
 			<start>
-				1,1,1
+				0.500000,-0.500000,-0.500000
 			</start>
 		</struct Scarlett::Component::Line>
 	</Entity>
@@ -371,32 +371,32 @@
 		</struct Scarlett::Component::Tag>
 		<struct Scarlett::Component::BoundingBox>
 			<localMaximum>
-				1,1,1
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum>
-				1,1,1
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</struct Scarlett::Component::BoundingBox>
 		<struct Scarlett::Component::Transform>
 			<position>
-				1,1,1
+				0.000000,0.000000,0.000000
 			</position>
 			<rotation>
-				1,1,1,1
+				1.000000,0.000000,0.000000,0.000000
 			</rotation>
 			<scale>
-				1,1,1
+				1.000000,1.000000,1.000000
 			</scale>
 		</struct Scarlett::Component::Transform>
 		<struct Scarlett::Component::Line>
 			<color>
-				1,1,1,1
+				0.160000,0.780000,1.000000,1.000000
 			</color>
 			<end>
-				1,1,1
+				0.500000,-0.500000,-0.500000
 			</end>
 			<start>
-				1,1,1
+				0.500000,0.500000,-0.500000
 			</start>
 		</struct Scarlett::Component::Line>
 	</Entity>
@@ -408,32 +408,32 @@
 		</struct Scarlett::Component::Tag>
 		<struct Scarlett::Component::BoundingBox>
 			<localMaximum>
-				1,1,1
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum>
-				1,1,1
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</struct Scarlett::Component::BoundingBox>
 		<struct Scarlett::Component::Transform>
 			<position>
-				1,1,1
+				0.000000,0.000000,0.000000
 			</position>
 			<rotation>
-				1,1,1,1
+				1.000000,0.000000,0.000000,0.000000
 			</rotation>
 			<scale>
-				1,1,1
+				1.000000,1.000000,1.000000
 			</scale>
 		</struct Scarlett::Component::Transform>
 		<struct Scarlett::Component::Line>
 			<color>
-				1,1,1,1
+				0.160000,0.780000,1.000000,1.000000
 			</color>
 			<end>
-				1,1,1
+				-0.500000,0.500000,-0.500000
 			</end>
 			<start>
-				1,1,1
+				0.500000,0.500000,-0.500000
 			</start>
 		</struct Scarlett::Component::Line>
 	</Entity>
@@ -445,32 +445,32 @@
 		</struct Scarlett::Component::Tag>
 		<struct Scarlett::Component::BoundingBox>
 			<localMaximum>
-				1,1,1
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum>
-				1,1,1
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</struct Scarlett::Component::BoundingBox>
 		<struct Scarlett::Component::Transform>
 			<position>
-				1,1,1
+				0.000000,0.000000,0.000000
 			</position>
 			<rotation>
-				1,1,1,1
+				1.000000,0.000000,0.000000,0.000000
 			</rotation>
 			<scale>
-				1,1,1
+				1.000000,1.000000,1.000000
 			</scale>
 		</struct Scarlett::Component::Transform>
 		<struct Scarlett::Component::Line>
 			<color>
-				1,1,1,1
+				0.160000,0.780000,1.000000,1.000000
 			</color>
 			<end>
-				1,1,1
+				-0.500000,-0.500000,-0.500000
 			</end>
 			<start>
-				1,1,1
+				0.500000,-0.500000,-0.500000
 			</start>
 		</struct Scarlett::Component::Line>
 	</Entity>
@@ -482,32 +482,32 @@
 		</struct Scarlett::Component::Tag>
 		<struct Scarlett::Component::BoundingBox>
 			<localMaximum>
-				1,1,1
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum>
-				1,1,1
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</struct Scarlett::Component::BoundingBox>
 		<struct Scarlett::Component::Transform>
 			<position>
-				1,1,1
+				0.000000,0.000000,0.000000
 			</position>
 			<rotation>
-				1,1,1,1
+				1.000000,0.000000,0.000000,0.000000
 			</rotation>
 			<scale>
-				1,1,1
+				1.000000,1.000000,1.000000
 			</scale>
 		</struct Scarlett::Component::Transform>
 		<struct Scarlett::Component::Line>
 			<color>
-				1,1,1,1
+				0.710000,0.710000,0.060000,1.000000
 			</color>
 			<end>
-				1,1,1
+				-0.500000,-0.500000,0.500000
 			</end>
 			<start>
-				1,1,1
+				0.500000,0.500000,0.500000
 			</start>
 		</struct Scarlett::Component::Line>
 	</Entity>
@@ -519,32 +519,32 @@
 		</struct Scarlett::Component::Tag>
 		<struct Scarlett::Component::BoundingBox>
 			<localMaximum>
-				1,1,1
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum>
-				1,1,1
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</struct Scarlett::Component::BoundingBox>
 		<struct Scarlett::Component::Transform>
 			<position>
-				1,1,1
+				0.000000,0.000000,0.000000
 			</position>
 			<rotation>
-				1,1,1,1
+				1.000000,0.000000,0.000000,0.000000
 			</rotation>
 			<scale>
-				1,1,1
+				1.000000,1.000000,1.000000
 			</scale>
 		</struct Scarlett::Component::Transform>
 		<struct Scarlett::Component::Line>
 			<color>
-				1,1,1,1
+				0.710000,0.710000,0.060000,1.000000
 			</color>
 			<end>
-				1,1,1
+				0.500000,-0.500000,0.500000
 			</end>
 			<start>
-				1,1,1
+				-0.500000,0.500000,0.500000
 			</start>
 		</struct Scarlett::Component::Line>
 	</Entity>
@@ -556,32 +556,32 @@
 		</struct Scarlett::Component::Tag>
 		<struct Scarlett::Component::BoundingBox>
 			<localMaximum>
-				1,1,1
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum>
-				1,1,1
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</struct Scarlett::Component::BoundingBox>
 		<struct Scarlett::Component::Transform>
 			<position>
-				1,1,1
+				0.000000,0.000000,0.000000
 			</position>
 			<rotation>
-				1,1,1,1
+				1.000000,0.000000,0.000000,0.000000
 			</rotation>
 			<scale>
-				1,1,1
+				1.000000,1.000000,1.000000
 			</scale>
 		</struct Scarlett::Component::Transform>
 		<struct Scarlett::Component::Line>
 			<color>
-				1,1,1,1
+				0.710000,0.710000,0.060000,1.000000
 			</color>
 			<end>
-				1,1,1
+				-0.500000,0.500000,0.500000
 			</end>
 			<start>
-				1,1,1
+				-0.500000,-0.500000,-0.500000
 			</start>
 		</struct Scarlett::Component::Line>
 	</Entity>
@@ -593,32 +593,32 @@
 		</struct Scarlett::Component::Tag>
 		<struct Scarlett::Component::BoundingBox>
 			<localMaximum>
-				1,1,1
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum>
-				1,1,1
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</struct Scarlett::Component::BoundingBox>
 		<struct Scarlett::Component::Transform>
 			<position>
-				1,1,1
+				0.000000,0.000000,0.000000
 			</position>
 			<rotation>
-				1,1,1,1
+				1.000000,0.000000,0.000000,0.000000
 			</rotation>
 			<scale>
-				1,1,1
+				1.000000,1.000000,1.000000
 			</scale>
 		</struct Scarlett::Component::Transform>
 		<struct Scarlett::Component::Line>
 			<color>
-				1,1,1,1
+				0.710000,0.710000,0.060000,1.000000
 			</color>
 			<end>
-				1,1,1
+				-0.500000,0.500000,-0.500000
 			</end>
 			<start>
-				1,1,1
+				-0.500000,-0.500000,0.500000
 			</start>
 		</struct Scarlett::Component::Line>
 	</Entity>
@@ -630,32 +630,32 @@
 		</struct Scarlett::Component::Tag>
 		<struct Scarlett::Component::BoundingBox>
 			<localMaximum>
-				1,1,1
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum>
-				1,1,1
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</struct Scarlett::Component::BoundingBox>
 		<struct Scarlett::Component::Transform>
 			<position>
-				1,1,1
+				0.000000,0.000000,0.000000
 			</position>
 			<rotation>
-				1,1,1,1
+				1.000000,0.000000,0.000000,0.000000
 			</rotation>
 			<scale>
-				1,1,1
+				1.000000,1.000000,1.000000
 			</scale>
 		</struct Scarlett::Component::Transform>
 		<struct Scarlett::Component::Line>
 			<color>
-				1,1,1,1
+				0.710000,0.710000,0.060000,1.000000
 			</color>
 			<end>
-				1,1,1
+				0.500000,-0.500000,-0.500000
 			</end>
 			<start>
-				1,1,1
+				0.500000,0.500000,0.500000
 			</start>
 		</struct Scarlett::Component::Line>
 	</Entity>
@@ -667,32 +667,32 @@
 		</struct Scarlett::Component::Tag>
 		<struct Scarlett::Component::BoundingBox>
 			<localMaximum>
-				1,1,1
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum>
-				1,1,1
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</struct Scarlett::Component::BoundingBox>
 		<struct Scarlett::Component::Transform>
 			<position>
-				1,1,1
+				0.000000,0.000000,0.000000
 			</position>
 			<rotation>
-				1,1,1,1
+				1.000000,0.000000,0.000000,0.000000
 			</rotation>
 			<scale>
-				1,1,1
+				1.000000,1.000000,1.000000
 			</scale>
 		</struct Scarlett::Component::Transform>
 		<struct Scarlett::Component::Line>
 			<color>
-				1,1,1,1
+				0.710000,0.710000,0.060000,1.000000
 			</color>
 			<end>
-				1,1,1
+				0.500000,-0.500000,0.500000
 			</end>
 			<start>
-				1,1,1
+				0.500000,0.500000,-0.500000
 			</start>
 		</struct Scarlett::Component::Line>
 	</Entity>
@@ -704,32 +704,32 @@
 		</struct Scarlett::Component::Tag>
 		<struct Scarlett::Component::BoundingBox>
 			<localMaximum>
-				1,1,1
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum>
-				1,1,1
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</struct Scarlett::Component::BoundingBox>
 		<struct Scarlett::Component::Transform>
 			<position>
-				1,1,1
+				0.000000,0.000000,0.000000
 			</position>
 			<rotation>
-				1,1,1,1
+				1.000000,0.000000,0.000000,0.000000
 			</rotation>
 			<scale>
-				1,1,1
+				1.000000,1.000000,1.000000
 			</scale>
 		</struct Scarlett::Component::Transform>
 		<struct Scarlett::Component::Line>
 			<color>
-				1,1,1,1
+				0.650000,0.120000,0.780000,1.000000
 			</color>
 			<end>
-				1,1,1
+				-0.000000,-0.000000,-0.000000
 			</end>
 			<start>
-				1,1,1
+				0.500000,0.500000,0.500000
 			</start>
 		</struct Scarlett::Component::Line>
 	</Entity>
@@ -741,32 +741,32 @@
 		</struct Scarlett::Component::Tag>
 		<struct Scarlett::Component::BoundingBox>
 			<localMaximum>
-				1,1,1
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum>
-				1,1,1
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</struct Scarlett::Component::BoundingBox>
 		<struct Scarlett::Component::Transform>
 			<position>
-				1,1,1
+				0.000000,0.000000,0.000000
 			</position>
 			<rotation>
-				1,1,1,1
+				1.000000,0.000000,0.000000,0.000000
 			</rotation>
 			<scale>
-				1,1,1
+				1.000000,1.000000,1.000000
 			</scale>
 		</struct Scarlett::Component::Transform>
 		<struct Scarlett::Component::Line>
 			<color>
-				1,1,1,1
+				0.650000,0.120000,0.780000,1.000000
 			</color>
 			<end>
-				1,1,1
+				0.500000,-0.500000,-0.500000
 			</end>
 			<start>
-				1,1,1
+				-0.500000,0.500000,0.500000
 			</start>
 		</struct Scarlett::Component::Line>
 	</Entity>
@@ -778,32 +778,32 @@
 		</struct Scarlett::Component::Tag>
 		<struct Scarlett::Component::BoundingBox>
 			<localMaximum>
-				1,1,1
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum>
-				1,1,1
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</struct Scarlett::Component::BoundingBox>
 		<struct Scarlett::Component::Transform>
 			<position>
-				1,1,1
+				0.000000,0.000000,0.000000
 			</position>
 			<rotation>
-				1,1,1,1
+				1.000000,0.000000,0.000000,0.000000
 			</rotation>
 			<scale>
-				1,1,1
+				1.000000,1.000000,1.000000
 			</scale>
 		</struct Scarlett::Component::Transform>
 		<struct Scarlett::Component::Line>
 			<color>
-				1,1,1,1
+				0.650000,0.120000,0.780000,1.000000
 			</color>
 			<end>
-				1,1,1
+				0.500000,0.000000,0.000000
 			</end>
 			<start>
-				1,1,1
+				-0.500000,0.000000,0.000000
 			</start>
 		</struct Scarlett::Component::Line>
 	</Entity>
@@ -815,32 +815,32 @@
 		</struct Scarlett::Component::Tag>
 		<struct Scarlett::Component::BoundingBox>
 			<localMaximum>
-				1,1,1
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum>
-				1,1,1
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</struct Scarlett::Component::BoundingBox>
 		<struct Scarlett::Component::Transform>
 			<position>
-				1,1,1
+				0.000000,0.000000,0.000000
 			</position>
 			<rotation>
-				1,1,1,1
+				1.000000,0.000000,0.000000,0.000000
 			</rotation>
 			<scale>
-				1,1,1
+				1.000000,1.000000,1.000000
 			</scale>
 		</struct Scarlett::Component::Transform>
 		<struct Scarlett::Component::Line>
 			<color>
-				1,1,1,1
+				1.000000,1.000000,0.000000,1.000000
 			</color>
 			<end>
-				1,1,1
+				0.500000,0.500000,0.500000
 			</end>
 			<start>
-				1,1,1
+				2.000000,2.000000,2.000000
 			</start>
 		</struct Scarlett::Component::Line>
 	</Entity>
@@ -852,32 +852,32 @@
 		</struct Scarlett::Component::Tag>
 		<struct Scarlett::Component::BoundingBox>
 			<localMaximum>
-				1,1,1
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum>
-				1,1,1
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</struct Scarlett::Component::BoundingBox>
 		<struct Scarlett::Component::Transform>
 			<position>
-				1,1,1
+				0.000000,0.000000,0.000000
 			</position>
 			<rotation>
-				1,1,1,1
+				1.000000,0.000000,0.000000,0.000000
 			</rotation>
 			<scale>
-				1,1,1
+				1.000000,1.000000,1.000000
 			</scale>
 		</struct Scarlett::Component::Transform>
 		<struct Scarlett::Component::Line>
 			<color>
-				1,1,1,1
+				1.000000,1.000000,0.000000,1.000000
 			</color>
 			<end>
-				1,1,1
+				-0.500000,0.500000,0.500000
 			</end>
 			<start>
-				1,1,1
+				-2.000000,2.000000,2.000000
 			</start>
 		</struct Scarlett::Component::Line>
 	</Entity>
@@ -889,35 +889,35 @@
 		</struct Scarlett::Component::Tag>
 		<struct Scarlett::Component::BoundingBox>
 			<localMaximum>
-				1,1,1
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum>
-				1,1,1
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</struct Scarlett::Component::BoundingBox>
 		<struct Scarlett::Component::Transform>
 			<position>
-				1,1,1
+				0.000000,0.000000,0.000000
 			</position>
 			<rotation>
-				1,1,1,1
+				1.000000,0.000000,0.000000,0.000000
 			</rotation>
 			<scale>
-				1,1,1
+				1.000000,1.000000,1.000000
 			</scale>
 		</struct Scarlett::Component::Transform>
 		<struct Scarlett::Component::Camera>
 			<aspectRatio>
-				1.77777777778
+				1.777778
 			</aspectRatio>
 			<forwardVector>
-				1,1,1
+				0.000000,0.000000,-1.000000
 			</forwardVector>
 			<rightVector>
-				1,1,1
+				1.000000,0.000000,0.000000
 			</rightVector>
 			<upVector>
-				1,1,1
+				0.000000,1.000000,0.000000
 			</upVector>
 		</struct Scarlett::Component::Camera>
 	</Entity>
@@ -929,26 +929,26 @@
 		</struct Scarlett::Component::Tag>
 		<struct Scarlett::Component::BoundingBox>
 			<localMaximum>
-				1,1,1
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum>
-				1,1,1
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</struct Scarlett::Component::BoundingBox>
 		<struct Scarlett::Component::Transform>
 			<position>
-				1,1,1
+				0.000000,0.000000,0.000000
 			</position>
 			<rotation>
-				1,1,1,1
+				1.000000,0.000000,0.000000,0.000000
 			</rotation>
 			<scale>
-				1,1,1
+				1.000000,1.000000,1.000000
 			</scale>
 		</struct Scarlett::Component::Transform>
 		<struct Scarlett::Component::SquareSprite>
 			<color>
-				1,1,1,1
+				1.000000,1.000000,1.000000,1.000000
 			</color>
 		</struct Scarlett::Component::SquareSprite>
 	</Entity>
@@ -960,26 +960,26 @@
 		</struct Scarlett::Component::Tag>
 		<struct Scarlett::Component::BoundingBox>
 			<localMaximum>
-				1,1,1
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum>
-				1,1,1
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</struct Scarlett::Component::BoundingBox>
 		<struct Scarlett::Component::Transform>
 			<position>
-				1,1,1
+				0.000000,0.000000,0.000000
 			</position>
 			<rotation>
-				1,1,1,1
+				1.000000,0.000000,0.000000,0.000000
 			</rotation>
 			<scale>
-				1,1,1
+				1.000000,1.000000,1.000000
 			</scale>
 		</struct Scarlett::Component::Transform>
 		<struct Scarlett::Component::SquareSprite>
 			<color>
-				1,1,1,1
+				1.000000,1.000000,1.000000,1.000000
 			</color>
 		</struct Scarlett::Component::SquareSprite>
 	</Entity>
@@ -991,26 +991,26 @@
 		</struct Scarlett::Component::Tag>
 		<struct Scarlett::Component::BoundingBox>
 			<localMaximum>
-				1,1,1
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum>
-				1,1,1
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</struct Scarlett::Component::BoundingBox>
 		<struct Scarlett::Component::Transform>
 			<position>
-				1,1,1
+				0.000000,0.000000,0.000000
 			</position>
 			<rotation>
-				1,1,1,1
+				1.000000,0.000000,0.000000,0.000000
 			</rotation>
 			<scale>
-				1,1,1
+				1.000000,1.000000,1.000000
 			</scale>
 		</struct Scarlett::Component::Transform>
 		<struct Scarlett::Component::SquareSprite>
 			<color>
-				1,1,1,1
+				1.000000,1.000000,1.000000,1.000000
 			</color>
 		</struct Scarlett::Component::SquareSprite>
 	</Entity>
@@ -1022,26 +1022,26 @@
 		</struct Scarlett::Component::Tag>
 		<struct Scarlett::Component::BoundingBox>
 			<localMaximum>
-				1,1,1
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum>
-				1,1,1
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</struct Scarlett::Component::BoundingBox>
 		<struct Scarlett::Component::Transform>
 			<position>
-				1,1,1
+				0.000000,0.000000,0.000000
 			</position>
 			<rotation>
-				1,1,1,1
+				1.000000,0.000000,0.000000,0.000000
 			</rotation>
 			<scale>
-				1,1,1
+				1.000000,1.000000,1.000000
 			</scale>
 		</struct Scarlett::Component::Transform>
 		<struct Scarlett::Component::SquareSprite>
 			<color>
-				1,1,1,1
+				1.000000,1.000000,1.000000,1.000000
 			</color>
 		</struct Scarlett::Component::SquareSprite>
 	</Entity>
@@ -1053,26 +1053,26 @@
 		</struct Scarlett::Component::Tag>
 		<struct Scarlett::Component::BoundingBox>
 			<localMaximum>
-				1,1,1
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum>
-				1,1,1
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</struct Scarlett::Component::BoundingBox>
 		<struct Scarlett::Component::Transform>
 			<position>
-				1,1,1
+				0.000000,0.000000,0.000000
 			</position>
 			<rotation>
-				1,1,1,1
+				1.000000,0.000000,0.000000,0.000000
 			</rotation>
 			<scale>
-				1,1,1
+				1.000000,1.000000,1.000000
 			</scale>
 		</struct Scarlett::Component::Transform>
 		<struct Scarlett::Component::SquareSprite>
 			<color>
-				1,1,1,1
+				1.000000,1.000000,1.000000,1.000000
 			</color>
 		</struct Scarlett::Component::SquareSprite>
 	</Entity>
@@ -1084,26 +1084,26 @@
 		</struct Scarlett::Component::Tag>
 		<struct Scarlett::Component::BoundingBox>
 			<localMaximum>
-				1,1,1
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum>
-				1,1,1
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</struct Scarlett::Component::BoundingBox>
 		<struct Scarlett::Component::Transform>
 			<position>
-				1,1,1
+				0.000000,0.000000,0.000000
 			</position>
 			<rotation>
-				1,1,1,1
+				1.000000,0.000000,0.000000,0.000000
 			</rotation>
 			<scale>
-				1,1,1
+				1.000000,1.000000,1.000000
 			</scale>
 		</struct Scarlett::Component::Transform>
 		<struct Scarlett::Component::SquareSprite>
 			<color>
-				1,1,1,1
+				1.000000,1.000000,1.000000,1.000000
 			</color>
 		</struct Scarlett::Component::SquareSprite>
 	</Entity>

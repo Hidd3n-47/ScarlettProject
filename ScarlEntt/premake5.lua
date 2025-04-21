@@ -23,6 +23,8 @@ project "ScarlEntt"
         "$(SolutionDir)Scarlett/",
         "$(SolutionDir)ScarlEntt/ScarlEntt/",
         "$(SolutionDir)ScarlettMath/ScarlettMath/",
+
+        "$(SolutionDir)deps/include/",
     }
 
     links

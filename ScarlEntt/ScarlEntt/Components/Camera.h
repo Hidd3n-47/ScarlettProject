@@ -35,12 +35,6 @@ public:
     inline void SetDirty() { mIsDirty = true; }
     inline void SetClean() { mIsDirty = false; }
     [[nodiscard]] bool IsDirty() const { return mIsDirty; }
-
-    COMPONENT_SERIALIZATION(
-        { "forwardVector", "1,1,1" },
-        { "rightVector", "1,1,1" },
-        { "upVector", "1,1,1" },
-        { "aspectRatio", "1.77777777778" })
 private:
     bool mIsDirty = true;
 
@@ -52,6 +46,12 @@ private:
     ScarlettMath::Vec3 mUpVector       { 0.0f, 1.0f,  0.0f };
 
     float mAspectRatio = 16.0f / 9.0f;
+
+    COMPONENT_SERIALIZATION(
+        { "forwardVector" , SerializationUtils::ToString(mForwardVector) },
+        { "rightVector"   , SerializationUtils::ToString(mRightVector) },
+        { "upVector"      , SerializationUtils::ToString(mUpVector) },
+        { "aspectRatio"   , std::to_string(mAspectRatio) })
 };
 
 } // Namespace Scarlett::Component.
