@@ -3,6 +3,8 @@
 
 #include "Scene.h"
 
+#include "Components/Tag.h"
+
 namespace ScarlEntt
 {
 
@@ -22,5 +24,9 @@ EntityHandle::EntityHandle(const EntityId entityId, Scene* sceneRef)
     // Empty.
 }
 
+void EntityHandle::AddEntityHandleToTagComponent() const
+{
+    GetComponent<Scarlett::Component::Tag>()->entity = EntityHandle{ mEntityId, mSceneRef };
+}
 
 } // Namespace ScarlEntt.

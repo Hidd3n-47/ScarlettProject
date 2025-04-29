@@ -3,6 +3,8 @@
 #include <ScarlettLogger/Log.h>
 
 #include <Components/Tag.h>
+#include <Components/Line.h>
+#include <Components/Camera.h>
 #include <Components/Transform.h>
 #include <Components/BoundingBox.h>
 #include <Components/SquareSprite.h>
@@ -28,6 +30,9 @@ void GameCore::Init()
 
     mCurrentScene->RegisterComponent<Scarlett::Component::Transform>();
     mCurrentScene->RegisterComponent<Scarlett::Component::SquareSprite>();
+
+    mCurrentScene->RegisterComponent<Scarlett::Component::Camera>();
+    mCurrentScene->RegisterComponent<Scarlett::Component::Line>();
 
     Scarlett::Log::GetLogger()->info("Scarlett Game Core initialized");
 }

@@ -14,6 +14,8 @@
 namespace ScarlEntt
 {
 
+class XmlNode;
+
 /**
  * @class ComponentManager: The owner of the components and instance used to create/destroy and register components.<br/>
  * Components need to be registered before adding or removing.<br/>
@@ -32,7 +34,7 @@ public:
     ComponentManager& operator=(const ComponentManager&)    = delete;
 
     /**
-    * @brief Register the component so that the component array can be created and reserved/initialized.
+    * @brief Register the component so that the component array can be created and reserved/initialised.
     * @note: __All components need to be registered before they can be used.__
     */
     template <typename ComponentType>
@@ -51,12 +53,14 @@ public:
 private:
     unordered_map<std::string, IComponentArray*> mComponents;
 
+    void AddDeserializedComponent(const EntityId entityId, const std::string& componentTypeId, XmlNode* node);
+
     /**
     * @brief Add a component to an entity.
     * @tparam ComponentType The class of the Component
     * @tparam Args Arguments that are passed to the ComponentType constructor to construct a component with initial values.
     * @param entityId The ID of the entity the component is being added to.
-    * @param args The arguments used to initialize the component.
+    * @param args The arguments used to initialise the component.
     * @return A reference to the created component.
     */
     template <typename ComponentType, typename... Args>
@@ -85,6 +89,8 @@ private:
 
 #ifdef DEV_CONFIGURATION
     unordered_map<EntityId, vector<ComponentView>> mEntityToComponentMap;
+
+    unordered_map<std::string, std::function<void(EntityId, XmlNode*)>> mDeserializeComponentFunctionMap;
 
     /**
     * @brief Retrieve a vector of \c ComponentView for the components the requested entity.
@@ -123,6 +129,10 @@ inline void ComponentManager::RegisterComponent()
     SCARLENTT_ASSERT(!mComponents.contains(typeName) && "Registering component type more than once.");
     assert(!mComponents.contains(typeName) && "Registering component type more than once."); // todo remove.
 
+#ifdef DEV_CONFIGURATION
+    mDeserializeComponentFunctionMap[typeName] = [this](EntityId entityId, XmlNode* node){ AddComponent(entityId, ComponentType::DeserializeComponent(node)); };
+#endif // DEV_CONFIGURATION.
+
     mComponents[typeName] = new ComponentArray<ComponentType>();
 }
 
@@ -134,6 +144,11 @@ inline ComponentArray<ComponentType>& ComponentManager::GetComponentArray()
     assert(mComponents.contains(typeName) && "Component not registered before use."); // todo remove.
 
     return *static_cast<ComponentArray<ComponentType>*>(mComponents[typeName]);
+}
+
+inline void ComponentManager::AddDeserializedComponent(const EntityId entityId, const std::string& componentTypeId, XmlNode* node)
+{
+    mDeserializeComponentFunctionMap[componentTypeId](entityId, node);
 }
 
 template <typename ComponentType, typename... Args>
@@ -171,7 +186,8 @@ inline ComponentType* ComponentManager::AddComponent(const EntityId entityId, co
     if (std::find(entityComponents.begin(), entityComponents.end(), GetComponentTypeId<ComponentType>()) == entityComponents.end())
     {
         ComponentRef<ComponentType> componentRef { entityId, &GetComponentArray<ComponentType>() };
-        entityComponents.emplace_back(GetComponentTypeId<ComponentType>(), [componentRef]() { return componentRef->GetSerializedFunction(); });
+        std::string componentTypeId = GetComponentTypeId<ComponentType>();
+        entityComponents.emplace_back(componentTypeId, [componentRef]() { return componentRef->GetSerializedFunction(); });
     }
     else
     {

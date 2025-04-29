@@ -1,6 +1,11 @@
 ﻿#pragma once
 
-#include <Math/Math.h>
+#include "ScarlEntt/Debug.h"
+
+namespace ScarlEntt
+{
+class XmlNode;
+} // Namespace XmlNode.
 
 namespace Scarlett::Component
 {
@@ -8,6 +13,7 @@ namespace Scarlett::Component
 //todo make this editor only.
 struct Line
 {
+    Line() = default;
     Line(const ScarlettMath::Vec3 start, const ScarlettMath::Vec3 end)
         : start(start), end(end), color({ 1.0f, 1.0f, 1.0f, 1.0f })
     { /* Empty. */ }
@@ -21,9 +27,11 @@ struct Line
     ScarlettMath::Vec4 color;
 
     COMPONENT_SERIALIZATION(
-        { "start" , SerializationUtils::ToString(start) },
-        { "end"   , SerializationUtils::ToString(end) },
-        { "color" , SerializationUtils::ToString(color) })
+        { "start" , ScarlEntt::TypeReflection::Reflect(&start) },
+        { "end"   , ScarlEntt::TypeReflection::Reflect(&end) },
+        { "color" , ScarlEntt::TypeReflection::Reflect(&color) })
+
+    static Line DeserializeComponent(const ScarlEntt::XmlNode* node);
 };
 
 } // Namespace Scarlett::Component.

@@ -22,11 +22,13 @@ public:
     EntityHandle& operator=(const EntityHandle& other)      = default;
     EntityHandle& operator=(EntityHandle&& other)           = default;
 
+    void AddDeserializedComponent(const std::string& componentTypeId, XmlNode* node) const;
+
     /**
     * @brief Add a component to the entity
     * @tparam ComponentType The class of the Component
     * @tparam Args Arguments that are passed to the ComponentType constructor to construct a component with initial values.
-    * @param args The arguments used to initialize the component.
+    * @param args The arguments used to initialise the component.
     * @return A reference to the created component.
     */
     template <typename ComponentType, typename ...Args>
@@ -48,12 +50,20 @@ public:
     void RemoveComponent() const;
 
     /**
-    * @brief Retrieve a pointer to the component of the entity.
-    * @note This is a raw pointer and should not be cached due to memory potentially changing.
-    * @return Returns the __component__ if found, \c nullptr otherwise.
+    * @brief Retrieve a reference to the component of the entity.
+    * @see \c ComponentRef
+    * @return Returns a component reference of the requested component.
     */
     template <typename ComponentType>
     [[nodiscard]] ComponentRef<ComponentType> GetComponent();
+
+    /**
+    * @brief Retrieve a const reference to the component of the entity.
+    * @see \c ComponentRef
+    * @return Returns a const component reference of the requested component.
+    */
+    template <typename ComponentType>
+    [[nodiscard]] ComponentRef<ComponentType> GetComponent() const;
 
 #ifdef DEV_CONFIGURATION
     /**
@@ -74,11 +84,24 @@ private:
     EntityId            mEntityId;
     Scene*              mSceneRef;
     ComponentManager*   mComponentManagerRef;
+
+    void AddEntityHandleToTagComponent() const;
 };
 
 /*
   ======================================================================================================================================================
                                                                                                                                                         */
+
+inline void EntityHandle::AddDeserializedComponent(const std::string& componentTypeId, XmlNode* node) const
+{
+    mComponentManagerRef->AddDeserializedComponent(mEntityId, componentTypeId, node);
+
+    const std::string TAG_TYPE_ID = "struct Scarlett::Component::Tag";
+    if (componentTypeId == TAG_TYPE_ID)
+    {
+        AddEntityHandleToTagComponent();
+    }
+}
 
 template <typename ComponentType, typename ...Args>
 inline ComponentType* EntityHandle::AddComponent(Args ...args) const
@@ -100,6 +123,12 @@ inline void EntityHandle::RemoveComponent() const
 
 template <typename ComponentType>
 inline ComponentRef<ComponentType> EntityHandle::GetComponent()
+{
+    return mComponentManagerRef->GetComponent<ComponentType>(mEntityId);
+}
+
+template <typename ComponentType>
+inline ComponentRef<ComponentType> EntityHandle::GetComponent() const
 {
     return mComponentManagerRef->GetComponent<ComponentType>(mEntityId);
 }

@@ -58,12 +58,10 @@ void Engine::InitEngine()
 
     ScarlettGame::GameCore::Instance().GetActiveScene()->RegisterSystem<SquareSpriteSystem>();
     ScarlettGame::GameCore::Instance().GetActiveScene()->RegisterSystem<LineRendererSystem>();
-    ScarlettGame::GameCore::Instance().GetActiveScene()->RegisterComponent<Component::Line>();
 
     Renderer::Instance().Init(mMainWindow);
 
     ScarlettGame::GameCore::Instance().GetActiveScene()->RegisterSystem<CameraSystem>();
-    ScarlettGame::GameCore::Instance().GetActiveScene()->RegisterComponent<Component::Camera>();
     ScarlEntt::EntityHandle gameCamera = ScarlettGame::GameCore::Instance().CreateEntity();
     gameCamera.RemoveComponent<Component::SquareSprite>();
     gameCamera.GetComponent<Component::Transform>()->translation = { 0.0f, 2.0f, 6.0f };

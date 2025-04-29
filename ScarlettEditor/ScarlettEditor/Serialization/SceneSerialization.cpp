@@ -3,32 +3,35 @@
 
 #include <ScarlettGameCore/Src/GameCore.h>
 
-#include "Serialization/Xml/XmlSerializer.h"
+#include <Serialization/Xml/XmlSerializer.h>
 
 namespace ScarlettEditor
 {
 
+//todo change to filepath instead of string.
 const std::string SceneSerialization::SCENE_FILE_PATH { "E:/Programming/ScarlettProject/Assets/Scenes/DefaultScene.scarlett_scene" };
 
 void SceneSerialization::SerializeCurrentGameScene()
 {
 #ifdef DEV_CONFIGURATION
-    XmlNode* sceneNode = new XmlNode("Scene");
+    ScarlEntt::XmlNode* sceneNode = new ScarlEntt::XmlNode("Scene");
     const ScarlEntt::Scene* scene = ScarlettGame::GameCore::Instance().GetActiveScene();
     const auto& entities = scene->GetEntities();
 
     for (ScarlEntt::EntityHandle handle : entities)
     {
-        XmlNode* entityNode = new XmlNode("Entity");
+        ScarlEntt::XmlNode* entityNode = new ScarlEntt::XmlNode("Entity");
 
         for (const auto& component : handle.GetComponents())
         {
-            XmlNode* componentNode = new XmlNode{ component.GetComponentTypeId() };
+            ScarlEntt::XmlNode* componentNode = new ScarlEntt::XmlNode{ "Component" };
+            componentNode->AddAttribute("typeId", component.GetComponentTypeId());
 
-            auto map = component.GetSerializedValue();
-            for (auto& [componentTag, componentValue] : *map)
+            for (auto& [componentTag, componentValue] : *component.GetSerializedValue())
             {
-                componentNode->AddChildNode(new XmlNode{ componentTag, componentValue });
+                ScarlEntt::XmlNode* componentValueNode = new ScarlEntt::XmlNode{ componentTag, componentValue.GetValueString() };
+                componentValueNode->AddAttribute("type", componentValue.GetTypeString());
+                componentNode->AddChildNode(componentValueNode);
             }
 
             entityNode->AddChildNode(componentNode);
@@ -37,14 +40,30 @@ void SceneSerialization::SerializeCurrentGameScene()
         sceneNode->AddChildNode(entityNode);
     }
 
-    XmlSerializer::Serialize(XmlDocument { sceneNode }, SCENE_FILE_PATH);
+    ScarlEntt::XmlSerializer::Serialize(ScarlEntt::XmlDocument { sceneNode }, SCENE_FILE_PATH);
 #endif // DEV_CONFIGURATION.
 }
 
 void SceneSerialization::DeserializeCurrentGameScene()
 {
-#ifdef DEV_CONFIGURATION
-    XmlDocument sceneDocument = XmlSerializer::Deserialize(SCENE_FILE_PATH);
+#ifdef foo
+    const ScarlEntt::XmlDocument sceneDocument = ScarlEntt::XmlSerializer::Deserialize(SCENE_FILE_PATH);
+
+    ScarlEntt::Scene* scene = ScarlettGame::GameCore::Instance().GetActiveScene();
+
+    for (ScarlEntt::XmlNode* entityNode : sceneDocument.GetRootNode()->GetChildren())
+    {
+        ScarlEntt::EntityHandle entity = scene->CreateEntity();
+        for (const auto component : entityNode->GetChildren())
+        {
+            const std::string TYPE_ID_ATTRIBUTE     = "typeId";
+            const std::string VALUE_TYPE_ATTRIBUTE  = "name";
+
+            const std::string componentTypeId = component->GetAttribute(TYPE_ID_ATTRIBUTE);
+            entity.AddDeserializedComponent(componentTypeId, component);
+        }
+    }
+
 #endif // DEV_CONFIGURATION.
 }
 

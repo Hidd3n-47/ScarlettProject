@@ -2,6 +2,13 @@
 
 #include <Math/Math.h>
 
+#include "ScarlEntt/Debug.h"
+
+namespace ScarlEntt
+{
+    class XmlNode;
+} // Namespace XmlNode.
+
 namespace Scarlett::Component
 {
 
@@ -31,6 +38,7 @@ public:
     inline void SetForwardVector(const ScarlettMath::Vec3& forward) { mForwardVector = forward; mIsDirty = true; }
     inline void SetRightVector(const ScarlettMath::Vec3& right)     { mRightVector = right; mIsDirty = true; }
     inline void SetUpVector(const ScarlettMath::Vec3& up)           { mUpVector = up; mIsDirty = true; }
+    inline void SetAspectRatio(const float& aspectRatio)            { mAspectRatio = aspectRatio; mIsDirty = true; }
 
     inline void SetDirty() { mIsDirty = true; }
     inline void SetClean() { mIsDirty = false; }
@@ -48,10 +56,12 @@ private:
     float mAspectRatio = 16.0f / 9.0f;
 
     COMPONENT_SERIALIZATION(
-        { "forwardVector" , SerializationUtils::ToString(mForwardVector) },
-        { "rightVector"   , SerializationUtils::ToString(mRightVector) },
-        { "upVector"      , SerializationUtils::ToString(mUpVector) },
-        { "aspectRatio"   , std::to_string(mAspectRatio) })
+        { "forwardVector" , ScarlEntt::TypeReflection::Reflect(&mForwardVector) },
+        { "rightVector"   , ScarlEntt::TypeReflection::Reflect(&mRightVector) },
+        { "upVector"      , ScarlEntt::TypeReflection::Reflect(&mUpVector) },
+        { "aspectRatio"   , ScarlEntt::TypeReflection::Reflect(&mAspectRatio) })
+
+    static Camera DeserializeComponent(const ScarlEntt::XmlNode* node);
 };
 
 } // Namespace Scarlett::Component.

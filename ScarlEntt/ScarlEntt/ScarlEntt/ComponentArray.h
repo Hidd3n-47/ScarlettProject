@@ -30,7 +30,7 @@ class ComponentArray final : public IComponentArray
 {
 friend class ComponentManager;
 public:
-    ComponentArray()            = default;
+    ComponentArray()              { mComponentArray.reserve(100); }
     ~ComponentArray() override  = default;
 
     ComponentArray(const ComponentArray&)               = delete;

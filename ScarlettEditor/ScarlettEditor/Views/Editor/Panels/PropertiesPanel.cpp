@@ -20,7 +20,7 @@ void PropertiesPanel::Render()
 
     if (selectedEntity != nullptr)
     {
-        const std::string entityName = selectedEntity->GetComponent<Scarlett::Component::Tag>()->name.c_str();
+        const std::string entityName = selectedEntity->GetComponent<Scarlett::Component::Tag>()->name;
 
         if (ImGui::CollapsingHeader("Transform"))
         {

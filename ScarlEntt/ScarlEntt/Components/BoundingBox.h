@@ -14,8 +14,28 @@ struct BoundingBox
     inline ScarlettMath::Vec3 GetCenter() const { return (localMinimum + localMaximum) * 0.5f; }
 
     COMPONENT_SERIALIZATION(
-        { "localMinimum", SerializationUtils::ToString(localMinimum) },
-        { "localMaximum", SerializationUtils::ToString(localMaximum) })
+        { "localMinimum", ScarlEntt::TypeReflection::Reflect(&localMinimum) },
+        { "localMaximum", ScarlEntt::TypeReflection::Reflect(&localMaximum) })
+
+    static BoundingBox DeserializeComponent(const ScarlEntt::XmlNode* node)
+    {
+        BoundingBox component;
+        //todo assert for children size.
+        for (const ScarlEntt::XmlNode* childNode : node->GetChildren())
+        {
+            if (childNode->GetTagName() == "localMinimum")
+            {
+                component.localMinimum = ScarlEntt::TypeReflection::GetValueFromTypeString<ScarlettMath::Vec3>(childNode->GetValue());
+                continue;
+            }
+            if (childNode->GetTagName() == "localMaximum")
+            {
+                component.localMaximum = ScarlEntt::TypeReflection::GetValueFromTypeString<ScarlettMath::Vec3>(childNode->GetValue());
+            }
+        }
+
+        return component;
+    }
 };
 
 } // Namespace Scarlett::Component.

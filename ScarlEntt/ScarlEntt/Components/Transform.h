@@ -3,6 +3,7 @@
 #include <Math/Quat.h>
 
 #include "ScarlEntt/Debug.h"
+#include "Serialization/Xml/XmlDocument.h"
 
 namespace Scarlett::Component
 {
@@ -14,9 +15,34 @@ struct Transform
     ScarlettMath::Vec3 scale         { 1.0f };
 
     COMPONENT_SERIALIZATION(
-        { "position" , SerializationUtils::ToString(translation) },
-        { "rotation" , SerializationUtils::ToString(rotation) },
-        { "scale"    , SerializationUtils::ToString(scale) })
+        { "position" , ScarlEntt::TypeReflection::Reflect(&translation) },
+        { "rotation" , ScarlEntt::TypeReflection::Reflect(&rotation) },
+        { "scale"    , ScarlEntt::TypeReflection::Reflect(&scale) })
+
+    static Transform DeserializeComponent(const ScarlEntt::XmlNode* node)
+    {
+        Transform component;
+        //todo assert for children size.
+        for (const ScarlEntt::XmlNode* childNode : node->GetChildren())
+        {
+            if (childNode->GetTagName() == "position")
+            {
+                component.translation = ScarlEntt::TypeReflection::GetValueFromTypeString<ScarlettMath::Vec3>(childNode->GetValue());
+                continue;
+            }
+            if (childNode->GetTagName() == "rotation")
+            {
+                component.rotation = ScarlEntt::TypeReflection::GetValueFromTypeString<ScarlettMath::Quat>(childNode->GetValue());
+                continue;
+            }
+            if (childNode->GetTagName() == "scale")
+            {
+                component.scale = ScarlEntt::TypeReflection::GetValueFromTypeString<ScarlettMath::Vec3>(childNode->GetValue());
+            }
+        }
+
+        return component;
+    }
 };
 
 } // Namespace Scarlett::Component.
