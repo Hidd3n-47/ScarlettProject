@@ -27,7 +27,6 @@ Line Line::DeserializeComponent(const ScarlEntt::XmlNode* node)
         if (childNode->GetTagName() == "color")
         {
             component.color = ScarlEntt::TypeReflection::GetValueFromTypeString<ScarlettMath::Vec4>(childNode->GetValue());
-            continue;
         }
     }
 

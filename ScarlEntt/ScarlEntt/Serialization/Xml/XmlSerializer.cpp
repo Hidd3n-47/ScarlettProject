@@ -10,7 +10,7 @@ namespace ScarlEntt
 
 bool XmlSerializer::Serialize(const XmlDocument& document, const std::string& path)
 {
-    if (!document.mParentNode)
+    if (!document.mRootNode)
     {
         return false;
     }
@@ -21,7 +21,7 @@ bool XmlSerializer::Serialize(const XmlDocument& document, const std::string& pa
         return false;
     }
 
-    OutputNode(file, document.mParentNode);
+    OutputNode(file, document.mRootNode);
 
     file.close();
     return true;
@@ -50,8 +50,23 @@ bool XmlSerializer::Serialize(const XmlDocument& document, const std::string& pa
         {
             ++tagLevel;
 
-            XmlNode* newNode = new XmlNode(tagOrValue);
+            size_t spacePosition = tagOrValue.find(' ');
+
+            const std::string tag = spacePosition == std::string::npos ? tagOrValue : tagOrValue.substr(0, spacePosition);
+
+            XmlNode* newNode = new XmlNode(tag);
             nodes[tagLevel].emplace_back(newNode);
+
+            while(spacePosition != std::string::npos)
+            {
+                const size_t equalPosition = tagOrValue.find('=', spacePosition);
+
+                // Since attributes are in the form 'attributeName="attributeValue"', add 2 to equals position to get ending double quote.
+                const size_t endDoubleQuotePosition = tagOrValue.find('"', equalPosition + 2);
+                newNode->AddAttribute(tagOrValue.substr(spacePosition + 1, equalPosition - spacePosition - 1), tagOrValue.substr(equalPosition + 2, endDoubleQuotePosition - equalPosition - 2));
+
+                spacePosition = tagOrValue.find(' ', endDoubleQuotePosition + 1);
+            }
 
             if (tagLevel > 1)
             {
@@ -75,7 +90,6 @@ bool XmlSerializer::Serialize(const XmlDocument& document, const std::string& pa
 
     file.close();
 
-
     return XmlDocument { nodes[1].empty() ? nullptr : nodes[1].back() };
 }
 
@@ -84,7 +98,13 @@ void XmlSerializer::OutputNode(std::ofstream& file, const XmlNode* node, const i
     const std::string indent(static_cast<size_t>(level), '\t');
     const std::string innerTagIndent = indent + "\t";
 
-    file << indent << "<" << node->GetTagName() << ">\n";
+    std::string attributeString;
+    for(auto& [attribute, attributeValue] : node->GetAttributes())
+    {
+        attributeString += " " + attribute + "=\"" + attributeValue + "\"";
+    }
+
+    file << indent << "<" << node->GetTagName() << attributeString << ">\n";
 
     if (node->mChildren.empty())
     {

@@ -90,7 +90,7 @@ private:
 #ifdef DEV_CONFIGURATION
     unordered_map<EntityId, vector<ComponentView>> mEntityToComponentMap;
 
-    unordered_map<std::string, std::function<void(EntityId, XmlNode*)>> mDeserializeComponentFunctionMap;
+    unordered_map<std::string, std::function<void(const EntityId, XmlNode*)>> mDeserializeComponentFunctionMap;
 
     /**
     * @brief Retrieve a vector of \c ComponentView for the components the requested entity.
@@ -130,7 +130,7 @@ inline void ComponentManager::RegisterComponent()
     assert(!mComponents.contains(typeName) && "Registering component type more than once."); // todo remove.
 
 #ifdef DEV_CONFIGURATION
-    mDeserializeComponentFunctionMap[typeName] = [this](EntityId entityId, XmlNode* node){ AddComponent(entityId, ComponentType::DeserializeComponent(node)); };
+    mDeserializeComponentFunctionMap[typeName] = [this](const EntityId entityId, XmlNode* node){ AddComponent(entityId, ComponentType::DeserializeComponent(node)); };
 #endif // DEV_CONFIGURATION.
 
     mComponents[typeName] = new ComponentArray<ComponentType>();

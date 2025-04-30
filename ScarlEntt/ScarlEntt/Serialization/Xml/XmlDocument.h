@@ -10,7 +10,7 @@ class XmlDocument
 friend class XmlSerializer;
 public:
     explicit XmlDocument(XmlNode* parentNode)
-        : mParentNode(parentNode)
+        : mRootNode(parentNode)
     { /* Empty. */ }
     XmlDocument() = default;
     ~XmlDocument();
@@ -20,8 +20,9 @@ public:
     XmlDocument& operator=(XmlDocument&&)         = delete;
     XmlDocument& operator=(const XmlDocument&)    = delete;
 
+    inline XmlNode* GetRootNode() const { return mRootNode; }
 private:
-    XmlNode* mParentNode = nullptr;
+    XmlNode* mRootNode = nullptr;
 };
 
 class XmlNode
@@ -42,11 +43,18 @@ public:
 
     inline void AddChildNode(XmlNode* child) { mChildren.push_back(child); }
     inline const vector<XmlNode*>& GetChildren() const { return mChildren; }
+
+    //todo add checking to ensure attribute is not present already.
+    inline void AddAttribute(const std::string& attribute, const std::string& value) { mAttributes[attribute] = value; }
+    inline std::string GetAttribute(const std::string& attribute) const { return mAttributes.at(attribute); }
+    inline const unordered_map<std::string, std::string>& GetAttributes() const { return mAttributes; }
 private:
     vector<XmlNode*> mChildren;
 
     std::string mTagName;
     std::string mValue;
+
+    unordered_map<std::string, std::string> mAttributes;
 };
 
 } // Namespace ScarlEntt.

@@ -6,10 +6,10 @@ namespace ScarlEntt
 
 XmlDocument::~XmlDocument()
 {
-    while (mParentNode && !mParentNode->mChildren.empty())
+    while (mRootNode && !mRootNode->mChildren.empty())
     {
-        XmlNode* node = mParentNode->mChildren.back();
-        XmlNode* previous = mParentNode;
+        XmlNode* node = mRootNode->mChildren.back();
+        XmlNode* previous = mRootNode;
 
         while (!node->mChildren.empty())
         {
@@ -21,7 +21,7 @@ XmlDocument::~XmlDocument()
         delete node;
     }
 
-    delete mParentNode;
+    delete mRootNode;
 }
 
 

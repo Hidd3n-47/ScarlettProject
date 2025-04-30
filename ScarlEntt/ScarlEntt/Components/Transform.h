@@ -15,9 +15,9 @@ struct Transform
     ScarlettMath::Vec3 scale         { 1.0f };
 
     COMPONENT_SERIALIZATION(
-        { "position" , ScarlEntt::TypeReflection::Reflect(&translation) },
-        { "rotation" , ScarlEntt::TypeReflection::Reflect(&rotation) },
-        { "scale"    , ScarlEntt::TypeReflection::Reflect(&scale) })
+        REFLECT(translation),
+        REFLECT(rotation),
+        REFLECT(scale))
 
     static Transform DeserializeComponent(const ScarlEntt::XmlNode* node)
     {
@@ -25,7 +25,7 @@ struct Transform
         //todo assert for children size.
         for (const ScarlEntt::XmlNode* childNode : node->GetChildren())
         {
-            if (childNode->GetTagName() == "position")
+            if (childNode->GetTagName() == "translation")
             {
                 component.translation = ScarlEntt::TypeReflection::GetValueFromTypeString<ScarlettMath::Vec3>(childNode->GetValue());
                 continue;

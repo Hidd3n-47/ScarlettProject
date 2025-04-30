@@ -12,7 +12,7 @@ namespace Scarlett::Component
     {
         ScarlettMath::Vec4 color = { 1.0f, 1.0f, 1.0f, 1.0f };
 
-        COMPONENT_SERIALIZATION({ "color", ScarlEntt::TypeReflection::Reflect(&color) })
+        COMPONENT_SERIALIZATION(REFLECT(color))
 
         static SquareSprite DeserializeComponent(const ScarlEntt::XmlNode* node)
         {
@@ -20,7 +20,7 @@ namespace Scarlett::Component
             //todo assert for children size.
             for (const ScarlEntt::XmlNode* childNode : node->GetChildren())
             {
-                if (childNode->GetTagName() == "position")
+                if (childNode->GetTagName() == "color")
                 {
                     component.color = ScarlEntt::TypeReflection::GetValueFromTypeString<ScarlettMath::Vec4>(childNode->GetValue());
                 }

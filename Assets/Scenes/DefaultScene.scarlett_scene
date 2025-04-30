@@ -2,1108 +2,1108 @@
 	<Entity>
 		<Component typeId="struct Scarlett::Component::Tag">
 			<name type="string">
-
+				Entity 0
 			</name>
 		</Component>
 		<Component typeId="struct Scarlett::Component::BoundingBox">
 			<localMaximum type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Transform">
-			<position type="vec3">
-				0.000000,0.000000,0.000000
-			</position>
 			<rotation type="quat">
-				0.000000,0.000000,0.000000,0.000000
+				0.707107,0.707100,0.000000,0.000000
 			</rotation>
 			<scale type="vec3">
-				0.000000,0.000000,0.000000
+				100.000000,100.000000,0.000000
 			</scale>
+			<translation type="vec3">
+				0.000000,-0.500000,0.000000
+			</translation>
 		</Component>
 		<Component typeId="struct Scarlett::Component::SquareSprite">
 			<color type="vec4">
-				0.000000,0.000000,0.000000,0.000000
+				1.000000,1.000000,1.000000,0.200000
 			</color>
 		</Component>
 	</Entity>
 	<Entity>
 		<Component typeId="struct Scarlett::Component::Tag">
 			<name type="string">
-
+				Entity 1
 			</name>
 		</Component>
 		<Component typeId="struct Scarlett::Component::BoundingBox">
 			<localMaximum type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Transform">
-			<position type="vec3">
-				0.000000,0.000000,0.000000
-			</position>
 			<rotation type="quat">
-				0.000000,0.000000,0.000000,0.000000
+				1.000000,0.000000,0.000000,0.000000
 			</rotation>
 			<scale type="vec3">
-				0.000000,0.000000,0.000000
+				1.000000,0.020000,0.020000
 			</scale>
+			<translation type="vec3">
+				-0.500000,0.500000,0.500000
+			</translation>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Line">
 			<color type="vec4">
-				0.000000,0.000000,0.000000,0.000000
+				0.160000,0.780000,1.000000,1.000000
 			</color>
 			<end type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,0.500000,0.500000
 			</end>
 			<start type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,0.500000,0.500000
 			</start>
 		</Component>
 	</Entity>
 	<Entity>
 		<Component typeId="struct Scarlett::Component::Tag">
 			<name type="string">
-
+				Entity 2
 			</name>
 		</Component>
 		<Component typeId="struct Scarlett::Component::BoundingBox">
 			<localMaximum type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Transform">
-			<position type="vec3">
-				0.000000,0.000000,0.000000
-			</position>
 			<rotation type="quat">
-				0.000000,0.000000,0.000000,0.000000
+				1.000000,0.000000,0.000000,0.000000
 			</rotation>
 			<scale type="vec3">
-				0.000000,0.000000,0.000000
+				1.000000,0.020000,0.020000
 			</scale>
+			<translation type="vec3">
+				-0.500000,-0.500000,0.500000
+			</translation>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Line">
 			<color type="vec4">
-				0.000000,0.000000,0.000000,0.000000
+				0.160000,0.780000,1.000000,1.000000
 			</color>
 			<end type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,-0.500000,0.500000
 			</end>
 			<start type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,-0.500000,0.500000
 			</start>
 		</Component>
 	</Entity>
 	<Entity>
 		<Component typeId="struct Scarlett::Component::Tag">
 			<name type="string">
-
+				Entity 3
 			</name>
 		</Component>
 		<Component typeId="struct Scarlett::Component::BoundingBox">
 			<localMaximum type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Transform">
-			<position type="vec3">
-				0.000000,0.000000,0.000000
-			</position>
 			<rotation type="quat">
-				0.000000,0.000000,0.000000,0.000000
+				-0.707107,0.000000,0.000000,0.707107
 			</rotation>
 			<scale type="vec3">
-				0.000000,0.000000,0.000000
+				1.000000,0.020000,0.020000
 			</scale>
+			<translation type="vec3">
+				-0.500000,-0.500000,0.500000
+			</translation>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Line">
 			<color type="vec4">
-				0.000000,0.000000,0.000000,0.000000
+				0.160000,0.780000,1.000000,1.000000
 			</color>
 			<end type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,0.500000,0.500000
 			</end>
 			<start type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,-0.500000,0.500000
 			</start>
 		</Component>
 	</Entity>
 	<Entity>
 		<Component typeId="struct Scarlett::Component::Tag">
 			<name type="string">
-
+				Entity 4
 			</name>
 		</Component>
 		<Component typeId="struct Scarlett::Component::BoundingBox">
 			<localMaximum type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Transform">
-			<position type="vec3">
-				0.000000,0.000000,0.000000
-			</position>
 			<rotation type="quat">
-				0.000000,0.000000,0.000000,0.000000
+				-0.707107,0.000000,0.000000,0.707107
 			</rotation>
 			<scale type="vec3">
-				0.000000,0.000000,0.000000
+				1.000000,0.020000,0.020000
 			</scale>
+			<translation type="vec3">
+				0.500000,-0.500000,0.500000
+			</translation>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Line">
 			<color type="vec4">
-				0.000000,0.000000,0.000000,0.000000
+				0.160000,0.780000,1.000000,1.000000
 			</color>
 			<end type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,0.500000,0.500000
 			</end>
 			<start type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,-0.500000,0.500000
 			</start>
 		</Component>
 	</Entity>
 	<Entity>
 		<Component typeId="struct Scarlett::Component::Tag">
 			<name type="string">
-
+				Entity 5
 			</name>
 		</Component>
 		<Component typeId="struct Scarlett::Component::BoundingBox">
 			<localMaximum type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Transform">
-			<position type="vec3">
-				0.000000,0.000000,0.000000
-			</position>
 			<rotation type="quat">
-				0.000000,0.000000,0.000000,0.000000
+				-0.707107,-0.000000,0.707107,0.000000
 			</rotation>
 			<scale type="vec3">
-				0.000000,0.000000,0.000000
+				1.000000,0.020000,0.020000
 			</scale>
+			<translation type="vec3">
+				-0.500000,0.500000,0.500000
+			</translation>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Line">
 			<color type="vec4">
-				0.000000,0.000000,0.000000,0.000000
+				0.160000,0.780000,1.000000,1.000000
 			</color>
 			<end type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,0.500000,-0.500000
 			</end>
 			<start type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,0.500000,0.500000
 			</start>
 		</Component>
 	</Entity>
 	<Entity>
 		<Component typeId="struct Scarlett::Component::Tag">
 			<name type="string">
-
+				Entity 6
 			</name>
 		</Component>
 		<Component typeId="struct Scarlett::Component::BoundingBox">
 			<localMaximum type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Transform">
-			<position type="vec3">
-				0.000000,0.000000,0.000000
-			</position>
 			<rotation type="quat">
-				0.000000,0.000000,0.000000,0.000000
+				-0.707107,-0.000000,0.707107,0.000000
 			</rotation>
 			<scale type="vec3">
-				0.000000,0.000000,0.000000
+				1.000000,0.020000,0.020000
 			</scale>
+			<translation type="vec3">
+				-0.500000,-0.500000,0.500000
+			</translation>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Line">
 			<color type="vec4">
-				0.000000,0.000000,0.000000,0.000000
+				0.160000,0.780000,1.000000,1.000000
 			</color>
 			<end type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,-0.500000,-0.500000
 			</end>
 			<start type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,-0.500000,0.500000
 			</start>
 		</Component>
 	</Entity>
 	<Entity>
 		<Component typeId="struct Scarlett::Component::Tag">
 			<name type="string">
-
+				Entity 7
 			</name>
 		</Component>
 		<Component typeId="struct Scarlett::Component::BoundingBox">
 			<localMaximum type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Transform">
-			<position type="vec3">
-				0.000000,0.000000,0.000000
-			</position>
 			<rotation type="quat">
-				0.000000,0.000000,0.000000,0.000000
+				-0.707107,0.000000,0.000000,0.707107
 			</rotation>
 			<scale type="vec3">
-				0.000000,0.000000,0.000000
+				1.000000,0.020000,0.020000
 			</scale>
+			<translation type="vec3">
+				-0.500000,-0.500000,-0.500000
+			</translation>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Line">
 			<color type="vec4">
-				0.000000,0.000000,0.000000,0.000000
+				0.160000,0.780000,1.000000,1.000000
 			</color>
 			<end type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,0.500000,-0.500000
 			</end>
 			<start type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,-0.500000,-0.500000
 			</start>
 		</Component>
 	</Entity>
 	<Entity>
 		<Component typeId="struct Scarlett::Component::Tag">
 			<name type="string">
-
+				Entity 8
 			</name>
 		</Component>
 		<Component typeId="struct Scarlett::Component::BoundingBox">
 			<localMaximum type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Transform">
-			<position type="vec3">
-				0.000000,0.000000,0.000000
-			</position>
 			<rotation type="quat">
-				0.000000,0.000000,0.000000,0.000000
+				-0.707107,0.000000,-0.707107,0.000000
 			</rotation>
 			<scale type="vec3">
-				0.000000,0.000000,0.000000
+				1.000000,0.020000,0.020000
 			</scale>
+			<translation type="vec3">
+				0.500000,0.500000,-0.500000
+			</translation>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Line">
 			<color type="vec4">
-				0.000000,0.000000,0.000000,0.000000
+				0.160000,0.780000,1.000000,1.000000
 			</color>
 			<end type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,0.500000,0.500000
 			</end>
 			<start type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,0.500000,-0.500000
 			</start>
 		</Component>
 	</Entity>
 	<Entity>
 		<Component typeId="struct Scarlett::Component::Tag">
 			<name type="string">
-
+				Entity 9
 			</name>
 		</Component>
 		<Component typeId="struct Scarlett::Component::BoundingBox">
 			<localMaximum type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Transform">
-			<position type="vec3">
-				0.000000,0.000000,0.000000
-			</position>
 			<rotation type="quat">
-				0.000000,0.000000,0.000000,0.000000
+				-0.707107,0.000000,-0.707107,0.000000
 			</rotation>
 			<scale type="vec3">
-				0.000000,0.000000,0.000000
+				1.000000,0.020000,0.020000
 			</scale>
+			<translation type="vec3">
+				0.500000,-0.500000,-0.500000
+			</translation>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Line">
 			<color type="vec4">
-				0.000000,0.000000,0.000000,0.000000
+				0.160000,0.780000,1.000000,1.000000
 			</color>
 			<end type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,-0.500000,0.500000
 			</end>
 			<start type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,-0.500000,-0.500000
 			</start>
 		</Component>
 	</Entity>
 	<Entity>
 		<Component typeId="struct Scarlett::Component::Tag">
 			<name type="string">
-
+				Entity 10
 			</name>
 		</Component>
 		<Component typeId="struct Scarlett::Component::BoundingBox">
 			<localMaximum type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Transform">
-			<position type="vec3">
-				0.000000,0.000000,0.000000
-			</position>
 			<rotation type="quat">
-				0.000000,0.000000,0.000000,0.000000
+				-0.707107,0.000000,0.000000,-0.707107
 			</rotation>
 			<scale type="vec3">
-				0.000000,0.000000,0.000000
+				1.000000,0.020000,0.020000
 			</scale>
+			<translation type="vec3">
+				0.500000,0.500000,-0.500000
+			</translation>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Line">
 			<color type="vec4">
-				0.000000,0.000000,0.000000,0.000000
+				0.160000,0.780000,1.000000,1.000000
 			</color>
 			<end type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,-0.500000,-0.500000
 			</end>
 			<start type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,0.500000,-0.500000
 			</start>
 		</Component>
 	</Entity>
 	<Entity>
 		<Component typeId="struct Scarlett::Component::Tag">
 			<name type="string">
-
+				Entity 11
 			</name>
 		</Component>
 		<Component typeId="struct Scarlett::Component::BoundingBox">
 			<localMaximum type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Transform">
-			<position type="vec3">
-				0.000000,0.000000,0.000000
-			</position>
 			<rotation type="quat">
-				0.000000,0.000000,0.000000,0.000000
+				-0.000000,0.000000,0.000000,-1.000000
 			</rotation>
 			<scale type="vec3">
-				0.000000,0.000000,0.000000
+				1.000000,0.020000,0.020000
 			</scale>
+			<translation type="vec3">
+				0.500000,0.500000,-0.500000
+			</translation>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Line">
 			<color type="vec4">
-				0.000000,0.000000,0.000000,0.000000
+				0.160000,0.780000,1.000000,1.000000
 			</color>
 			<end type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,0.500000,-0.500000
 			</end>
 			<start type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,0.500000,-0.500000
 			</start>
 		</Component>
 	</Entity>
 	<Entity>
 		<Component typeId="struct Scarlett::Component::Tag">
 			<name type="string">
-
+				Entity 12
 			</name>
 		</Component>
 		<Component typeId="struct Scarlett::Component::BoundingBox">
 			<localMaximum type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Transform">
-			<position type="vec3">
-				0.000000,0.000000,0.000000
-			</position>
 			<rotation type="quat">
-				0.000000,0.000000,0.000000,0.000000
+				-0.000000,0.000000,0.000000,-1.000000
 			</rotation>
 			<scale type="vec3">
-				0.000000,0.000000,0.000000
+				1.000000,0.020000,0.020000
 			</scale>
+			<translation type="vec3">
+				0.500000,-0.500000,-0.500000
+			</translation>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Line">
 			<color type="vec4">
-				0.000000,0.000000,0.000000,0.000000
+				0.160000,0.780000,1.000000,1.000000
 			</color>
 			<end type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,-0.500000,-0.500000
 			</end>
 			<start type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,-0.500000,-0.500000
 			</start>
 		</Component>
 	</Entity>
 	<Entity>
 		<Component typeId="struct Scarlett::Component::Tag">
 			<name type="string">
-
+				Entity 13
 			</name>
 		</Component>
 		<Component typeId="struct Scarlett::Component::BoundingBox">
 			<localMaximum type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Transform">
-			<position type="vec3">
-				0.000000,0.000000,0.000000
-			</position>
 			<rotation type="quat">
-				0.000000,0.000000,0.000000,0.000000
+				-0.382683,0.000000,-0.000000,-0.923880
 			</rotation>
 			<scale type="vec3">
-				0.000000,0.000000,0.000000
+				1.414214,0.020000,0.020000
 			</scale>
+			<translation type="vec3">
+				0.500000,0.500000,0.500000
+			</translation>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Line">
 			<color type="vec4">
-				0.000000,0.000000,0.000000,0.000000
+				0.710000,0.710000,0.060000,1.000000
 			</color>
 			<end type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,-0.500000,0.500000
 			</end>
 			<start type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,0.500000,0.500000
 			</start>
 		</Component>
 	</Entity>
 	<Entity>
 		<Component typeId="struct Scarlett::Component::Tag">
 			<name type="string">
-
+				Entity 14
 			</name>
 		</Component>
 		<Component typeId="struct Scarlett::Component::BoundingBox">
 			<localMaximum type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Transform">
-			<position type="vec3">
-				0.000000,0.000000,0.000000
-			</position>
 			<rotation type="quat">
-				0.000000,0.000000,0.000000,0.000000
+				-0.923880,0.000000,0.000000,-0.382683
 			</rotation>
 			<scale type="vec3">
-				0.000000,0.000000,0.000000
+				1.414214,0.020000,0.020000
 			</scale>
+			<translation type="vec3">
+				-0.500000,0.500000,0.500000
+			</translation>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Line">
 			<color type="vec4">
-				0.000000,0.000000,0.000000,0.000000
+				0.710000,0.710000,0.060000,1.000000
 			</color>
 			<end type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,-0.500000,0.500000
 			</end>
 			<start type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,0.500000,0.500000
 			</start>
 		</Component>
 	</Entity>
 	<Entity>
 		<Component typeId="struct Scarlett::Component::Tag">
 			<name type="string">
-
+				Entity 15
 			</name>
 		</Component>
 		<Component typeId="struct Scarlett::Component::BoundingBox">
 			<localMaximum type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Transform">
-			<position type="vec3">
-				0.000000,0.000000,0.000000
-			</position>
 			<rotation type="quat">
-				0.000000,0.000000,0.000000,0.000000
+				-0.707107,0.000000,-0.500000,0.500000
 			</rotation>
 			<scale type="vec3">
-				0.000000,0.000000,0.000000
+				1.414214,0.020000,0.020000
 			</scale>
+			<translation type="vec3">
+				-0.500000,-0.500000,-0.500000
+			</translation>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Line">
 			<color type="vec4">
-				0.000000,0.000000,0.000000,0.000000
+				0.710000,0.710000,0.060000,1.000000
 			</color>
 			<end type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,0.500000,0.500000
 			</end>
 			<start type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,-0.500000,-0.500000
 			</start>
 		</Component>
 	</Entity>
 	<Entity>
 		<Component typeId="struct Scarlett::Component::Tag">
 			<name type="string">
-
+				Entity 16
 			</name>
 		</Component>
 		<Component typeId="struct Scarlett::Component::BoundingBox">
 			<localMaximum type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Transform">
-			<position type="vec3">
-				0.000000,0.000000,0.000000
-			</position>
 			<rotation type="quat">
-				0.000000,0.000000,0.000000,0.000000
+				-0.707107,-0.000000,0.500000,0.500000
 			</rotation>
 			<scale type="vec3">
-				0.000000,0.000000,0.000000
+				1.414214,0.020000,0.020000
 			</scale>
+			<translation type="vec3">
+				-0.500000,-0.500000,0.500000
+			</translation>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Line">
 			<color type="vec4">
-				0.000000,0.000000,0.000000,0.000000
+				0.710000,0.710000,0.060000,1.000000
 			</color>
 			<end type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,0.500000,-0.500000
 			</end>
 			<start type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,-0.500000,0.500000
 			</start>
 		</Component>
 	</Entity>
 	<Entity>
 		<Component typeId="struct Scarlett::Component::Tag">
 			<name type="string">
-
+				Entity 17
 			</name>
 		</Component>
 		<Component typeId="struct Scarlett::Component::BoundingBox">
 			<localMaximum type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Transform">
-			<position type="vec3">
-				0.000000,0.000000,0.000000
-			</position>
 			<rotation type="quat">
-				0.000000,0.000000,0.000000,0.000000
+				-0.707107,0.000000,0.500000,-0.500000
 			</rotation>
 			<scale type="vec3">
-				0.000000,0.000000,0.000000
+				1.414214,0.020000,0.020000
 			</scale>
+			<translation type="vec3">
+				0.500000,0.500000,0.500000
+			</translation>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Line">
 			<color type="vec4">
-				0.000000,0.000000,0.000000,0.000000
+				0.710000,0.710000,0.060000,1.000000
 			</color>
 			<end type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,-0.500000,-0.500000
 			</end>
 			<start type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,0.500000,0.500000
 			</start>
 		</Component>
 	</Entity>
 	<Entity>
 		<Component typeId="struct Scarlett::Component::Tag">
 			<name type="string">
-
+				Entity 18
 			</name>
 		</Component>
 		<Component typeId="struct Scarlett::Component::BoundingBox">
 			<localMaximum type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Transform">
-			<position type="vec3">
-				0.000000,0.000000,0.000000
-			</position>
 			<rotation type="quat">
-				0.000000,0.000000,0.000000,0.000000
+				-0.707107,0.000000,-0.500000,-0.500000
 			</rotation>
 			<scale type="vec3">
-				0.000000,0.000000,0.000000
+				1.414214,0.020000,0.020000
 			</scale>
+			<translation type="vec3">
+				0.500000,0.500000,-0.500000
+			</translation>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Line">
 			<color type="vec4">
-				0.000000,0.000000,0.000000,0.000000
+				0.710000,0.710000,0.060000,1.000000
 			</color>
 			<end type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,-0.500000,0.500000
 			</end>
 			<start type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,0.500000,-0.500000
 			</start>
 		</Component>
 	</Entity>
 	<Entity>
 		<Component typeId="struct Scarlett::Component::Tag">
 			<name type="string">
-
+				Entity 19
 			</name>
 		</Component>
 		<Component typeId="struct Scarlett::Component::BoundingBox">
 			<localMaximum type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Transform">
-			<position type="vec3">
-				0.000000,0.000000,0.000000
-			</position>
 			<rotation type="quat">
-				0.000000,0.000000,0.000000,0.000000
+				-0.459701,0.000000,0.627963,-0.627963
 			</rotation>
 			<scale type="vec3">
-				0.000000,0.000000,0.000000
+				0.866025,0.020000,0.020000
 			</scale>
+			<translation type="vec3">
+				0.500000,0.500000,0.500000
+			</translation>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Line">
 			<color type="vec4">
-				0.000000,0.000000,0.000000,0.000000
+				0.650000,0.120000,0.780000,1.000000
 			</color>
 			<end type="vec3">
-				0.000000,0.000000,0.000000
+				-0.000000,-0.000000,-0.000000
 			</end>
 			<start type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,0.500000,0.500000
 			</start>
 		</Component>
 	</Entity>
 	<Entity>
 		<Component typeId="struct Scarlett::Component::Tag">
 			<name type="string">
-
+				Entity 20
 			</name>
 		</Component>
 		<Component typeId="struct Scarlett::Component::BoundingBox">
 			<localMaximum type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Transform">
-			<position type="vec3">
-				0.000000,0.000000,0.000000
-			</position>
 			<rotation type="quat">
-				0.000000,0.000000,0.000000,0.000000
+				-0.888074,0.000000,0.325058,-0.325058
 			</rotation>
 			<scale type="vec3">
-				0.000000,0.000000,0.000000
+				1.732051,0.020000,0.020000
 			</scale>
+			<translation type="vec3">
+				-0.500000,0.500000,0.500000
+			</translation>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Line">
 			<color type="vec4">
-				0.000000,0.000000,0.000000,0.000000
+				0.650000,0.120000,0.780000,1.000000
 			</color>
 			<end type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,-0.500000,-0.500000
 			</end>
 			<start type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,0.500000,0.500000
 			</start>
 		</Component>
 	</Entity>
 	<Entity>
 		<Component typeId="struct Scarlett::Component::Tag">
 			<name type="string">
-
+				Entity 21
 			</name>
 		</Component>
 		<Component typeId="struct Scarlett::Component::BoundingBox">
 			<localMaximum type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Transform">
-			<position type="vec3">
-				0.000000,0.000000,0.000000
-			</position>
 			<rotation type="quat">
-				0.000000,0.000000,0.000000,0.000000
+				1.000000,0.000000,0.000000,0.000000
 			</rotation>
 			<scale type="vec3">
-				0.000000,0.000000,0.000000
+				1.000000,0.020000,0.020000
 			</scale>
+			<translation type="vec3">
+				-0.500000,0.000000,0.000000
+			</translation>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Line">
 			<color type="vec4">
-				0.000000,0.000000,0.000000,0.000000
+				0.650000,0.120000,0.780000,1.000000
 			</color>
 			<end type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,0.000000,0.000000
 			</end>
 			<start type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,0.000000,0.000000
 			</start>
 		</Component>
 	</Entity>
 	<Entity>
 		<Component typeId="struct Scarlett::Component::Tag">
 			<name type="string">
-
+				Entity 22
 			</name>
 		</Component>
 		<Component typeId="struct Scarlett::Component::BoundingBox">
 			<localMaximum type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Transform">
-			<position type="vec3">
-				0.000000,0.000000,0.000000
-			</position>
 			<rotation type="quat">
-				0.000000,0.000000,0.000000,0.000000
+				-0.459701,0.000000,0.627963,-0.627963
 			</rotation>
 			<scale type="vec3">
-				0.000000,0.000000,0.000000
+				2.598076,0.020000,0.020000
 			</scale>
+			<translation type="vec3">
+				2.000000,2.000000,2.000000
+			</translation>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Line">
 			<color type="vec4">
-				0.000000,0.000000,0.000000,0.000000
+				1.000000,1.000000,0.000000,1.000000
 			</color>
 			<end type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,0.500000,0.500000
 			</end>
 			<start type="vec3">
-				0.000000,0.000000,0.000000
+				2.000000,2.000000,2.000000
 			</start>
 		</Component>
 	</Entity>
 	<Entity>
 		<Component typeId="struct Scarlett::Component::Tag">
 			<name type="string">
-
+				Entity 23
 			</name>
 		</Component>
 		<Component typeId="struct Scarlett::Component::BoundingBox">
 			<localMaximum type="vec3">
-				0.000000,0.000000,0.000000
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Transform">
-			<position type="vec3">
-				0.000000,0.000000,0.000000
-			</position>
 			<rotation type="quat">
-				0.000000,0.000000,0.000000,0.000000
+				-0.888074,0.000000,0.325058,-0.325058
 			</rotation>
 			<scale type="vec3">
-				0.000000,0.000000,0.000000
+				2.598076,0.020000,0.020000
 			</scale>
+			<translation type="vec3">
+				-2.000000,2.000000,2.000000
+			</translation>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Line">
 			<color type="vec4">
-				0.000000,0.000000,0.000000,0.000000
+				1.000000,1.000000,0.000000,1.000000
 			</color>
 			<end type="vec3">
-				0.000000,0.000000,0.000000
+				-0.500000,0.500000,0.500000
 			</end>
 			<start type="vec3">
-				0.000000,0.000000,0.000000
+				-2.000000,2.000000,2.000000
 			</start>
 		</Component>
 	</Entity>
 	<Entity>
 		<Component typeId="struct Scarlett::Component::Tag">
 			<name type="string">
-
+				Entity 24
 			</name>
 		</Component>
 		<Component typeId="struct Scarlett::Component::BoundingBox">
 			<localMaximum type="vec3">
-				-107374176.000000,-107374176.000000,0.000000
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum type="vec3">
-				-107374176.000000,-107374176.000000,-107374176.000000
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Transform">
-			<position type="vec3">
-				-107374176.000000,-107374176.000000,0.000000
-			</position>
 			<rotation type="quat">
-				-107374176.000000,27410177196032.000000,0.000000,45253897748480.000000
+				0.911370,-0.111050,-0.393410,-0.047938
 			</rotation>
 			<scale type="vec3">
-				-107374176.000000,-107374176.000000,-0.000000
+				1.000000,1.000000,1.000000
 			</scale>
+			<translation type="vec3">
+				-4.744259,2.545820,4.326283
+			</translation>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Camera">
-			<aspectRatio type="float">
-				-0.000000
-			</aspectRatio>
-			<forwardVector type="vec3">
-				-107374176.000000,-107374176.000000,-107374176.000000
-			</forwardVector>
-			<rightVector type="vec3">
-				-107374176.000000,-107374176.000000,-0.000000
-			</rightVector>
-			<upVector type="vec3">
-				0.000000,-107374176.000000,-107374176.000000
-			</upVector>
+			<mAspectRatio type="float">
+				1.777778
+			</mAspectRatio>
+			<mForwardVector type="vec3">
+				0.706437,-0.240134,-0.665790
+			</mForwardVector>
+			<mRightVector type="vec3">
+				0.685858,-0.000002,0.727731
+			</mRightVector>
+			<mUpVector type="vec3">
+				0.174755,0.970737,-0.164697
+			</mUpVector>
 		</Component>
 	</Entity>
 	<Entity>
 		<Component typeId="struct Scarlett::Component::Tag">
 			<name type="string">
-
+				Entity 25
 			</name>
 		</Component>
 		<Component typeId="struct Scarlett::Component::BoundingBox">
 			<localMaximum type="vec3">
-				-107374176.000000,-107374176.000000,0.000000
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum type="vec3">
-				-107374176.000000,-107374176.000000,-107374176.000000
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Transform">
-			<position type="vec3">
-				-107374176.000000,-107374176.000000,0.000000
-			</position>
 			<rotation type="quat">
-				-107374176.000000,27410177196032.000000,0.000000,45253897748480.000000
+				0.707107,0.707100,0.000000,0.000000
 			</rotation>
 			<scale type="vec3">
-				-107374176.000000,-107374176.000000,-0.000000
+				1.000000,1.000000,1.000000
 			</scale>
+			<translation type="vec3">
+				0.000000,0.500000,0.000000
+			</translation>
 		</Component>
 		<Component typeId="struct Scarlett::Component::SquareSprite">
 			<color type="vec4">
-				0.000000,0.000000,-5149154082816.000000,0.000000
+				1.000000,0.000000,0.000000,1.000000
 			</color>
 		</Component>
 	</Entity>
 	<Entity>
 		<Component typeId="struct Scarlett::Component::Tag">
 			<name type="string">
-
+				Entity 26
 			</name>
 		</Component>
 		<Component typeId="struct Scarlett::Component::BoundingBox">
 			<localMaximum type="vec3">
-				-107374176.000000,-107374176.000000,0.000000
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum type="vec3">
-				-107374176.000000,-107374176.000000,-107374176.000000
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Transform">
-			<position type="vec3">
-				-107374176.000000,-107374176.000000,0.000000
-			</position>
 			<rotation type="quat">
-				-107374176.000000,27410177196032.000000,0.000000,45253897748480.000000
+				0.707107,0.707100,0.000000,0.000000
 			</rotation>
 			<scale type="vec3">
-				-107374176.000000,-107374176.000000,-0.000000
+				1.000000,1.000000,1.000000
 			</scale>
+			<translation type="vec3">
+				0.000000,-0.500000,0.000000
+			</translation>
 		</Component>
 		<Component typeId="struct Scarlett::Component::SquareSprite">
 			<color type="vec4">
-				0.000000,0.000000,-5149154082816.000000,0.000000
+				0.000000,0.000000,1.000000,1.000000
 			</color>
 		</Component>
 	</Entity>
 	<Entity>
 		<Component typeId="struct Scarlett::Component::Tag">
 			<name type="string">
-
+				Entity 27
 			</name>
 		</Component>
 		<Component typeId="struct Scarlett::Component::BoundingBox">
 			<localMaximum type="vec3">
-				-107374176.000000,-107374176.000000,0.000000
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum type="vec3">
-				-107374176.000000,-107374176.000000,-107374176.000000
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Transform">
-			<position type="vec3">
-				-107374176.000000,-107374176.000000,0.000000
-			</position>
 			<rotation type="quat">
-				-107374176.000000,27410177196032.000000,0.000000,45253897748480.000000
+				0.707107,0.000000,0.707100,0.000000
 			</rotation>
 			<scale type="vec3">
-				-107374176.000000,-107374176.000000,-0.000000
+				1.000000,1.000000,1.000000
 			</scale>
+			<translation type="vec3">
+				0.500000,0.000000,0.000000
+			</translation>
 		</Component>
 		<Component typeId="struct Scarlett::Component::SquareSprite">
 			<color type="vec4">
-				0.000000,0.000000,-5149154082816.000000,0.000000
+				0.000000,1.000000,0.000000,1.000000
 			</color>
 		</Component>
 	</Entity>
 	<Entity>
 		<Component typeId="struct Scarlett::Component::Tag">
 			<name type="string">
-
+				Entity 28
 			</name>
 		</Component>
 		<Component typeId="struct Scarlett::Component::BoundingBox">
 			<localMaximum type="vec3">
-				-107374176.000000,-107374176.000000,0.000000
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum type="vec3">
-				-107374176.000000,-107374176.000000,-107374176.000000
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Transform">
-			<position type="vec3">
-				-107374176.000000,-107374176.000000,0.000000
-			</position>
 			<rotation type="quat">
-				-107374176.000000,27410177196032.000000,0.000000,45253897748480.000000
+				0.707107,0.000000,0.707100,0.000000
 			</rotation>
 			<scale type="vec3">
-				-107374176.000000,-107374176.000000,-0.000000
+				1.000000,1.000000,1.000000
 			</scale>
+			<translation type="vec3">
+				-0.500000,0.000000,0.000000
+			</translation>
 		</Component>
 		<Component typeId="struct Scarlett::Component::SquareSprite">
 			<color type="vec4">
-				0.000000,0.000000,-5149154082816.000000,0.000000
+				1.000000,0.000000,1.000000,1.000000
 			</color>
 		</Component>
 	</Entity>
 	<Entity>
 		<Component typeId="struct Scarlett::Component::Tag">
 			<name type="string">
-
+				Entity 29
 			</name>
 		</Component>
 		<Component typeId="struct Scarlett::Component::BoundingBox">
 			<localMaximum type="vec3">
-				-107374176.000000,-107374176.000000,0.000000
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum type="vec3">
-				-107374176.000000,-107374176.000000,-107374176.000000
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Transform">
-			<position type="vec3">
-				-107374176.000000,-107374176.000000,0.000000
-			</position>
 			<rotation type="quat">
-				-107374176.000000,27410177196032.000000,0.000000,45253897748480.000000
+				1.000000,0.000000,0.000000,0.000000
 			</rotation>
 			<scale type="vec3">
-				-107374176.000000,-107374176.000000,-0.000000
+				1.000000,1.000000,1.000000
 			</scale>
+			<translation type="vec3">
+				0.000000,0.000000,0.500000
+			</translation>
 		</Component>
 		<Component typeId="struct Scarlett::Component::SquareSprite">
 			<color type="vec4">
-				0.000000,0.000000,-5149154082816.000000,0.000000
+				1.000000,1.000000,1.000000,1.000000
 			</color>
 		</Component>
 	</Entity>
 	<Entity>
 		<Component typeId="struct Scarlett::Component::Tag">
 			<name type="string">
-
+				Entity 30
 			</name>
 		</Component>
 		<Component typeId="struct Scarlett::Component::BoundingBox">
 			<localMaximum type="vec3">
-				-107374176.000000,-107374176.000000,0.000000
+				0.500000,0.500000,0.010000
 			</localMaximum>
 			<localMinimum type="vec3">
-				-107374176.000000,-107374176.000000,-107374176.000000
+				-0.500000,-0.500000,-0.010000
 			</localMinimum>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Transform">
-			<position type="vec3">
-				-107374176.000000,-107374176.000000,0.000000
-			</position>
 			<rotation type="quat">
-				-107374176.000000,27410177196032.000000,0.000000,45253897748480.000000
+				1.000000,0.000000,0.000000,0.000000
 			</rotation>
 			<scale type="vec3">
-				-107374176.000000,-107374176.000000,-0.000000
+				1.000000,1.000000,1.000000
 			</scale>
+			<translation type="vec3">
+				0.000000,0.000000,-0.500000
+			</translation>
 		</Component>
 		<Component typeId="struct Scarlett::Component::SquareSprite">
 			<color type="vec4">
-				0.000000,0.000000,-5149154082816.000000,0.000000
+				0.000000,0.000000,0.000000,1.000000
 			</color>
 		</Component>
 	</Entity>

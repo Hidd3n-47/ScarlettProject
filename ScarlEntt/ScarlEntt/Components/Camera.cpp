@@ -14,22 +14,22 @@ Camera Camera::DeserializeComponent(const ScarlEntt::XmlNode* node)
     //todo assert for children size.
     for (const ScarlEntt::XmlNode* childNode : node->GetChildren())
     {
-        if (childNode->GetTagName() == "forwardVector")
+        if (childNode->GetTagName() == "mForwardVector")
         {
             component.SetForwardVector(ScarlEntt::TypeReflection::GetValueFromTypeString<ScarlettMath::Vec3>(childNode->GetValue()));
             continue;
         }
-        if (childNode->GetTagName() == "rightVector")
+        if (childNode->GetTagName() == "mRightVector")
         {
             component.SetRightVector(ScarlEntt::TypeReflection::GetValueFromTypeString<ScarlettMath::Vec3>(childNode->GetValue()));
             continue;
         }
-        if (childNode->GetTagName() == "upVector")
+        if (childNode->GetTagName() == "mUpVector")
         {
             component.SetUpVector(ScarlEntt::TypeReflection::GetValueFromTypeString<ScarlettMath::Vec3>(childNode->GetValue()));
             continue;
         }
-        if (childNode->GetTagName() == "aspectRatio")
+        if (childNode->GetTagName() == "mAspectRatio")
         {
             component.SetAspectRatio(ScarlEntt::TypeReflection::GetValueFromTypeString<float>(childNode->GetValue()));
         }

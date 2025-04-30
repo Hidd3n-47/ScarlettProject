@@ -2,10 +2,12 @@
 
 #include "Math/Math.h"
 
-#include "Components/SerializationUtils.h"
+#include "Serialization/SerializationUtils.h"
 
 namespace ScarlEntt
 {
+
+#define REFLECT(X) { #X, ScarlEntt::TypeReflection::Reflect(X) }
 
 enum class ValueType : uint8_t
 {
@@ -31,7 +33,6 @@ struct TypeToValueType<ScarlettMath::Vec4>  { static constexpr ValueType value =
 template <>
 struct TypeToValueType<ScarlettMath::Quat>  { static constexpr ValueType value = ValueType::QUAT; };
 
-
 struct TypeReflection
 {
 public:
@@ -39,46 +40,16 @@ public:
     TypeReflection(const ValueType type, std::string value)
         : mType(type), mValue(std::move(value))
     { /* Empty. */ }
-    TypeReflection(const ValueType type, void* valuePtr)
-        : mType(type), mValueMemoryAddress(valuePtr)
-    { /* Empty. */ }
 
-    // inline static TypeReflection Reflect(const float value)                 { return { ValueType::FLOAT, std::to_string(value) }; }
-    // inline static TypeReflection Reflect(std::string value)                 { return { ValueType::STRING, std::move(value) }; }
-    // inline static TypeReflection Reflect(const ScarlettMath::Vec3& value)   { return { ValueType::VEC3, SerializationUtils::ToString(value) }; }
-    // inline static TypeReflection Reflect(const ScarlettMath::Vec4& value)   { return { ValueType::VEC4, SerializationUtils::ToString(value) }; }
-    // inline static TypeReflection Reflect(const ScarlettMath::Quat& value)   { return { ValueType::QUAT, SerializationUtils::ToString(value) }; }
-
-
-    inline static TypeReflection Reflect(float* value)                { return { ValueType::FLOAT, static_cast<void*>(value) }; }
-    inline static TypeReflection Reflect(std::string* value)          { return { ValueType::STRING, static_cast<void*>(value) }; }
-    inline static TypeReflection Reflect(ScarlettMath::Vec3* value)   { return { ValueType::VEC3, static_cast<void*>(value) }; }
-    inline static TypeReflection Reflect(ScarlettMath::Vec4* value)   { return { ValueType::VEC4, static_cast<void*>(value) }; }
-    inline static TypeReflection Reflect(ScarlettMath::Quat* value)   { return { ValueType::QUAT, static_cast<void*>(value) }; }
+    inline static TypeReflection Reflect(const float value)                 { return { ValueType::FLOAT, std::to_string(value) }; }
+    inline static TypeReflection Reflect(std::string value)                 { return { ValueType::STRING, std::move(value) }; }
+    inline static TypeReflection Reflect(const ScarlettMath::Vec3& value)   { return { ValueType::VEC3, SerializationUtils::ToString(value) }; }
+    inline static TypeReflection Reflect(const ScarlettMath::Vec4& value)   { return { ValueType::VEC4, SerializationUtils::ToString(value) }; }
+    inline static TypeReflection Reflect(const ScarlettMath::Quat& value)   { return { ValueType::QUAT, SerializationUtils::ToString(value) }; }
 
     template <typename T>
-    static T GetValueFromTypeString(const std::string& value)
+    inline static T GetValueFromTypeString(const std::string& value)
     {
-        // constexpr ValueType type = TypeToValueType<T>::value;
-        // switch (type)
-        // {
-        //     case ValueType::FLOAT:
-        //     return GetFloatFromString(value);
-        //     case ValueType::STRING:
-        //     return value;
-        //     case ValueType::VEC3:
-        //     return GetVec3FromString(value);
-        //     case ValueType::VEC4:
-        //     return GetVec4FromString(value);
-        //     case ValueType::QUAT:
-        //     return GetQuatFromString(value);
-        //     default:
-        //     // error.
-        //     break;
-        // }
-        // return T();
-        // // need to assert or break.
-
         constexpr ValueType type = TypeToValueType<T>::value;
         if constexpr (type == ValueType::FLOAT)
         {
@@ -102,32 +73,13 @@ public:
         }
         else
         {
-            static_assert(false, "Unsupported type for GetValueFromTypeString.");
+            // todo logging/assert/debug break
             return T();
         }
     }
 
     inline ValueType          GetType()  const { return mType; }
     inline const std::string& GetValue() const { return mValue; }
-    inline std::string GetValueString() const
-    {
-        switch (mType)
-        {
-        case ValueType::FLOAT:
-            return std::to_string(*reinterpret_cast<float*>(mValueMemoryAddress));
-        case ValueType::STRING:
-            return /**static_cast<std::string*>(mValueMemoryAddress)*/ "";
-        case ValueType::VEC3:
-            return SerializationUtils::ToString(*reinterpret_cast<ScarlettMath::Vec3*>(mValueMemoryAddress));
-        case ValueType::VEC4:
-            return SerializationUtils::ToString(*reinterpret_cast<ScarlettMath::Vec4*>(mValueMemoryAddress));
-        case ValueType::QUAT:
-            return SerializationUtils::ToString(*reinterpret_cast<ScarlettMath::Quat*>(mValueMemoryAddress));
-        default:
-            // todo add logging or debug assert/breakpoint here.
-            return "unknown";
-        }
-    }
 
     inline std::string GetTypeString() const
     {
@@ -151,8 +103,6 @@ public:
 private:
     ValueType       mType = ValueType::UNKNOWN;
     std::string     mValue;
-
-    void* mValueMemoryAddress;
 
     static float GetFloatFromString(const std::string& value);
     static ScarlettMath::Vec3 GetVec3FromString(const std::string& value);

@@ -50,7 +50,7 @@ void VulkanRenderer::Init(const Window* windowRef)
         };
         mSquare = new Mesh(&mDevice, verts, indices);
 
-        mLine = new Mesh(&mDevice, "E:/Programming/ScarlettProject/Assets/Mesh/CylinderLowPoly.obj");
+        mLine = new Mesh(&mDevice, "E:/Personal development folder/ScarlettProject/Assets/Mesh/CylinderLowPoly.obj");
     }
     catch(const std::runtime_error& e)
     {
@@ -238,7 +238,7 @@ void VulkanRenderer::CreatePipeline()
     }
     mPipeline = new Pipeline();
 
-    mPipeline->Init(&mDevice, "E:/Programming/ScarlettProject/ScarlettEngine/ScarlettEngine/Rendering/Shaders/vert.spv", "E:/Programming/ScarlettProject/ScarlettEngine/ScarlettEngine/Rendering/Shaders/frag.spv", pipelineConfig);
+    mPipeline->Init(&mDevice, "E:/Personal development folder/ScarlettProject/ScarlettEngine/ScarlettEngine/Rendering/Shaders/vert.spv", "E:/Personal development folder/ScarlettProject/ScarlettEngine/ScarlettEngine/Rendering/Shaders/frag.spv", pipelineConfig);
 }
 
 void VulkanRenderer::CreateCommandBuffers()

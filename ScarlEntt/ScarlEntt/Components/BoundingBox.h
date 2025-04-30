@@ -14,9 +14,10 @@ struct BoundingBox
     inline ScarlettMath::Vec3 GetCenter() const { return (localMinimum + localMaximum) * 0.5f; }
 
     COMPONENT_SERIALIZATION(
-        { "localMinimum", ScarlEntt::TypeReflection::Reflect(&localMinimum) },
-        { "localMaximum", ScarlEntt::TypeReflection::Reflect(&localMaximum) })
+        REFLECT(localMinimum),
+        REFLECT(localMaximum))
 
+    //todo look at automating this similar to component_serialization, and if not even auto generated from that...
     static BoundingBox DeserializeComponent(const ScarlEntt::XmlNode* node)
     {
         BoundingBox component;

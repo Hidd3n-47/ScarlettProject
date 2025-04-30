@@ -43,6 +43,14 @@ public:
     inline void SetDirty() { mIsDirty = true; }
     inline void SetClean() { mIsDirty = false; }
     [[nodiscard]] bool IsDirty() const { return mIsDirty; }
+
+    COMPONENT_SERIALIZATION(
+        REFLECT(mForwardVector),
+        REFLECT(mRightVector),
+        REFLECT(mUpVector),
+        REFLECT(mAspectRatio))
+
+        static Camera DeserializeComponent(const ScarlEntt::XmlNode* node);
 private:
     bool mIsDirty = true;
 
@@ -54,14 +62,6 @@ private:
     ScarlettMath::Vec3 mUpVector       { 0.0f, 1.0f,  0.0f };
 
     float mAspectRatio = 16.0f / 9.0f;
-
-    COMPONENT_SERIALIZATION(
-        { "forwardVector" , ScarlEntt::TypeReflection::Reflect(&mForwardVector) },
-        { "rightVector"   , ScarlEntt::TypeReflection::Reflect(&mRightVector) },
-        { "upVector"      , ScarlEntt::TypeReflection::Reflect(&mUpVector) },
-        { "aspectRatio"   , ScarlEntt::TypeReflection::Reflect(&mAspectRatio) })
-
-    static Camera DeserializeComponent(const ScarlEntt::XmlNode* node);
 };
 
 } // Namespace Scarlett::Component.

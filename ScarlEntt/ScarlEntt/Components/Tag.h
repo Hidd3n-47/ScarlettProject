@@ -24,7 +24,7 @@ struct Tag
     std::string name;
     ScarlEntt::EntityHandle entity;
 
-    COMPONENT_SERIALIZATION({ "name", ScarlEntt::TypeReflection::Reflect(&name) })
+    COMPONENT_SERIALIZATION(REFLECT(name))
 
     static Tag DeserializeComponent(const ScarlEntt::XmlNode* node)
     {
