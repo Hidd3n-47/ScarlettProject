@@ -48,16 +48,38 @@ public:
     template<typename ComponentType>
     [[nodiscard]] ComponentArray<ComponentType>& GetComponentArray();
 
+    /**
+     * @brief Get the ID for the component.
+     * @tparam ComponentType The component class
+     * @return the type ID for the component.
+     */
     template <typename ComponentType>
-    static inline std::string GetComponentTypeId() { return { typeid(ComponentType).name() }; }
-private:
-    unordered_map<std::string, IComponentArray*> mComponents;
+    static inline ComponentTypeId GetComponentTypeId() { return { typeid(ComponentType).name() }; }
 
-    void AddDeserializedComponent(const EntityId entityId, const std::string& componentTypeId, XmlNode* node);
+#ifdef DEV_CONFIGURATION
+    inline const vector<ComponentTypeId>& GetRegisteredComponentTypes() const { return mRegisteredComponentTypes; }
+#endif // DEV_CONFIGURATION.
+private:
+    unordered_map<ComponentTypeId, IComponentArray*> mComponents;
+
+    /**
+     * Deserialize a component from the XML node and add it to the entity.
+     * @param entityId The ID of the entity the component is being added to.
+     * @param componentTypeId The ID of the component being added.
+     * @param node The XML node of the component that contains the values to deserialize into the component.
+     */
+    void AddDeserializedComponent(const EntityId entityId, const ComponentTypeId& componentTypeId, XmlNode* node);
 
     /**
     * @brief Add a component to an entity.
-    * @tparam ComponentType The class of the Component
+    * @param componentTypeId The type ID of the Component.
+    * @param entityId The ID of the entity the component is being added to.
+    */
+    void AddDefaultComponent(const ComponentTypeId& componentTypeId, const EntityId entityId);
+
+    /**
+    * @brief Add a component to an entity.
+    * @tparam ComponentType The class of the Component.
     * @tparam Args Arguments that are passed to the ComponentType constructor to construct a component with initial values.
     * @param entityId The ID of the entity the component is being added to.
     * @param args The arguments used to initialise the component.
@@ -87,10 +109,19 @@ private:
     template <typename ComponentType>
     [[nodiscard]] ComponentRef<ComponentType> GetComponent(const EntityId entityId);
 
-#ifdef DEV_CONFIGURATION
-    unordered_map<EntityId, vector<ComponentView>> mEntityToComponentMap;
+    /**
+    * @brief Remove a component (if found) of a specific _entity_.
+    * @param entityId: The entity ID for which we are removing the component.
+    */
+    template <typename ComponentType>
+    void RemoveComponent(EntityId entityId);
 
-    unordered_map<std::string, std::function<void(const EntityId, XmlNode*)>> mDeserializeComponentFunctionMap;
+#ifdef DEV_CONFIGURATION
+    vector<ComponentTypeId>                           mRegisteredComponentTypes;
+    unordered_map<EntityId, vector<ComponentView>>    mEntityToComponentMap;
+
+    unordered_map<ComponentTypeId, std::function<void(const EntityId)>>             mDefaultComponentFunctionMap;
+    unordered_map<ComponentTypeId, std::function<void(const EntityId, XmlNode*)>>   mDeserializeComponentFunctionMap;
 
     /**
     * @brief Retrieve a vector of \c ComponentView for the components the requested entity.
@@ -101,13 +132,6 @@ private:
     */
     inline const vector<ComponentView>& GetComponents(const EntityId entityId) { return mEntityToComponentMap[entityId]; }
 #endif // DEV_CONFIGURATION.
-
-    /**
-    * @brief Remove a component (if found) of a specific _entity_.
-    * @param entityId: The entity ID for which we are removing the component.
-    */
-    template <typename ComponentType>
-    void RemoveComponent(EntityId entityId);
 };
 
 /*
@@ -125,11 +149,16 @@ inline ComponentManager::~ComponentManager()
 template <typename ComponentType>
 inline void ComponentManager::RegisterComponent()
 {
-    const std::string typeName = GetComponentTypeId<ComponentType>();
+    const ComponentTypeId typeName = GetComponentTypeId<ComponentType>();
     SCARLENTT_ASSERT(!mComponents.contains(typeName) && "Registering component type more than once.");
     assert(!mComponents.contains(typeName) && "Registering component type more than once."); // todo remove.
 
 #ifdef DEV_CONFIGURATION
+    // Components registered with namespaces and types such as: 'struct Scarlett::Component::Transform'.
+    // To get component friendly name, just extract 'Transform'.
+    const size_t lastColonPosition = typeName.find_last_of(':');
+    mRegisteredComponentTypes.emplace_back(typeName.substr(lastColonPosition + 1, typeName.length() - lastColonPosition - 1));
+    mDefaultComponentFunctionMap[typeName]     = [this](const EntityId entityId) { AddComponent(entityId, ComponentType{}); };
     mDeserializeComponentFunctionMap[typeName] = [this](const EntityId entityId, XmlNode* node){ AddComponent(entityId, ComponentType::DeserializeComponent(node)); };
 #endif // DEV_CONFIGURATION.
 
@@ -139,7 +168,7 @@ inline void ComponentManager::RegisterComponent()
 template<typename ComponentType>
 inline ComponentArray<ComponentType>& ComponentManager::GetComponentArray()
 {
-    const std::string typeName = GetComponentTypeId<ComponentType>();
+    const ComponentTypeId typeName = GetComponentTypeId<ComponentType>();
     SCARLENTT_ASSERT(mComponents.contains(typeName) && "Component not registered before use.");
     assert(mComponents.contains(typeName) && "Component not registered before use."); // todo remove.
 
@@ -149,6 +178,11 @@ inline ComponentArray<ComponentType>& ComponentManager::GetComponentArray()
 inline void ComponentManager::AddDeserializedComponent(const EntityId entityId, const std::string& componentTypeId, XmlNode* node)
 {
     mDeserializeComponentFunctionMap[componentTypeId](entityId, node);
+}
+
+inline void ComponentManager::AddDefaultComponent(const ComponentTypeId& componentTypeId, const EntityId entityId)
+{
+    mDefaultComponentFunctionMap[componentTypeId](entityId);
 }
 
 template <typename ComponentType, typename... Args>

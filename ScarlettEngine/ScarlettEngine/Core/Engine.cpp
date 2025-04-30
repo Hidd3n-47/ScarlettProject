@@ -5,10 +5,6 @@
 
 #include <ScarlettGameCore/Src/GameCore.h>
 
-#include <Components/Line.h>
-#include <Components/Camera.h>
-#include <Components/SquareSprite.h>
-
 #include "WindowLayer.h"
 #include "Input/LayerStack.h"
 

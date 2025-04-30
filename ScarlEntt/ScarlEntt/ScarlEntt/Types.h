@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#include <string>
 #include <unordered_map>
 
 namespace ScarlEntt
@@ -8,6 +9,8 @@ typedef uint32_t uint32;
 
 typedef uint32_t EntityId;
 typedef uint32_t ComponentId;
+
+typedef std::string ComponentTypeId;
 } // Namespace Entity
 
 namespace Entity

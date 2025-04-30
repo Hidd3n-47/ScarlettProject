@@ -27,14 +27,12 @@ void SceneSerialization::SerializeCurrentGameScene()
             ScarlEntt::XmlNode* componentNode = new ScarlEntt::XmlNode{ "Component" };
             componentNode->AddAttribute("typeId", component.GetComponentTypeId());
 
-            auto componentMap = component.GetSerializedValue();
-            for (auto& [componentTag, componentValue] : *componentMap)
+            for (auto& [componentTag, componentValue] : *component.GetSerializedValue())
             {
                 ScarlEntt::XmlNode* componentValueNode = new ScarlEntt::XmlNode{ componentTag, componentValue.GetValue()};
                 componentValueNode->AddAttribute("type", componentValue.GetTypeString());
                 componentNode->AddChildNode(componentValueNode);
             }
-            free(componentMap);
 
             entityNode->AddChildNode(componentNode);
         }

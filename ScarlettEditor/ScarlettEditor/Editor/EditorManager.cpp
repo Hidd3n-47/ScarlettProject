@@ -60,6 +60,7 @@ void EditorManager::CreateInstance(ImGuiContext* uiContext, ImGuiMemAllocFunc* a
 
     style.Colors[ImGuiCol_TitleBg]              = DARK;
     style.Colors[ImGuiCol_TitleBgActive]        = DARK;
+    style.Colors[ImGuiCol_PopupBg]              = DARK;
 
     style.Colors[ImGuiCol_WindowBg]             = MEDIUM;
     style.Colors[ImGuiCol_Tab]                  = MEDIUM;

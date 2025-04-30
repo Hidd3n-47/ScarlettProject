@@ -117,6 +117,8 @@ bool EditorViewInputLayer::OnMouseMoved(const Scarlett::MouseMovedEvent& e)
         const ScarlettMath::Vec2 moveDelta = mousePosition - mPreviousMousePosition;
 
         float yaw, pitch, roll;
+        //todo this is causing a bug with the camera movement with deserialization as we can't extract the yaw, pitch and roll yet.
+        // so first movement means we have a rotation of 0 in all 3.
         transform->rotation.GetYawPitchRoll(yaw, pitch, roll);
 
         yaw    -= moveDelta.x * SPEED_SCALING_FACTOR;

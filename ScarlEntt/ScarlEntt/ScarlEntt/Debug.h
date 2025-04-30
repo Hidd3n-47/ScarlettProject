@@ -9,7 +9,16 @@
 #include "ReflectedTypes.h"
 
 #define COMPONENT_SERIALIZATION(...)                                                  \
-inline std::map<std::string, ScarlEntt::TypeReflection>* GetSerializedFunction() { return new std::map<std::string, ScarlEntt::TypeReflection> { __VA_ARGS__ }; }
+public:                                                                               \
+inline std::map<std::string, ScarlEntt::TypeReflection>* GetSerializedFunction()      \
+{                                                                                     \
+    /* Regenerate the map to ensure it's up-to-date. */                               \
+    mTypeReflectionMap = { __VA_ARGS__ };                                             \
+    return &mTypeReflectionMap;                                                       \
+}                                                                                     \
+private:                                                                              \
+std::map<std::string, ScarlEntt::TypeReflection> mTypeReflectionMap;                  \
+public:
 
 namespace ScarlEntt
 {

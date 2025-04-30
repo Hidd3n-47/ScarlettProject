@@ -9,7 +9,11 @@
 #include <Components/Transform.h>
 #include <Components/SquareSprite.h>
 
+#include "Core/Input/KeyCodes.h"
+#include "Input/EditorInputManager.h"
 #include "Views/Editor/View/EditorView.h"
+
+#include "ContextMenu/EntityContextMenu.h"
 
 namespace ScarlettEditor
 {
@@ -44,6 +48,17 @@ void PropertiesPanel::Render()
             const auto squareSprite = selectedEntity->GetComponent<Scarlett::Component::SquareSprite>();
             ImGui::DragFloat3((std::string("Colour##") + entityName).c_str(), &squareSprite->color.x, 0.01f);
         }
+    }
+
+    if(EditorInputManager::IsMouseButtonDown(Scarlett::KeyCode::MOUSE_BUTTON_2))
+    {
+        mShowContextMenu = true;
+    }
+
+    if(mShowContextMenu)
+    {
+        //EntityContextMenu::RenderContextMenu();
+        menu.OpenContextMenu();
     }
 }
 
