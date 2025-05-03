@@ -897,7 +897,7 @@
 		</Component>
 		<Component typeId="struct Scarlett::Component::Transform">
 			<rotation type="quat">
-				-0.986241,0.144010,-0.080300,-0.011727
+				-0.993985,0.106010,-0.027340,-0.002916
 			</rotation>
 			<scale type="vec3">
 				1.000000,1.000000,1.000000
@@ -911,13 +911,13 @@
 				1.777778
 			</mAspectRatio>
 			<mForwardVector type="vec3">
-				-0.155013,-0.285940,-0.945622
+				-0.053733,-0.210904,-0.976029
 			</mForwardVector>
 			<mRightVector type="vec3">
-				0.986825,0.000003,-0.161768
+				0.998488,0.000000,-0.054969
 			</mRightVector>
 			<mUpVector type="vec3">
-				-0.046259,0.958243,-0.282174
+				-0.011594,0.977507,-0.210585
 			</mUpVector>
 		</Component>
 	</Entity>

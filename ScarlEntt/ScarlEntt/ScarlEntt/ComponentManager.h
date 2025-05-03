@@ -3,7 +3,6 @@
 // todo Christian try and use ScarlEntt version of assert over this.
 #include <cassert>
 #include <ranges>
-#include <string>
 
 #include <stdexcept>
 #include "Debug.h"
@@ -54,7 +53,7 @@ public:
      * @return the type ID for the component.
      */
     template <typename ComponentType>
-    static inline ComponentTypeId GetComponentTypeId() { return { typeid(ComponentType).name() }; }
+    static inline ComponentTypeId GetComponentTypeId() { return ComponentTypeId{ typeid(ComponentType).name() }; }
 
 #ifdef DEV_CONFIGURATION
     inline const vector<ComponentTypeId>& GetRegisteredComponentTypes() const { return mRegisteredComponentTypes; }
@@ -154,10 +153,7 @@ inline void ComponentManager::RegisterComponent()
     assert(!mComponents.contains(typeName) && "Registering component type more than once."); // todo remove.
 
 #ifdef DEV_CONFIGURATION
-    // Components registered with namespaces and types such as: 'struct Scarlett::Component::Transform'.
-    // To get component friendly name, just extract 'Transform'.
-    const size_t lastColonPosition = typeName.find_last_of(':');
-    mRegisteredComponentTypes.emplace_back(typeName.substr(lastColonPosition + 1, typeName.length() - lastColonPosition - 1));
+    mRegisteredComponentTypes.emplace_back(typeName);
     mDefaultComponentFunctionMap[typeName]     = [this](const EntityId entityId) { AddComponent(entityId, ComponentType{}); };
     mDeserializeComponentFunctionMap[typeName] = [this](const EntityId entityId, XmlNode* node){ AddComponent(entityId, ComponentType::DeserializeComponent(node)); };
 #endif // DEV_CONFIGURATION.
@@ -175,7 +171,7 @@ inline ComponentArray<ComponentType>& ComponentManager::GetComponentArray()
     return *static_cast<ComponentArray<ComponentType>*>(mComponents[typeName]);
 }
 
-inline void ComponentManager::AddDeserializedComponent(const EntityId entityId, const std::string& componentTypeId, XmlNode* node)
+inline void ComponentManager::AddDeserializedComponent(const EntityId entityId, const ComponentTypeId& componentTypeId, XmlNode* node)
 {
     mDeserializeComponentFunctionMap[componentTypeId](entityId, node);
 }
@@ -193,10 +189,10 @@ inline ComponentType* ComponentManager::AddComponent(const EntityId entityId, Ar
     ComponentType* component = GetComponentArray<ComponentType>().AddComponent(entityId, std::forward<Args>(args)...);
 
     vector<ComponentView>& entityComponents = mEntityToComponentMap[entityId];
-    if (std::find(entityComponents.begin(), entityComponents.end(), GetComponentTypeId<ComponentType>()) == entityComponents.end())
+    if (std::find(entityComponents.begin(), entityComponents.end(), GetComponentTypeId<ComponentType>().Type()) == entityComponents.end())
     {
         ComponentRef<ComponentType> componentRef { entityId, &GetComponentArray<ComponentType>() };
-        entityComponents.emplace_back(GetComponentTypeId<ComponentType>(), [componentRef]() { return componentRef->GetSerializedFunction(); });
+        entityComponents.emplace_back(GetComponentTypeId<ComponentType>().Type(), [componentRef]() { return componentRef->GetSerializedFunction(); });
     }
     else
     {
@@ -217,11 +213,11 @@ inline ComponentType* ComponentManager::AddComponent(const EntityId entityId, co
     ComponentType* c = GetComponentArray<ComponentType>().AddComponent(entityId, component);
 
     vector<ComponentView>& entityComponents = mEntityToComponentMap[entityId];
-    if (std::find(entityComponents.begin(), entityComponents.end(), GetComponentTypeId<ComponentType>()) == entityComponents.end())
+    if (std::find(entityComponents.begin(), entityComponents.end(), GetComponentTypeId<ComponentType>().Type()) == entityComponents.end())
     {
         ComponentRef<ComponentType> componentRef { entityId, &GetComponentArray<ComponentType>() };
-        std::string componentTypeId = GetComponentTypeId<ComponentType>();
-        entityComponents.emplace_back(componentTypeId, [componentRef]() { return componentRef->GetSerializedFunction(); });
+        const ComponentTypeId componentTypeId = GetComponentTypeId<ComponentType>();
+        entityComponents.emplace_back(componentTypeId.Type(), [componentRef]() { return componentRef->GetSerializedFunction(); });
     }
     else
     {
@@ -245,7 +241,7 @@ inline void ComponentManager::RemoveComponent(EntityId entityId)
 {
 #ifdef DEV_CONFIGURATION
     vector<ComponentView>& entityComponents = mEntityToComponentMap[entityId];
-    if (const auto it = std::find(entityComponents.begin(), entityComponents.end(), GetComponentTypeId<ComponentType>()); it != entityComponents.end())
+    if (const auto it = std::find(entityComponents.begin(), entityComponents.end(), GetComponentTypeId<ComponentType>().Type()); it != entityComponents.end())
     {
         entityComponents.erase(it);
     }

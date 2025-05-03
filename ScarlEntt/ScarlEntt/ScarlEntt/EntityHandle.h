@@ -22,7 +22,18 @@ public:
     EntityHandle& operator=(const EntityHandle& other)      = default;
     EntityHandle& operator=(EntityHandle&& other)           = default;
 
-    void AddDeserializedComponent(const std::string& componentTypeId, XmlNode* node) const;
+    /**
+     * Deserialize the component based off XML node and add to the entity.
+     * @param componentTypeId The type ID of the component.
+     * @param node The XML node of the component.
+     */
+    void AddDeserializedComponent(const ComponentTypeId& componentTypeId, XmlNode* node) const;
+
+    /**
+     * Add a default component to the entity.
+     * @param componentTypeId The type ID of the component.
+     */
+    void AddDefaultComponent(const ComponentTypeId& componentTypeId) const;
 
     /**
     * @brief Add a component to the entity
@@ -92,15 +103,20 @@ private:
   ======================================================================================================================================================
                                                                                                                                                         */
 
-inline void EntityHandle::AddDeserializedComponent(const std::string& componentTypeId, XmlNode* node) const
+inline void EntityHandle::AddDeserializedComponent(const ComponentTypeId& componentTypeId, XmlNode* node) const
 {
     mComponentManagerRef->AddDeserializedComponent(mEntityId, componentTypeId, node);
 
     const std::string TAG_TYPE_ID = "struct Scarlett::Component::Tag";
-    if (componentTypeId == TAG_TYPE_ID)
+    if (componentTypeId.Type() == TAG_TYPE_ID)
     {
         AddEntityHandleToTagComponent();
     }
+}
+
+inline void EntityHandle::AddDefaultComponent(const ComponentTypeId& componentTypeId) const
+{
+    mComponentManagerRef->AddDefaultComponent(componentTypeId, mEntityId);
 }
 
 template <typename ComponentType, typename ...Args>

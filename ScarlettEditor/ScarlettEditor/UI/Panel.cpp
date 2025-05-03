@@ -13,10 +13,15 @@ void Panel::RenderUi()
     End();
 }
 
-void Panel::Begin() const
+void Panel::Begin()
 {
     const char* title = mProperties.title.data();
     ImGui::Begin(title);
+
+    RenderContextMenu();
+
+    mIsFocused = ImGui::IsWindowFocused();
+    mIsHovered = ImGui::IsWindowHovered();
 }
 
 void Panel::End() const

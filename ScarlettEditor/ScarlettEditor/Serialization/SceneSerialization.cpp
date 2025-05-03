@@ -9,7 +9,7 @@ namespace ScarlettEditor
 {
 
 //todo change to filepath instead of string.
-const std::string SceneSerialization::SCENE_FILE_PATH { "E:/Personal development folder/ScarlettProject/Assets/Scenes/DefaultScene.scarlett_scene" };
+const std::string SceneSerialization::SCENE_FILE_PATH { "E:/Programming/ScarlettProject/Assets/Scenes/DefaultScene.scarlett_scene" };
 
 void SceneSerialization::SerializeCurrentGameScene()
 {
@@ -59,7 +59,7 @@ void SceneSerialization::DeserializeCurrentGameScene()
             const std::string TYPE_ID_ATTRIBUTE     = "typeId";
             const std::string VALUE_TYPE_ATTRIBUTE  = "name";
 
-            const std::string componentTypeId = component->GetAttribute(TYPE_ID_ATTRIBUTE);
+            const ScarlEntt::ComponentTypeId componentTypeId { component->GetAttribute(TYPE_ID_ATTRIBUTE) };
             entity.AddDeserializedComponent(componentTypeId, component);
         }
     }

@@ -53,7 +53,6 @@ ScarlEntt::EntityHandle GameCore::CreateEntity() const
     (void)ent.AddComponent<Scarlett::Component::BoundingBox>();
 
     (void)ent.AddComponent<Scarlett::Component::Transform>();
-    (void)ent.AddComponent<Scarlett::Component::SquareSprite>();
 
     return ent;
 }

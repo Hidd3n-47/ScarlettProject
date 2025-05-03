@@ -3,26 +3,25 @@
 
 #include <imgui/imgui.h>
 
+#include <ScarlettGameCore/Src/GameCore.h>
+
 #include <ScarlEntt/EntityHandle.h>
 
 #include <Components/Tag.h>
 #include <Components/Transform.h>
 #include <Components/SquareSprite.h>
 
-#include "Core/Input/KeyCodes.h"
-#include "Input/EditorInputManager.h"
 #include "Views/Editor/View/EditorView.h"
 
-#include "ContextMenu/EntityContextMenu.h"
 
 namespace ScarlettEditor
 {
 
 void PropertiesPanel::Render()
 {
-    auto* selectedEntity = dynamic_cast<EditorView*>(mView)->GetSelectionManager().GetSelectedEntity();
+    const ScarlEntt::EntityHandle* selectedEntity = dynamic_cast<EditorView*>(mView)->GetSelectionManager().GetSelectedEntity();
 
-    if (selectedEntity != nullptr)
+    if (selectedEntity)
     {
         const std::string entityName = selectedEntity->GetComponent<Scarlett::Component::Tag>()->name;
 
@@ -49,17 +48,34 @@ void PropertiesPanel::Render()
             ImGui::DragFloat3((std::string("Colour##") + entityName).c_str(), &squareSprite->color.x, 0.01f);
         }
     }
+}
 
-    if(EditorInputManager::IsMouseButtonDown(Scarlett::KeyCode::MOUSE_BUTTON_2))
+void PropertiesPanel::RenderContextMenu()
+{
+    if (ImGui::BeginPopupContextWindow())
     {
-        mShowContextMenu = true;
-    }
+        const ScarlEntt::EntityHandle* selectedEntity = dynamic_cast<EditorView*>(mView)->GetSelectionManager().GetSelectedEntity();
 
-    if(mShowContextMenu)
-    {
-        //EntityContextMenu::RenderContextMenu();
-        menu.OpenContextMenu();
+        if (!selectedEntity)
+        {
+            ImGui::CloseCurrentPopup();
+            return;
+        }
+
+        if (ImGui::BeginMenu("Add Component"))
+        {
+            for(const ScarlEntt::ComponentTypeId& component : ScarlettGame::GameCore::Instance().GetActiveScene()->GetComponentManager()->GetRegisteredComponentTypes())
+            {
+                if (ImGui::MenuItem(component.FriendlyName().c_str()))
+                {
+                    selectedEntity->AddDefaultComponent(component);
+                    ImGui::CloseCurrentPopup();
+                }
+            }
+            ImGui::EndMenu();
+        }
+        ImGui::EndPopup();
     }
 }
 
-}
+} // Namespace ScarlettEditor.

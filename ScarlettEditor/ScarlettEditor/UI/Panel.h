@@ -30,12 +30,14 @@ protected:
 
     bool mIsFocused = false;
     bool mIsHovered = false;
+
+    virtual void RenderContextMenu() { }
 private:
     PanelProperties mProperties;
 
     virtual void Render() = 0;
 
-    void Begin() const;
+    void Begin();
     void End() const;
 };
 
