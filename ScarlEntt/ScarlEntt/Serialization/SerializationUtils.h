@@ -5,6 +5,16 @@
 namespace SerializationUtils
 {
 
+[[nodiscard]] static inline std::string ToString(const std::string& value)
+{
+    return value;
+}
+
+[[nodiscard]] static inline std::string ToString(const float value)
+{
+    return std::to_string(value);
+}
+
 [[nodiscard]] static inline std::string ToString(const ScarlettMath::Vec3& vector)
 {
     return std::to_string(vector.x) + "," + std::to_string(vector.y) + "," + std::to_string(vector.z);

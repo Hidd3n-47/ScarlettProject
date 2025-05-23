@@ -26,12 +26,7 @@ struct Line
 
     ScarlettMath::Vec4 color;
 
-    COMPONENT_SERIALIZATION(
-        REFLECT(start),
-        REFLECT(end),
-        REFLECT(color))
-
-    static Line DeserializeComponent(const ScarlEntt::XmlNode* node);
+    SCARLETT_COMPONENT(Line)
 };
 
 } // Namespace Scarlett::Component.

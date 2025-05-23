@@ -24,23 +24,7 @@ struct Tag
     std::string name;
     ScarlEntt::EntityHandle entity;
 
-    COMPONENT_SERIALIZATION(REFLECT(name))
-
-    static Tag DeserializeComponent(const ScarlEntt::XmlNode* node)
-    {
-        Tag component;
-        //todo assert for children size.
-        for (const ScarlEntt::XmlNode* childNode : node->GetChildren())
-        {
-            if (childNode->GetTagName() == "name")
-            {
-                component.name = ScarlEntt::TypeReflection::GetValueFromTypeString<std::string>(childNode->GetValue());
-            }
-        }
-        //todo need to fix the entity handle somehow.
-
-        return component;
-    }
+    SCARLETT_COMPONENT(Tag)
 };
 
 } // Namespace Scarlett::Component.

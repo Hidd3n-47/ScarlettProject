@@ -2,7 +2,6 @@
 #include "SwapChain.h"
 
 #include "Device.h"
-#include "Utilities.h"
 #include "Rendering/Vulkan/VulkanUtils.h"
 
 namespace Scarlett
@@ -36,7 +35,7 @@ VkResult SwapChain::AcquireNextImage(uint32* imageIndex) const
 
 VkResult SwapChain::SubmitCommandBuffers(const VkCommandBuffer* buffer, const uint32* imageIndex)
 {
-    if (mImagesInFlight[*imageIndex] != VK_NULL_HANDLE) 
+    if (mImagesInFlight[*imageIndex] != VK_NULL_HANDLE)
     {
         vkWaitForFences(mDevice->GetDevice(), 1, &mImagesInFlight[*imageIndex], VK_TRUE, UINT64_MAX);
     }
@@ -197,7 +196,7 @@ void SwapChain::CreateSwapChain(const SwapChain* previousSwapChain)
 void SwapChain::CreateImageViews()
 {
     mSwapChainImageViews.resize(mSwapChainImages.size());
-    for (size_t i = 0; i < mSwapChainImages.size(); ++i) 
+    for (size_t i = 0; i < mSwapChainImages.size(); ++i)
     {
         constexpr VkImageSubresourceRange subresourceRange
         {
@@ -327,7 +326,7 @@ void SwapChain::CreateDepthResources()
             .viewType           = VK_IMAGE_VIEW_TYPE_2D,
             .format             = depthFormat,
             .subresourceRange   = subResourceRange
-            
+
         };
 
         VK_CHECK(vkCreateImageView(mDevice->GetDevice(), &viewInfo, nullptr, &mDepthImageViews[i]), "Failed to create Vulkan Image Texture View.");
@@ -379,7 +378,7 @@ void SwapChain::CreateSyncObjects()
         .flags = VK_FENCE_CREATE_SIGNALED_BIT,
     };
 
-    for (int i = 0; i < MAX_IMAGES_PER_FRAME; ++i) 
+    for (int i = 0; i < MAX_IMAGES_PER_FRAME; ++i)
     {
         VK_CHECK(vkCreateSemaphore(mDevice->GetDevice(), &semaphoreInfo, nullptr, &mImageAvailableSemaphores[i]), "Failed to create Vulkan Semaphore.");
         VK_CHECK(vkCreateSemaphore(mDevice->GetDevice(), &semaphoreInfo, nullptr, &mRenderFinishedSemaphores[i]), "Failed to create Vulkan Semaphore.");
@@ -416,7 +415,7 @@ void SwapChain::CreateRenderPass(const bool hasDepthAttachment, const VkImageLay
         .stencilLoadOp      = VK_ATTACHMENT_LOAD_OP_DONT_CARE,
         .stencilStoreOp     = VK_ATTACHMENT_STORE_OP_DONT_CARE,
         .initialLayout      = VK_IMAGE_LAYOUT_UNDEFINED,
-        .finalLayout        = finalImageLayout 
+        .finalLayout        = finalImageLayout
     };
 
     constexpr VkAttachmentReference colorAttachmentRef
@@ -512,11 +511,11 @@ VkPresentModeKHR SwapChain::ChooseSwapPresentMode(const vector<VkPresentModeKHR>
 
 VkExtent2D SwapChain::ChooseSwapChainExtent(const VkSurfaceCapabilitiesKHR& capabilities) const
 {
-    if (capabilities.currentExtent.width != std::numeric_limits<uint32_t>::max()) 
+    if (capabilities.currentExtent.width != std::numeric_limits<uint32_t>::max())
     {
         return capabilities.currentExtent;
     }
-    
+
     VkExtent2D actualExtent = mWindowExtent;
     actualExtent.width      = std::max(capabilities.minImageExtent.width, std::min(capabilities.maxImageExtent.width, actualExtent.width));
     actualExtent.height     = std::max(capabilities.minImageExtent.height, std::min(capabilities.maxImageExtent.height, actualExtent.height));

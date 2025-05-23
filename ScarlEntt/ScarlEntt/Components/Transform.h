@@ -14,35 +14,7 @@ struct Transform
     ScarlettMath::Quat rotation      { ScarlettMath::Quat::Identity() };
     ScarlettMath::Vec3 scale         { 1.0f };
 
-    COMPONENT_SERIALIZATION(
-        REFLECT(translation),
-        REFLECT(rotation),
-        REFLECT(scale))
-
-    static Transform DeserializeComponent(const ScarlEntt::XmlNode* node)
-    {
-        Transform component;
-        //todo assert for children size.
-        for (const ScarlEntt::XmlNode* childNode : node->GetChildren())
-        {
-            if (childNode->GetTagName() == "translation")
-            {
-                component.translation = ScarlEntt::TypeReflection::GetValueFromTypeString<ScarlettMath::Vec3>(childNode->GetValue());
-                continue;
-            }
-            if (childNode->GetTagName() == "rotation")
-            {
-                component.rotation = ScarlEntt::TypeReflection::GetValueFromTypeString<ScarlettMath::Quat>(childNode->GetValue());
-                continue;
-            }
-            if (childNode->GetTagName() == "scale")
-            {
-                component.scale = ScarlEntt::TypeReflection::GetValueFromTypeString<ScarlettMath::Vec3>(childNode->GetValue());
-            }
-        }
-
-        return component;
-    }
+    SCARLETT_COMPONENT(Transform)
 };
 
 } // Namespace Scarlett::Component.

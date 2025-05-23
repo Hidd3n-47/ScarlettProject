@@ -6,7 +6,7 @@
 
 namespace ScarlEntt
 {
-    class XmlNode;
+class XmlNode;
 } // Namespace XmlNode.
 
 namespace Scarlett::Component
@@ -44,13 +44,7 @@ public:
     inline void SetClean() { mIsDirty = false; }
     [[nodiscard]] bool IsDirty() const { return mIsDirty; }
 
-    COMPONENT_SERIALIZATION(
-        REFLECT(mForwardVector),
-        REFLECT(mRightVector),
-        REFLECT(mUpVector),
-        REFLECT(mAspectRatio))
-
-        static Camera DeserializeComponent(const ScarlEntt::XmlNode* node);
+    SCARLETT_COMPONENT(Camera)
 private:
     bool mIsDirty = true;
 

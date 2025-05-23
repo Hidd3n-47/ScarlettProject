@@ -100,6 +100,27 @@ public:
             return "unknown";
         }
     }
+
+    template <typename T>
+    inline T GetTypeValue() const
+    {
+        switch (mType)
+        {
+        case ValueType::FLOAT:
+            return GetValueFromTypeString<float>(mValue);
+        case ValueType::STRING:
+            return GetValueFromTypeString<std::string>(mValue);
+        case ValueType::VEC3:
+            return GetValueFromTypeString<ScarlettMath::Vec3>(mValue);
+        case ValueType::VEC4:
+            return GetValueFromTypeString<ScarlettMath::Vec4>(mValue);
+        case ValueType::QUAT:
+            return GetValueFromTypeString<ScarlettMath::Quat>(mValue);
+        default:
+            // todo add logging or debug assert/breakpoint here.
+            return "unknown";
+        }
+    }
 private:
     ValueType       mType = ValueType::UNKNOWN;
     std::string     mValue;
