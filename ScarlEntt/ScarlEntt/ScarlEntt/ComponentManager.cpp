@@ -1,0 +1,28 @@
+#include "ScarlEnttpch.h"
+#include "ComponentManager.h"
+
+#include "Serialization/Xml/XmlDocument.h"
+
+namespace ScarlEntt
+{
+
+ComponentManager::~ComponentManager()
+{
+    for (const auto& componentArray : mComponents | std::views::values)
+    {
+        delete componentArray;
+    }
+}
+
+void ComponentManager::AddComponentFromXml(const EntityId entityId, const XmlNode* node)
+{
+    const std::string TYPE_ID_ATTRIBUTE = "typeId";
+    const ComponentTypeId componentTypeId{ node->GetAttribute(TYPE_ID_ATTRIBUTE) };
+
+    assert(mComponentTypeToDeserializeFunctionMap.contains(componentTypeId) && "Trying to deserialize a component type that has not been registered.");
+
+    mComponentTypeToDeserializeFunctionMap[componentTypeId](entityId, node);
+
+}
+
+} // Namespace ScarlEntt.

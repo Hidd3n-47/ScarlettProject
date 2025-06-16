@@ -1,58 +1,36 @@
 #include "ScarlEnttpch.h"
 #include "Components/Transform.h"
 
+#include "RTTI/TypeReflection.h"
+#include "ScarlEntt/ComponentManager.h"
+
 namespace Scarlett::Component
 {
 
-std::unordered_map<std::string, Property> Transform::properties = {
-    {
-        "translation",
-            Property{ ScarlEntt::ValueType::VEC3,
-            [](void* o) { return SerializationUtils::ToString(static_cast<Transform*>(o)->translation); },
-            [](void* o, const std::string& value) { static_cast<Transform*>(o)->translation = ScarlEntt::TypeReflection::GetValueFromTypeString<ScarlettMath::Vec3>(value); } }
-    },
-    {
-        "rotation",
-            Property{ ScarlEntt::ValueType::QUAT,
-            [](void* o) { return SerializationUtils::ToString(static_cast<Transform*>(o)->rotation); },
-            [](void* o, const std::string& value) { static_cast<Transform*>(o)->rotation = ScarlEntt::TypeReflection::GetValueFromTypeString<ScarlettMath::Quat>(value); } }
-    },
-    {
-        "scale",
-            Property{ ScarlEntt::ValueType::VEC3,
-            [](void* o) { return SerializationUtils::ToString(static_cast<Transform*>(o)->scale); },
-            [](void* o, const std::string& value) { static_cast<Transform*>(o)->scale = ScarlEntt::TypeReflection::GetValueFromTypeString<ScarlettMath::Vec3>(value); } }
-    },
+void Transform::GenerateProperties()
+{
+    mProperties.clear();
+
+    mProperties["translation"] = ScarlEntt::Property { 
+        ScarlEntt::PropertyType::VEC3, 
+        ScarlEntt::ComponentManager::GetComponentTypeId<Transform>(),
+        [this]() { return ScarlEntt::TypeReflection::GetStringFromValue(this->translation); },
+        [this](const std::string& stringValue) { ScarlEntt::TypeReflection::SetValueFromString(this->translation, stringValue); } 
+    };
+
+    mProperties["rotation"] = ScarlEntt::Property { 
+        ScarlEntt::PropertyType::QUAT, 
+        ScarlEntt::ComponentManager::GetComponentTypeId<Transform>(),
+        [this]() { return ScarlEntt::TypeReflection::GetStringFromValue(this->rotation); },
+        [this](const std::string& stringValue) { ScarlEntt::TypeReflection::SetValueFromString(this->rotation, stringValue); } 
+    };
+
+    mProperties["scale"] = ScarlEntt::Property { 
+        ScarlEntt::PropertyType::VEC3, 
+        ScarlEntt::ComponentManager::GetComponentTypeId<Transform>(),
+        [this]() { return ScarlEntt::TypeReflection::GetStringFromValue(this->scale); },
+        [this](const std::string& stringValue) { ScarlEntt::TypeReflection::SetValueFromString(this->scale, stringValue); } 
+    };
 };
-
-Transform Transform::DeserializeComponent(const ScarlEntt::XmlNode* node)
-{
-    Transform component;
-
-    for (const auto& [propertyName, property] : properties)
-    {
-        for (const ScarlEntt::XmlNode* childNode : node->GetChildren())
-        {
-            if (childNode->GetTagName() == propertyName)
-            {
-                property.SetValue(&component, childNode->GetValue());
-            }
-        }
-    }
-
-    return component;
-}
-
-std::unordered_map<std::string, ScarlEntt::TypeReflection>* Transform::GetSerializedFunction()
-{
-     /* Regenerate the map to ensure it's up to date. */
-     mTypeReflectionMap.clear();
-     for (const auto& [propertyName, property] : properties)
-     {
-        mTypeReflectionMap[propertyName] = ScarlEntt::TypeReflection{ property.GetType(), property.GetValueAsString(this) };
-     }
-     
-     return &mTypeReflectionMap;
- }
 
 } // Namespace Scarlett::Component.

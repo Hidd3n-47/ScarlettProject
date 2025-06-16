@@ -18,6 +18,8 @@ public:
 
     [[nodiscard]] bool IsValid() const;
 
+    [[nodiscard]] void* GetRawPointer() const;
+
     T* operator->() const;
     T* operator->();
 private:
@@ -28,6 +30,18 @@ private:
 /*
   ======================================================================================================================================================
                                                                                                                                                         */
+
+template <typename T>
+void* ComponentRef<T>::GetRawPointer() const
+{
+    //todo need to ensure this works in debug and stripped out release
+#ifdef SCARLENTT_DEBUG
+    assert(IsValid());
+#endif // SCARLENTT_DEBUG.
+
+    return static_cast<void*>(mComponentArray->GetComponent(mEntityId));
+}
+
 template <typename T>
 bool ComponentRef<T>::IsValid() const
 {
@@ -55,6 +69,5 @@ T* ComponentRef<T>::operator->()
 
     return mComponentArray->GetComponent(mEntityId);
 }
-
 
 } // Namespace ScarlEntt.

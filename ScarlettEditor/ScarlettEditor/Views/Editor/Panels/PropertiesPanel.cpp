@@ -25,28 +25,62 @@ void PropertiesPanel::Render()
     {
         const std::string entityName = selectedEntity->GetComponent<Scarlett::Component::Tag>()->name;
 
-        if (ImGui::CollapsingHeader("Transform"))
-        {
-            const auto transform = selectedEntity->GetComponent<Scarlett::Component::Transform>();
-
-            ImGui::DragFloat3((std::string("Position##") + entityName).c_str(), &transform->translation.x, 0.05f);
-
-            float rot[3] = { 0.0f, 0.0f, 0.0f };
-            transform->rotation.GetYawPitchRoll(rot[1], rot[0], rot[2]);
-            rot[0] = ScarlettMath::Degrees(rot[0]);
-            rot[1] = ScarlettMath::Degrees(rot[1]);
-            rot[2] = ScarlettMath::Degrees(rot[2]);
-            ImGui::DragFloat3((std::string("Rotation##") + entityName).c_str(), rot, 0.5f);
-            transform->rotation.SetYawPitchRoll(ScarlettMath::Radians(rot[1]), ScarlettMath::Radians(rot[0]), ScarlettMath::Radians(rot[2]));
-
-            ImGui::DragFloat3((std::string("Scale##") + entityName).c_str(), &transform->scale.x, 0.05f);
-        }
-
-        if (ImGui::CollapsingHeader("Square Sprite"))
-        {
-            const auto squareSprite = selectedEntity->GetComponent<Scarlett::Component::SquareSprite>();
-            ImGui::DragFloat3((std::string("Colour##") + entityName).c_str(), &squareSprite->color.x, 0.01f);
-        }
+        //for (ScarlEntt::ComponentView& component : selectedEntity->GetComponents())
+        //{
+        //    if (ImGui::CollapsingHeader((component.GetComponentTypeId()).c_str()))
+        //    {
+        //        const auto properties = component.GetProperties();
+        //        for (const auto& [propertyName, property] : properties)
+        //        {
+        //            //const std::string valueString = { property.GetValue(component.GetRawComponent()) };
+        //            {
+        //                const auto t = property.GetType();
+        //            }
+        //            switch (property.GetType())
+        //            {
+        //            case ScarlEntt::ValueType::FLOAT:
+        //            {
+        //                //auto value = ScarlEntt::TypeReflection::GetValueFromTypeString<float>(valueString);
+        //                float value;
+        //                ImGui::DragFloat((propertyName + "##" + entityName).c_str(), &value, 0.05f);
+        //                break;
+        //            }
+        //            case ScarlEntt::ValueType::STRING:
+        //            {
+        //                //todo implement
+        //                //auto value = ScarlEntt::TypeReflection::GetValueFromTypeString<std::string>(valueString);
+        //                break;
+        //            }
+        //            case ScarlEntt::ValueType::VEC3:
+        //            {
+        //                //auto value = ScarlEntt::TypeReflection::GetValueFromTypeString<ScarlettMath::Vec3>(valueString);
+        //                ScarlettMath::Vec3 value;
+        //                ImGui::DragFloat3((propertyName + "##" + entityName).c_str(), &value.x, 0.05f);
+        //                break;
+        //            }
+        //            case ScarlEntt::ValueType::VEC4:
+        //            {
+        //                ScarlettMath::Vec4 value;
+        //                ScarlEntt::TypeReflection::GetValueFromProperty(property, component, value);
+        //                //auto value = ScarlEntt::TypeReflection::GetValueFromTypeString<ScarlettMath::Vec4>(valueString);
+        //                ImGui::DragFloat4((propertyName + "##" + entityName).c_str(), &value.x, 0.05f);
+        //                break;
+        //            }
+        //            case ScarlEntt::ValueType::QUAT:
+        //            {
+        //                ScarlettMath::Vec4 value;
+        //                //auto value = ScarlEntt::TypeReflection::GetValueFromTypeString<ScarlettMath::Quat>(valueString).ToVector4();
+        //                ImGui::DragFloat4((propertyName + "##" + entityName).c_str(), &value.x, 0.05f);
+        //                break;
+        //            }
+        //            case ScarlEntt::ValueType::UNKNOWN:
+        //            default:
+        //                // todo add logging or debug assert/breakpoint here.
+        //                break;
+        //            }
+        //        }
+        //    }
+        //}
     }
 }
 
@@ -64,14 +98,14 @@ void PropertiesPanel::RenderContextMenu()
 
         if (ImGui::BeginMenu("Add Component"))
         {
-            for(const ScarlEntt::ComponentTypeId& component : ScarlettGame::GameCore::Instance().GetActiveScene()->GetComponentManager()->GetRegisteredComponentTypes())
+            /*for(const ScarlEntt::ComponentTypeId& component : ScarlettGame::GameCore::Instance().GetActiveScene()->GetComponentManager()->GetRegisteredComponentTypes())
             {
                 if (ImGui::MenuItem(component.FriendlyName().c_str()))
                 {
                     selectedEntity->AddDefaultComponent(component);
                     ImGui::CloseCurrentPopup();
                 }
-            }
+            }*/
             ImGui::EndMenu();
         }
         ImGui::EndPopup();

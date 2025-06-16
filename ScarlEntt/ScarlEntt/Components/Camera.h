@@ -4,11 +4,6 @@
 
 #include "ScarlEntt/Debug.h"
 
-namespace ScarlEntt
-{
-class XmlNode;
-} // Namespace XmlNode.
-
 namespace Scarlett::Component
 {
 

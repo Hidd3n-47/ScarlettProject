@@ -23,19 +23,6 @@ public:
     EntityHandle& operator=(EntityHandle&& other)           = default;
 
     /**
-     * Deserialize the component based off XML node and add to the entity.
-     * @param componentTypeId The type ID of the component.
-     * @param node The XML node of the component.
-     */
-    void AddDeserializedComponent(const ComponentTypeId& componentTypeId, XmlNode* node) const;
-
-    /**
-     * Add a default component to the entity.
-     * @param componentTypeId The type ID of the component.
-     */
-    void AddDefaultComponent(const ComponentTypeId& componentTypeId) const;
-
-    /**
     * @brief Add a component to the entity
     * @tparam ComponentType The class of the Component
     * @tparam Args Arguments that are passed to the ComponentType constructor to construct a component with initial values.
@@ -44,6 +31,7 @@ public:
     */
     template <typename ComponentType, typename ...Args>
     [[maybe_unused]] ComponentType* AddComponent(Args ...args) const;
+
     /**
     * @brief Add the passed in component to the entity.<br/>
     * Note: The ownership of the __component__ is passed to the ComponentManager once called, therefore, cannot be used after adding to Entity.
@@ -53,6 +41,12 @@ public:
     */
     template <typename ComponentType>
     [[maybe_unused]] ComponentType* AddComponent(const ComponentType& component) const;
+
+    /**
+    * @brief Deserialize the component from XML and add it to the entity.
+    * @param node: The XML of the component to be deserialized.
+    */
+    void AddComponentFromXml(const XmlNode* node) const;
 
     /**
     * @breif Remove a component (if found) from the _entity_.
@@ -77,13 +71,7 @@ public:
     [[nodiscard]] ComponentRef<ComponentType> GetComponent() const;
 
 #ifdef DEV_CONFIGURATION
-    /**
-    * @brief Retrieve a vector of \c ComponentView for the components of the entity.
-    * @note This is only available in Dev Configuration and is meant to be used for debugging.
-    * @see \c ComponentView
-    * @return Returns a \c ComponentView for each of the components on the entity.
-    */
-    [[nodiscard]] const vector<ComponentView>& GetComponents() const;
+
 #endif // DEV_CONFIGURATION.
 
     /**
@@ -103,22 +91,6 @@ private:
   ======================================================================================================================================================
                                                                                                                                                         */
 
-inline void EntityHandle::AddDeserializedComponent(const ComponentTypeId& componentTypeId, XmlNode* node) const
-{
-    mComponentManagerRef->AddDeserializedComponent(mEntityId, componentTypeId, node);
-
-    const std::string TAG_TYPE_ID = "struct Scarlett::Component::Tag";
-    if (componentTypeId.Type() == TAG_TYPE_ID)
-    {
-        AddEntityHandleToTagComponent();
-    }
-}
-
-inline void EntityHandle::AddDefaultComponent(const ComponentTypeId& componentTypeId) const
-{
-    mComponentManagerRef->AddDefaultComponent(componentTypeId, mEntityId);
-}
-
 template <typename ComponentType, typename ...Args>
 inline ComponentType* EntityHandle::AddComponent(Args ...args) const
 {
@@ -129,6 +101,11 @@ template <typename ComponentType>
 inline ComponentType* EntityHandle::AddComponent(const ComponentType& component) const
 {
     return mComponentManagerRef->AddComponent<ComponentType>(mEntityId, component);
+}
+
+inline void EntityHandle::AddComponentFromXml(const XmlNode* node) const
+{
+    mComponentManagerRef->AddComponentFromXml(mEntityId, node);
 }
 
 template <typename ComponentType>
@@ -150,10 +127,7 @@ inline ComponentRef<ComponentType> EntityHandle::GetComponent() const
 }
 
 #ifdef DEV_CONFIGURATION
-inline const vector<ComponentView>& EntityHandle::GetComponents() const
-{
-    return mComponentManagerRef->GetComponents(mEntityId);
-}
+
 #endif // DEV_CONFIGURATION.
 
 } // Namespace ScarlEntt

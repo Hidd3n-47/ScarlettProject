@@ -18,13 +18,13 @@ void SceneSerialization::SerializeCurrentGameScene()
     const ScarlEntt::Scene* scene = ScarlettGame::GameCore::Instance().GetActiveScene();
     const auto& entities = scene->GetEntities();
 
-    for (ScarlEntt::EntityHandle handle : entities)
+    for (const ScarlEntt::EntityHandle& handle : entities)
     {
         ScarlEntt::XmlNode* entityNode = new ScarlEntt::XmlNode("Entity");
 
-        for (const auto& component : handle.GetComponents())
+        //for (const auto& component : handle.GetComponents())
         {
-            ScarlEntt::XmlNode* componentNode = new ScarlEntt::XmlNode{ "Component" };
+            /*ScarlEntt::XmlNode* componentNode = new ScarlEntt::XmlNode{ "Component" };
             componentNode->AddAttribute("typeId", component.GetComponentTypeId());
 
             for (auto& [componentTag, componentValue] : *component.GetSerializedValue())
@@ -34,7 +34,7 @@ void SceneSerialization::SerializeCurrentGameScene()
                 componentNode->AddChildNode(componentValueNode);
             }
 
-            entityNode->AddChildNode(componentNode);
+            entityNode->AddChildNode(componentNode);*/
         }
 
         sceneNode->AddChildNode(entityNode);
@@ -51,16 +51,12 @@ void SceneSerialization::DeserializeCurrentGameScene()
 
     ScarlEntt::Scene* scene = ScarlettGame::GameCore::Instance().GetActiveScene();
 
-    for (ScarlEntt::XmlNode* entityNode : sceneDocument.GetRootNode()->GetChildren())
+    for (const ScarlEntt::XmlNode* entityNode : sceneDocument.GetRootNode()->GetChildren())
     {
         ScarlEntt::EntityHandle entity = scene->CreateEntity();
         for (const auto component : entityNode->GetChildren())
         {
-            const std::string TYPE_ID_ATTRIBUTE     = "typeId";
-            const std::string VALUE_TYPE_ATTRIBUTE  = "name";
-
-            const ScarlEntt::ComponentTypeId componentTypeId { component->GetAttribute(TYPE_ID_ATTRIBUTE) };
-            entity.AddDeserializedComponent(componentTypeId, component);
+            entity.AddComponentFromXml(component);
         }
     }
 

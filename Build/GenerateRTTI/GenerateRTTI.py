@@ -51,57 +51,33 @@ def generate_rtti_for_component(struct_name, member_variables):
 #include "ScarlEnttpch.h"
 #include "Components/{struct_name}.h"
 
+#include "RTTI/TypeReflection.h"
+#include "ScarlEntt/ComponentManager.h"
+
 namespace Scarlett::Component
 {{
 
-std::unordered_map<std::string, Property> {struct_name}::properties = {{
+void {struct_name}::GenerateProperties()
+{{
+    mProperties.clear();
 '''.format(struct_name=struct_name))
 
         for variable in member_variables:
             if variable[0] in types:
                 f.write('''\
-    {{
-        "{property_name}",
-            Property{{ ScarlEntt::ValueType::{type_enum},
-            [](void* o) {{ return SerializationUtils::ToString(static_cast<{struct_name}*>(o)->{property_name}); }},
-            [](void* o, const std::string& value) {{ static_cast<{struct_name}*>(o)->{property_name} = ScarlEntt::TypeReflection::GetValueFromTypeString<{type}>(value); }} }}
-    }},
+
+    mProperties["{property_name}"] = ScarlEntt::Property {{ 
+        ScarlEntt::PropertyType::{type_enum}, 
+        ScarlEntt::ComponentManager::GetComponentTypeId<{struct_name}>(),
+        [this]() {{ return ScarlEntt::TypeReflection::GetStringFromValue(this->{property_name}); }},
+        [this](const std::string& stringValue) {{ ScarlEntt::TypeReflection::SetValueFromString(this->{property_name}, stringValue); }} 
+    }};
 '''.format(struct_name=struct_name, type=variable[0], type_enum=types[variable[0]], property_name=variable[1]))
             else:
                 print("Error processing variable type: " + variable[0])
 
         f.write('''\
 }};
-
-{struct_name} {struct_name}::DeserializeComponent(const ScarlEntt::XmlNode* node)
-{{
-    {struct_name} component;
-
-    for (const auto& [propertyName, property] : properties)
-    {{
-        for (const ScarlEntt::XmlNode* childNode : node->GetChildren())
-        {{
-            if (childNode->GetTagName() == propertyName)
-            {{
-                property.SetValue(&component, childNode->GetValue());
-            }}
-        }}
-    }}
-
-    return component;
-}}
-
-std::unordered_map<std::string, ScarlEntt::TypeReflection>* {struct_name}::GetSerializedFunction()
-{{
-     /* Regenerate the map to ensure it's up to date. */
-     mTypeReflectionMap.clear();
-     for (const auto& [propertyName, property] : properties)
-     {{
-        mTypeReflectionMap[propertyName] = ScarlEntt::TypeReflection{{ property.GetType(), property.GetValueAsString(this) }};
-     }}
-     
-     return &mTypeReflectionMap;
- }}
 
 }} // Namespace Scarlett::Component.
 '''.format(struct_name=struct_name))

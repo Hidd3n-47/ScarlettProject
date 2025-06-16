@@ -13,6 +13,7 @@ typedef uint32_t ComponentId;
 struct ComponentTypeId
 {
 public:
+    ComponentTypeId() = default;
     explicit ComponentTypeId(std::string typeId)
         : mTypeId(std::move(typeId))
     { /* Empty. */ }

@@ -3,7 +3,6 @@
 #include "ScarlEntt/EntityHandle.h"
 
 #include "ScarlEntt/Debug.h"
-#include "Serialization/Xml/XmlDocument.h"
 
 namespace ScarlEntt
 {

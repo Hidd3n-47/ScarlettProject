@@ -46,6 +46,12 @@ Quat::Quat(const float w, const float x, const float y, const float z)
     // Empty.
 }
 
+Quat::Quat(const Vec4& vec)
+    : mW(vec.w), mX(vec.x), mY(vec.y), mZ(vec.z)
+{
+    // Empty.
+}
+
 void Quat::Normalise()
 {
     if (const float length = Sqrt(mX * mX + mY * mY + mZ * mZ + mW * mW); length != 0.0f)

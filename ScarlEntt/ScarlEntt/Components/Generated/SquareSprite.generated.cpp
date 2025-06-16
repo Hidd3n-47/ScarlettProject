@@ -1,46 +1,22 @@
 #include "ScarlEnttpch.h"
 #include "Components/SquareSprite.h"
 
+#include "RTTI/TypeReflection.h"
+#include "ScarlEntt/ComponentManager.h"
+
 namespace Scarlett::Component
 {
 
-std::unordered_map<std::string, Property> SquareSprite::properties = {
-    {
-        "color",
-            Property{ ScarlEntt::ValueType::VEC4,
-            [](void* o) { return SerializationUtils::ToString(static_cast<SquareSprite*>(o)->color); },
-            [](void* o, const std::string& value) { static_cast<SquareSprite*>(o)->color = ScarlEntt::TypeReflection::GetValueFromTypeString<ScarlettMath::Vec4>(value); } }
-    },
+void SquareSprite::GenerateProperties()
+{
+    mProperties.clear();
+
+    mProperties["color"] = ScarlEntt::Property { 
+        ScarlEntt::PropertyType::VEC4, 
+        ScarlEntt::ComponentManager::GetComponentTypeId<SquareSprite>(),
+        [this]() { return ScarlEntt::TypeReflection::GetStringFromValue(this->color); },
+        [this](const std::string& stringValue) { ScarlEntt::TypeReflection::SetValueFromString(this->color, stringValue); } 
+    };
 };
-
-SquareSprite SquareSprite::DeserializeComponent(const ScarlEntt::XmlNode* node)
-{
-    SquareSprite component;
-
-    for (const auto& [propertyName, property] : properties)
-    {
-        for (const ScarlEntt::XmlNode* childNode : node->GetChildren())
-        {
-            if (childNode->GetTagName() == propertyName)
-            {
-                property.SetValue(&component, childNode->GetValue());
-            }
-        }
-    }
-
-    return component;
-}
-
-std::unordered_map<std::string, ScarlEntt::TypeReflection>* SquareSprite::GetSerializedFunction()
-{
-     /* Regenerate the map to ensure it's up to date. */
-     mTypeReflectionMap.clear();
-     for (const auto& [propertyName, property] : properties)
-     {
-        mTypeReflectionMap[propertyName] = ScarlEntt::TypeReflection{ property.GetType(), property.GetValueAsString(this) };
-     }
-     
-     return &mTypeReflectionMap;
- }
 
 } // Namespace Scarlett::Component.

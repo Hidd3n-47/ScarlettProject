@@ -1,11 +1,8 @@
 ﻿#pragma once
 
-#include "ScarlEntt/Debug.h"
+#include <Math/Quat.h>
 
-namespace ScarlEntt
-{
-class XmlNode;
-} // Namespace XmlNode.
+#include "ScarlEntt/Debug.h"
 
 namespace Scarlett::Component
 {

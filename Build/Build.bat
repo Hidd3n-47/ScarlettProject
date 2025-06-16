@@ -15,9 +15,9 @@ call CreateBuildDirectories.bat
 echo ===================================================================================================================
 echo ^| Creating RTTI - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -^|
 echo ===================================================================================================================
-::python "GenerateRTTI.py"
-cd GenerateRTTI\dist\GenerateRTTI
-call GenerateRTTI.exe
+
+python E:\Programming\ScarlettProject\Build\GenerateRTTI\GenerateRTTI.py
+
 echo ===================================================================================================================
 
 :: Regenerate solution files.

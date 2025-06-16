@@ -41,6 +41,11 @@ public:
      * @param z The z component of the quaternion, also known as the k coefficients in the imaginary numbers.
      */
     explicit Quat(const float w, const float x, const float y, const float z);
+    /**
+     * @brief Construct a quaternion from given values of a quaternion.
+     * @param vec The w component of the quaternion, also known as the real value.
+     */
+    explicit Quat(const Vec4& vec);
 
     /**
      * @brief Normalise the quaternion to have a length of 1.

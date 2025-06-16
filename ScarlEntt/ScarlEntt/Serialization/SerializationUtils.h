@@ -1,33 +1,31 @@
 ﻿#pragma once
 
-#include <Math/Quat.h>
+#include "Xml/XmlDocument.h"
 
-namespace SerializationUtils
+namespace ScarlEntt
 {
 
-[[nodiscard]] static inline std::string ToString(const std::string& value)
+class SerializationUtils
 {
-    return value;
-}
+public:
+    template <typename T>
+    [[nodiscard]] inline static T DeserializeComponent(const XmlNode* node)
+    {
+        T component;
 
-[[nodiscard]] static inline std::string ToString(const float value)
-{
-    return std::to_string(value);
-}
+        for (const auto& [propertyName, property] : *component.GetProperties())
+        {
+            for (const XmlNode* childNode : node->GetChildren())
+            {
+                if (childNode->GetTagName() == propertyName)
+                {
+                    property.SetPropertyValue(childNode->GetValue());
+                }
+            }
+        }
 
-[[nodiscard]] static inline std::string ToString(const ScarlettMath::Vec3& vector)
-{
-    return std::to_string(vector.x) + "," + std::to_string(vector.y) + "," + std::to_string(vector.z);
-}
+        return component;
+    }
+};
 
-[[nodiscard]] static inline std::string ToString(const ScarlettMath::Vec4& vector)
-{
-    return std::to_string(vector.x) + "," + std::to_string(vector.y) + "," + std::to_string(vector.z) + "," + std::to_string(vector.w);
-}
-
-[[nodiscard]] static inline std::string ToString(const ScarlettMath::Quat& quat)
-{
-    return ToString(quat.ToVector4());
-}
-
-} // Namespace SerializationUtils.
+} // Namespace ScarlEntt.
