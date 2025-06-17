@@ -55,12 +55,19 @@ public:
     template <typename ComponentType>
     static inline ComponentTypeId GetComponentTypeId() { return ComponentTypeId{ typeid(ComponentType).name() }; }
 
+#ifdef DEV_CONFIGURATION
+    [[nodiscard]] vector<ComponentView>* GetComponents(const EntityId entityId);
+#endif // DEV_CONFIGURATION.
+
 private:
     unordered_map<ComponentTypeId, IComponentArray*> mComponents;
 
 #ifdef DEV_CONFIGURATION
     unordered_map <ComponentTypeId, std::function<void(const EntityId, const XmlNode*)>> mComponentTypeToDeserializeFunctionMap;
     unordered_map<EntityId, vector<ComponentView>> mEntityToComponentViewMap;
+
+    template <typename ComponentType>
+    void AddComponentViewToMap(const EntityId entityId, const ComponentType& component);
 #endif // DEV_CONFIGURATION.
 
     /**
@@ -139,16 +146,35 @@ inline ComponentArray<ComponentType>& ComponentManager::GetComponentArray()
     return *static_cast<ComponentArray<ComponentType>*>(mComponents[typeName]);
 }
 
+template <typename ComponentType>
+void ComponentManager::AddComponentViewToMap(const EntityId entityId, const ComponentType& component)
+{
+    ComponentRef<ComponentType> componentRef{ entityId, &GetComponentArray<ComponentType>() };
+
+    mEntityToComponentViewMap[entityId].emplace_back(ComponentTypeId{ GetComponentTypeId<ComponentType>() }, [componentRef]() { return componentRef->GetProperties(); });
+}
+
 template <typename ComponentType, typename... Args>
 inline ComponentType* ComponentManager::AddComponent(const EntityId entityId, Args&&... args)
 {
+#ifdef DEV_CONFIGURATION
+    ComponentType* component = GetComponentArray<ComponentType>().AddComponent(entityId, std::forward<Args>(args)...);
+    AddComponentViewToMap(entityId, *component);
+    return component;
+#else // DEV_CONFIGURATION
     return GetComponentArray<ComponentType>().AddComponent(entityId, std::forward<Args>(args)...);
+#endif // Else !DEV_CONFIGURATION.
 }
 
 template <typename ComponentType>
 inline ComponentType* ComponentManager::AddComponent(const EntityId entityId, const ComponentType& component)
 {
+#ifdef DEV_CONFIGURATION
+    AddComponentViewToMap(entityId, component);
     return GetComponentArray<ComponentType>().AddComponent(entityId, component);
+#else // DEV_CONFIGURATION
+    return GetComponentArray<ComponentType>().AddComponent(entityId, component);
+#endif // Else !DEV_CONFIGURATION.
 }
 
 template <typename ComponentType>
@@ -162,5 +188,15 @@ inline void ComponentManager::RemoveComponent(EntityId entityId)
 {
     GetComponentArray<ComponentType>().RemoveComponent(entityId);
 }
+
+#ifdef DEV_CONFIGURATION
+
+inline vector<ComponentView>* ComponentManager::GetComponents(const EntityId entityId)
+{
+    //todo add checks.
+    return &mEntityToComponentViewMap[entityId];
+}
+
+#endif // DEV_CONFIGURATION.
 
 } // Namespace ScarlEntt

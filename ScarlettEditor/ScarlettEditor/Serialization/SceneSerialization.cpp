@@ -5,6 +5,9 @@
 
 #include <Serialization/Xml/XmlSerializer.h>
 
+#include "Components/BoundingBox.h"
+#include "Components/Tag.h"
+
 namespace ScarlettEditor
 {
 
@@ -22,19 +25,21 @@ void SceneSerialization::SerializeCurrentGameScene()
     {
         ScarlEntt::XmlNode* entityNode = new ScarlEntt::XmlNode("Entity");
 
-        //for (const auto& component : handle.GetComponents())
+        for (auto& component : *handle.GetComponents())
         {
-            /*ScarlEntt::XmlNode* componentNode = new ScarlEntt::XmlNode{ "Component" };
-            componentNode->AddAttribute("typeId", component.GetComponentTypeId());
+            ScarlEntt::XmlNode* componentNode = new ScarlEntt::XmlNode{ "Component" };
+            componentNode->AddAttribute("typeId", component.GetComponentTypeId()->Type());
 
-            for (auto& [componentTag, componentValue] : *component.GetSerializedValue())
+            for (auto& [componentTag, componentValue] : *component.GetProperties())
             {
-                ScarlEntt::XmlNode* componentValueNode = new ScarlEntt::XmlNode{ componentTag, componentValue.GetValue()};
-                componentValueNode->AddAttribute("type", componentValue.GetTypeString());
+                std::string_view propertyValue;
+                componentValue.GetPropertyValue(propertyValue);
+                ScarlEntt::XmlNode* componentValueNode = new ScarlEntt::XmlNode{ componentTag, std::string{ propertyValue } };
+                componentValueNode->AddAttribute("type", componentValue.GetTypeAsString());
                 componentNode->AddChildNode(componentValueNode);
             }
 
-            entityNode->AddChildNode(componentNode);*/
+            entityNode->AddChildNode(componentNode);
         }
 
         sceneNode->AddChildNode(entityNode);
@@ -57,6 +62,12 @@ void SceneSerialization::DeserializeCurrentGameScene()
         for (const auto component : entityNode->GetChildren())
         {
             entity.AddComponentFromXml(component);
+        }
+
+        auto tag = entity.GetComponent<Scarlett::Component::Tag>();
+        if (tag.IsValid())
+        {
+            tag->entity = ScarlEntt::EntityHandle{ entity };
         }
     }
 

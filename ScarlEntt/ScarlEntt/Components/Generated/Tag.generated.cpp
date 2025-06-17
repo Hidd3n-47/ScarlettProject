@@ -14,8 +14,8 @@ void Tag::GenerateProperties()
     mProperties["name"] = ScarlEntt::Property { 
         ScarlEntt::PropertyType::STRING, 
         ScarlEntt::ComponentManager::GetComponentTypeId<Tag>(),
-        [this]() { return ScarlEntt::TypeReflection::GetStringFromValue(this->name); },
-        [this](const std::string& stringValue) { ScarlEntt::TypeReflection::SetValueFromString(this->name, stringValue); } 
+        [this](ScarlEntt::Property* p) { p->mPropertyValue = ScarlEntt::TypeReflection::GetStringFromValue(this->name); return "foo"; },
+        [this](const std::string_view& stringValue) { ScarlEntt::TypeReflection::SetValueFromString(this->name, stringValue); } 
     };
 };
 

@@ -14,22 +14,22 @@ void Line::GenerateProperties()
     mProperties["start"] = ScarlEntt::Property { 
         ScarlEntt::PropertyType::VEC3, 
         ScarlEntt::ComponentManager::GetComponentTypeId<Line>(),
-        [this]() { return ScarlEntt::TypeReflection::GetStringFromValue(this->start); },
-        [this](const std::string& stringValue) { ScarlEntt::TypeReflection::SetValueFromString(this->start, stringValue); } 
+        [this](ScarlEntt::Property* p) { p->mPropertyValue = ScarlEntt::TypeReflection::GetStringFromValue(this->start); return "foo"; },
+        [this](const std::string_view& stringValue) { ScarlEntt::TypeReflection::SetValueFromString(this->start, stringValue); } 
     };
 
     mProperties["end"] = ScarlEntt::Property { 
         ScarlEntt::PropertyType::VEC3, 
         ScarlEntt::ComponentManager::GetComponentTypeId<Line>(),
-        [this]() { return ScarlEntt::TypeReflection::GetStringFromValue(this->end); },
-        [this](const std::string& stringValue) { ScarlEntt::TypeReflection::SetValueFromString(this->end, stringValue); } 
+        [this](ScarlEntt::Property* p) { p->mPropertyValue = ScarlEntt::TypeReflection::GetStringFromValue(this->end); return "foo"; },
+        [this](const std::string_view& stringValue) { ScarlEntt::TypeReflection::SetValueFromString(this->end, stringValue); } 
     };
 
     mProperties["color"] = ScarlEntt::Property { 
         ScarlEntt::PropertyType::VEC4, 
         ScarlEntt::ComponentManager::GetComponentTypeId<Line>(),
-        [this]() { return ScarlEntt::TypeReflection::GetStringFromValue(this->color); },
-        [this](const std::string& stringValue) { ScarlEntt::TypeReflection::SetValueFromString(this->color, stringValue); } 
+        [this](ScarlEntt::Property* p) { p->mPropertyValue = ScarlEntt::TypeReflection::GetStringFromValue(this->color); return "foo"; },
+        [this](const std::string_view& stringValue) { ScarlEntt::TypeReflection::SetValueFromString(this->color, stringValue); } 
     };
 };
 

@@ -31,11 +31,11 @@ friend class XmlDocument;
 friend class XmlSerializer;
 public:
     inline XmlNode() = default;
-    explicit inline XmlNode(std::string tag)
-        : mTagName(std::move(tag))
+    explicit inline XmlNode(const std::string& tag)
+        : mTagName(tag)
     { /* Empty. */ }
-    explicit inline XmlNode(std::string tag, std::string value)
-        : mTagName(std::move(tag)), mValue(std::move(value))
+    explicit inline XmlNode(const std::string& tag, const std::string& value)
+        : mTagName(tag), mValue(value)
     { /* Empty. */ }
 
     inline std::string GetTagName() const { return mTagName; }

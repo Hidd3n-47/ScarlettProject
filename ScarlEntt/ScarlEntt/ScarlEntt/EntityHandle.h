@@ -71,7 +71,12 @@ public:
     [[nodiscard]] ComponentRef<ComponentType> GetComponent() const;
 
 #ifdef DEV_CONFIGURATION
-
+    /**
+    * @brief Get a vector of the components attached to the entity.
+    * @see ComponentView
+    * @returns A vector of \c ComponentView for the components on the entity.
+    */
+    [[nodiscard]] vector<ComponentView>* GetComponents() const;
 #endif // DEV_CONFIGURATION.
 
     /**
@@ -127,6 +132,11 @@ inline ComponentRef<ComponentType> EntityHandle::GetComponent() const
 }
 
 #ifdef DEV_CONFIGURATION
+
+inline vector<ComponentView>* EntityHandle::GetComponents() const
+{
+    return mComponentManagerRef->GetComponents(mEntityId);
+}
 
 #endif // DEV_CONFIGURATION.
 
