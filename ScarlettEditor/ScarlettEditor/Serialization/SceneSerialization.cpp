@@ -32,9 +32,8 @@ void SceneSerialization::SerializeCurrentGameScene()
 
             for (auto& [componentTag, componentValue] : *component.GetProperties())
             {
-                std::string_view propertyValue;
-                componentValue.GetPropertyValue(propertyValue);
-                ScarlEntt::XmlNode* componentValueNode = new ScarlEntt::XmlNode{ componentTag, std::string{ propertyValue } };
+                const std::string propertyValue = componentValue.GetPropertyValue();
+                ScarlEntt::XmlNode* componentValueNode = new ScarlEntt::XmlNode{ componentTag, propertyValue };
                 componentValueNode->AddAttribute("type", componentValue.GetTypeAsString());
                 componentNode->AddChildNode(componentValueNode);
             }

@@ -7,6 +7,5 @@
 #include <stdexcept>
 #include <unordered_map>
 
-
 #include "Types.h"
 #include "Debug.h"

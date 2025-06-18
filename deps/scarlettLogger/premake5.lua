@@ -3,8 +3,8 @@ project "ScarlettLogger"
     location "ScarlettLogger"
     kind "StaticLib"
     language "C++"
-	staticruntime "on"
-	cppdialect "C++20"
+    staticruntime "Off"
+    cppdialect "C++20"
     
     targetdir("$(SolutionDir)/bin/" .. outputName .. "/%{prj.name}")
     objdir("bin-int/" .. outputName .. "/%{prj.name}")
@@ -14,11 +14,11 @@ project "ScarlettLogger"
         "%{prj.name}/**.h",
         "%{prj.name}/**.cpp",
     }
-	
-	includedirs
-	{
-		"$(SolutionDir)/deps/ScarlettLogger/deps/"
-	}
+
+    includedirs
+    {
+        "$(SolutionDir)/deps/ScarlettLogger/deps/"
+    }
 
     filter "system:windows"
         systemversion "latest"

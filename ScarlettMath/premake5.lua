@@ -3,7 +3,7 @@ project "ScarlettMath"
     location "ScarlettMath"
     kind "StaticLib"
     language "C++"
-    staticruntime "On"
+    staticruntime "Off"
     cppdialect "C++20"
 
     targetdir(outputPath .. "%{prj.name}")

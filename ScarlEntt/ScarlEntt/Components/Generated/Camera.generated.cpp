@@ -14,28 +14,28 @@ void Camera::GenerateProperties()
     mProperties["mForwardVector"] = ScarlEntt::Property { 
         ScarlEntt::PropertyType::VEC3, 
         ScarlEntt::ComponentManager::GetComponentTypeId<Camera>(),
-        [this](ScarlEntt::Property* p) { p->mPropertyValue = ScarlEntt::TypeReflection::GetStringFromValue(this->mForwardVector); return "foo"; },
+        [this]() { return ScarlEntt::TypeReflection::GetStringFromValue(this->mForwardVector); },
         [this](const std::string_view& stringValue) { ScarlEntt::TypeReflection::SetValueFromString(this->mForwardVector, stringValue); } 
     };
 
     mProperties["mRightVector"] = ScarlEntt::Property { 
         ScarlEntt::PropertyType::VEC3, 
         ScarlEntt::ComponentManager::GetComponentTypeId<Camera>(),
-        [this](ScarlEntt::Property* p) { p->mPropertyValue = ScarlEntt::TypeReflection::GetStringFromValue(this->mRightVector); return "foo"; },
+        [this]() { return ScarlEntt::TypeReflection::GetStringFromValue(this->mRightVector); },
         [this](const std::string_view& stringValue) { ScarlEntt::TypeReflection::SetValueFromString(this->mRightVector, stringValue); } 
     };
 
     mProperties["mUpVector"] = ScarlEntt::Property { 
         ScarlEntt::PropertyType::VEC3, 
         ScarlEntt::ComponentManager::GetComponentTypeId<Camera>(),
-        [this](ScarlEntt::Property* p) { p->mPropertyValue = ScarlEntt::TypeReflection::GetStringFromValue(this->mUpVector); return "foo"; },
+        [this]() { return ScarlEntt::TypeReflection::GetStringFromValue(this->mUpVector); },
         [this](const std::string_view& stringValue) { ScarlEntt::TypeReflection::SetValueFromString(this->mUpVector, stringValue); } 
     };
 
     mProperties["mAspectRatio"] = ScarlEntt::Property { 
         ScarlEntt::PropertyType::FLOAT, 
         ScarlEntt::ComponentManager::GetComponentTypeId<Camera>(),
-        [this](ScarlEntt::Property* p) { p->mPropertyValue = ScarlEntt::TypeReflection::GetStringFromValue(this->mAspectRatio); return "foo"; },
+        [this]() { return ScarlEntt::TypeReflection::GetStringFromValue(this->mAspectRatio); },
         [this](const std::string_view& stringValue) { ScarlEntt::TypeReflection::SetValueFromString(this->mAspectRatio, stringValue); } 
     };
 };

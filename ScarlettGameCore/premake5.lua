@@ -3,7 +3,7 @@ project "ScarlettGameCore"
     location "ScarlettGameCore"
     kind "SharedLib"
     language "C++"
-    staticruntime "On"
+    staticruntime "Off"
     cppdialect "C++20"
 
     targetdir(outputPath .. "%{prj.name}")

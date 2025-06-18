@@ -69,7 +69,7 @@ void {struct_name}::GenerateProperties()
     mProperties["{property_name}"] = ScarlEntt::Property {{ 
         ScarlEntt::PropertyType::{type_enum}, 
         ScarlEntt::ComponentManager::GetComponentTypeId<{struct_name}>(),
-        [this](ScarlEntt::Property* p) {{ p->mPropertyValue = ScarlEntt::TypeReflection::GetStringFromValue(this->{property_name}); return "foo"; }},
+        [this]() {{ return ScarlEntt::TypeReflection::GetStringFromValue(this->{property_name}); }},
         [this](const std::string_view& stringValue) {{ ScarlEntt::TypeReflection::SetValueFromString(this->{property_name}, stringValue); }} 
     }};
 '''.format(struct_name=struct_name, type=variable[0], type_enum=types[variable[0]], property_name=variable[1]))

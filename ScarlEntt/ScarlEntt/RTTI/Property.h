@@ -2,9 +2,6 @@
 
 #include <functional>
 
-#include "../../../ScarlettEditor/ScarlettEditor/Src/ScarlettEditorDefines.h"
-#include "../../../ScarlettEngine/ScarlettEngine/Src/ScarlettEngineDefines.h"
-
 namespace ScarlEntt
 {
 
@@ -21,20 +18,14 @@ class Property
 {
 public:
     Property() = default;
-    inline Property(const PropertyType type, ComponentTypeId ownerType, const std::function<std::string(Property*)>& getFunction, const std::function<void(const std::string_view&)>& setFunction)
+    inline Property(const PropertyType type, ComponentTypeId ownerType, const std::function<std::string()>& getFunction, const std::function<void(const std::string_view&)>& setFunction)
         : mType(type)
         , mOwnerType(std::move(ownerType))
         , mGetFunction(getFunction)
         , mSetFunction(setFunction)
     { /* Empty. */ }
 
-    inline void GetPropertyValue(std::string_view& value)
-    {
-        mPropertyValue = mGetFunction(this);
-        value = std::string_view{ mPropertyValue };
-    }
-
-    [[nodiscard]] inline std::string_view GetPropertyValue() { std::string f; std::string_view value = mGetFunction(this); return value; }
+    [[nodiscard]] inline std::string GetPropertyValue()         const { return mGetFunction(); }
     inline void SetPropertyValue(const std::string_view& value) const { mSetFunction(value); }
 
     [[nodiscard]] inline PropertyType GetType()                 const { return mType; }
@@ -56,7 +47,7 @@ private:
     PropertyType        mType;
     ComponentTypeId     mOwnerType;
 
-    std::function<std::string(Property*)>                mGetFunction;
+    std::function<std::string()>                     mGetFunction;
     std::function<void(const std::string_view&)>     mSetFunction;
 
 };

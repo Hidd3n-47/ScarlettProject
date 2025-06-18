@@ -47,7 +47,7 @@ Quat::Quat(const float w, const float x, const float y, const float z)
 }
 
 Quat::Quat(const Vec4& vec)
-    : mW(vec.w), mX(vec.x), mY(vec.y), mZ(vec.z)
+    : mW(vec.x), mX(vec.y), mY(vec.z), mZ(vec.w)
 {
     // Empty.
 }

@@ -3,7 +3,7 @@ project "ScarlEnttTests"
     location "ScarlEnttTests"
     kind "ConsoleApp"
     language "C++"
-    staticruntime "On"
+    staticruntime "Off"
     cppdialect "C++20"
 
     targetdir("$(SolutionDir)bin/" .. outputNameTests .. "/%{prj.name}")

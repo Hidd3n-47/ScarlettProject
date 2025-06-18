@@ -1,7 +1,7 @@
 project "ImGui"
     kind "StaticLib"
     language "C++"
-    staticruntime "on"
+    staticruntime "Off"
     cppdialect "C++17"
 
     targetdir("$(SolutionDir)/bin/" .. outputName .. "/%{prj.name}")

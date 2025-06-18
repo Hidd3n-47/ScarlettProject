@@ -3,7 +3,7 @@ project "Scarlett"
     location "Scarlett"
     kind "ConsoleApp"
     language "C++"
-    staticruntime "On"
+    staticruntime "Off"
     cppdialect "C++20"
 
     targetdir(outputPath .. "%{prj.name}")

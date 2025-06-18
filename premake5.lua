@@ -1,11 +1,11 @@
 workspace "Scarlett"
-    architecture "x64"
+architecture "x64"
 
-    configurations
-    {
-        "Dev",
-        "Release"
-    }
+configurations
+{
+    "Dev",
+    "Release"
+}
 
 outputName          = "%{cfg.buildcfg}"
 outputPath          = "$(SolutionDir)bin/" .. outputName .. "/"

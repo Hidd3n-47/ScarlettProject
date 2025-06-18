@@ -6,3 +6,5 @@ bin-int/
 *sln
 .idea/
 p4config.txt
+.git/
+.vs/
