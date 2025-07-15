@@ -34,8 +34,6 @@ project "ScarlettGameCore"
         "ScarlettLogger",
     }
 
-    prebuildcommands {  "call \"%{wks.location}Build\\Build.bat\"" }
-
     postbuildcommands
     {
         ("{COPYFILE} %[%{cfg.buildtarget.abspath}] %[" .. outputPath .."ScarlettEngine/]"),

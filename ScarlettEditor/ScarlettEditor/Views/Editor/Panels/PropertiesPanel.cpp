@@ -5,12 +5,12 @@
 
 #include <ScarlettGameCore/Src/GameCore.h>
 
+#include <RTTI/TypeReflection.h>
 #include <ScarlEntt/EntityHandle.h>
 
 #include <Components/Tag.h>
-#include <Components/Transform.h>
-#include <Components/SquareSprite.h>
 
+#include "UI/UiControls.h"
 #include "Views/Editor/View/EditorView.h"
 
 
@@ -25,62 +25,47 @@ void PropertiesPanel::Render()
     {
         const std::string entityName = selectedEntity->GetComponent<Scarlett::Component::Tag>()->name;
 
-        //for (ScarlEntt::ComponentView& component : selectedEntity->GetComponents())
-        //{
-        //    if (ImGui::CollapsingHeader((component.GetComponentTypeId()).c_str()))
-        //    {
-        //        const auto properties = component.GetProperties();
-        //        for (const auto& [propertyName, property] : properties)
-        //        {
-        //            //const std::string valueString = { property.GetValue(component.GetRawComponent()) };
-        //            {
-        //                const auto t = property.GetType();
-        //            }
-        //            switch (property.GetType())
-        //            {
-        //            case ScarlEntt::ValueType::FLOAT:
-        //            {
-        //                //auto value = ScarlEntt::TypeReflection::GetValueFromTypeString<float>(valueString);
-        //                float value;
-        //                ImGui::DragFloat((propertyName + "##" + entityName).c_str(), &value, 0.05f);
-        //                break;
-        //            }
-        //            case ScarlEntt::ValueType::STRING:
-        //            {
-        //                //todo implement
-        //                //auto value = ScarlEntt::TypeReflection::GetValueFromTypeString<std::string>(valueString);
-        //                break;
-        //            }
-        //            case ScarlEntt::ValueType::VEC3:
-        //            {
-        //                //auto value = ScarlEntt::TypeReflection::GetValueFromTypeString<ScarlettMath::Vec3>(valueString);
-        //                ScarlettMath::Vec3 value;
-        //                ImGui::DragFloat3((propertyName + "##" + entityName).c_str(), &value.x, 0.05f);
-        //                break;
-        //            }
-        //            case ScarlEntt::ValueType::VEC4:
-        //            {
-        //                ScarlettMath::Vec4 value;
-        //                ScarlEntt::TypeReflection::GetValueFromProperty(property, component, value);
-        //                //auto value = ScarlEntt::TypeReflection::GetValueFromTypeString<ScarlettMath::Vec4>(valueString);
-        //                ImGui::DragFloat4((propertyName + "##" + entityName).c_str(), &value.x, 0.05f);
-        //                break;
-        //            }
-        //            case ScarlEntt::ValueType::QUAT:
-        //            {
-        //                ScarlettMath::Vec4 value;
-        //                //auto value = ScarlEntt::TypeReflection::GetValueFromTypeString<ScarlettMath::Quat>(valueString).ToVector4();
-        //                ImGui::DragFloat4((propertyName + "##" + entityName).c_str(), &value.x, 0.05f);
-        //                break;
-        //            }
-        //            case ScarlEntt::ValueType::UNKNOWN:
-        //            default:
-        //                // todo add logging or debug assert/breakpoint here.
-        //                break;
-        //            }
-        //        }
-        //    }
-        //}
+        for (ScarlEntt::ComponentView& component : *selectedEntity->GetComponents())
+        {
+            if (ImGui::CollapsingHeader(component.GetComponentTypeId()->FriendlyName().c_str()))
+            {
+                for (const auto& [propertyName, property] : *component.GetProperties())
+                {
+                    switch (property.GetType())
+                    {
+                    case ScarlEntt::PropertyType::FLOAT:
+                    {
+                        // todo implement with new way.
+                        float value;
+                        ScarlEntt::TypeReflection::SetValueFromString(value, property.GetPropertyValue());
+                        break;
+                    }
+                    case ScarlEntt::PropertyType::STRING:
+                        //todo implement
+                        //auto value = ScarlEntt::TypeReflection::GetValueFromTypeString<std::string>(valueString);
+                        break;
+                    case ScarlEntt::PropertyType::VEC3:
+                        UiControls::RenderVec3PropertyControl(property, {.propertyName = propertyName, .propertyId = entityName });
+                        break;
+                    case ScarlEntt::PropertyType::VEC4:
+                        UiControls::RenderVec4PropertyControl(property, { .propertyName = propertyName, .propertyId = entityName });
+                        break;
+                    case ScarlEntt::PropertyType::QUAT:
+                    {
+                        // Todo Change this to render as a vec 3.
+                        UiControls::RenderVec4PropertyControl(property, { .propertyName = propertyName, .propertyId = entityName });
+                        //ScarlettMath::Vec4 value;
+                        //ScarlEntt::TypeReflection::SetValueFromString(value, property.GetPropertyValue());
+                        //ImGui::DragFloat4((propertyName + "##" + entityName).c_str(), &value.x, 0.05f);
+                        break;
+                    }
+                    default:
+                        // todo add logging or debug assert/breakpoint here.
+                        break;
+                    }
+                }
+            }
+        }
     }
 }
 

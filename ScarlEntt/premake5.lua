@@ -12,6 +12,8 @@ project "ScarlEntt"
     pchheader "ScarlEnttpch.h"
     pchsource "%{prj.name}/ScarlEntt/ScarlEnttpch.cpp"
 
+    dependson { "ScarlettBuild" }
+
     files
     {
         "%{prj.name}/**.h",

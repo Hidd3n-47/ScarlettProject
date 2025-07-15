@@ -75,6 +75,8 @@ void EditorManager::CreateInstance(ImGuiContext* uiContext, ImGuiMemAllocFunc* a
     style.Colors[ImGuiCol_ButtonActive]         = LIGHT;
     style.Colors[ImGuiCol_ButtonHovered]        = SCARLETT;
 
+    style.Colors[ImGuiCol_FrameBg]              = LIGHT;
+
     style.Colors[ImGuiCol_Header]               = LIGHT;
     style.Colors[ImGuiCol_HeaderActive]         = LIGHT;
     style.Colors[ImGuiCol_HeaderHovered]        = SCARLETT;

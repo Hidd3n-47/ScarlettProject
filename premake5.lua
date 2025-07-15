@@ -14,6 +14,10 @@ outputNameTests     = "%{cfg.buildcfg}/Tests"
 
 VulkanPath = os.getenv('VULKAN_SDK')
 
+-- Build.
+include "ScarlettBuild/"
+
+-- Editor and Engine.
 include "ScarlettEngine/"
 include "ScarlettEditor/"
 include "ScarlettGameCore/"

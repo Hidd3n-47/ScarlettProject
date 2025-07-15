@@ -2,17 +2,11 @@
 
 #include <functional>
 
+#include "PropertyType.h"
+#include "ScarlEntt/Types.h"
+
 namespace ScarlEntt
 {
-
-enum class PropertyType : uint8_t
-{
-    FLOAT,
-    STRING,
-    VEC3,
-    VEC4,
-    QUAT,
-};
 
 class Property
 {
