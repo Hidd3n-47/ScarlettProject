@@ -122,7 +122,7 @@ uint32 Device::FindMemoryType(const uint32_t typeFilter, const VkMemoryPropertyF
     throw std::runtime_error("Failed to find suitable memory type.");
 }
 
-VkFormat Device::FindSupportedFormat(const std::vector<VkFormat>& candidates, VkImageTiling tiling, VkFormatFeatureFlags features) const
+VkFormat Device::FindSupportedFormat(const std::vector<VkFormat>& candidates, const VkImageTiling tiling, const VkFormatFeatureFlags features) const
 {
     for (const VkFormat format : candidates)
     {
@@ -167,9 +167,9 @@ void Device::CreateBuffer(const VkDeviceSize size, const VkBufferUsageFlags usag
     const VkBufferCreateInfo bufferInfo
     {
         .sType = VK_STRUCTURE_TYPE_BUFFER_CREATE_INFO,
-        .size = size,
-        .usage = usage,
-        .sharingMode = VK_SHARING_MODE_EXCLUSIVE
+        .size           = size,
+        .usage          = usage,
+        .sharingMode    = VK_SHARING_MODE_EXCLUSIVE
     };
 
     VK_CHECK(vkCreateBuffer(mDevice, &bufferInfo, nullptr, &buffer), "Failed to create Vulkan Buffer");
@@ -180,8 +180,8 @@ void Device::CreateBuffer(const VkDeviceSize size, const VkBufferUsageFlags usag
     const VkMemoryAllocateInfo allocInfo
     {
         .sType = VK_STRUCTURE_TYPE_MEMORY_ALLOCATE_INFO,
-        .allocationSize = memRequirements.size,
-        .memoryTypeIndex = FindMemoryType(memRequirements.memoryTypeBits, properties)
+        .allocationSize     = memRequirements.size,
+        .memoryTypeIndex    = FindMemoryType(memRequirements.memoryTypeBits, properties)
     };
 
     VK_CHECK(vkAllocateMemory(mDevice, &allocInfo, nullptr, &bufferMemory), "Failed to allocate Vulkan Buffer Memory.");

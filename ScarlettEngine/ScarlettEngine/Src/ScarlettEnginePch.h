@@ -20,3 +20,5 @@
 
 #include "Src/PrimitiveTypes.h"
 #include "Src/ScarlettEngineDefines.h"
+
+#include "Core/FileIO/Filepath.h"

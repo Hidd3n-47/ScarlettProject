@@ -19,12 +19,12 @@ struct PipelineConfigInfo
     VkRect2D    scissor;
     VkViewport  viewport;
 
-    VkPipelineInputAssemblyStateCreateInfo  inputAssemblyCreateInfo;
-    VkPipelineRasterizationStateCreateInfo  rasterizationCreateInfo;
-    VkPipelineMultisampleStateCreateInfo    multiSampleCreateInfo;
-    VkPipelineColorBlendAttachmentState     colorBlendAttachment;
-    VkPipelineColorBlendStateCreateInfo     colorBlendCreateInfo;
-    VkPipelineDepthStencilStateCreateInfo   depthStencilCreateInfo;
+    VkPipelineInputAssemblyStateCreateInfo  inputAssemblyCreateInfo{};
+    VkPipelineRasterizationStateCreateInfo  rasterizationCreateInfo{};
+    VkPipelineMultisampleStateCreateInfo    multiSampleCreateInfo{};
+    VkPipelineColorBlendAttachmentState     colorBlendAttachment{};
+    VkPipelineColorBlendStateCreateInfo     colorBlendCreateInfo{};
+    VkPipelineDepthStencilStateCreateInfo   depthStencilCreateInfo{};
 
     VkPipelineLayout    pipelineLayout  = nullptr;
     VkRenderPass        renderPass      = nullptr;
@@ -42,7 +42,7 @@ public:
     Pipeline& operator=(Pipeline&&)         = delete;
     Pipeline& operator=(const Pipeline&)    = delete;
 
-    void Init(Device* device, const std::string& vertFilepath, const std::string& fragFilepath, const PipelineConfigInfo& configInfo);
+    void Init(Device* device, const Filepath& vertFilepath, const Filepath& fragFilepath, const PipelineConfigInfo& configInfo);
     void Destroy();
 
     void Bind(const VkCommandBuffer commandBuffer) const;
@@ -53,13 +53,11 @@ public:
 private:
     Device*         mDevice;
     VkPipeline      mGraphicsPipeline;
-    VkShaderModule  mVertexShaderModule;
-    VkShaderModule  mFragmentShaderModule;
 
     // Todo christian make this not return a copy vector.
-    static vector<char> ReadFile(const std::string& filepath);
+    static vector<char> ReadFile(const Filepath& filepath);
 
-    void CreateGraphicsPipeline(const std::string& vertFilepath, const std::string& fragFilepath, const PipelineConfigInfo& configInfo);
+    void CreateGraphicsPipeline(const Filepath& vertFilepath, const Filepath& fragFilepath, const PipelineConfigInfo& configInfo);
 
     void CreateShaderModule(const vector<char>& code, VkShaderModule* shaderModule) const;
 };

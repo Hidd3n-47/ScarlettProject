@@ -2,13 +2,13 @@
 #include "Pipeline.h"
 
 #include "Device.h"
-#include "Mesh.h"
+#include "VulkanMesh.h"
 #include "Rendering/Vulkan/VulkanUtils.h"
 
 namespace Scarlett
 {
 
-void Pipeline::Init(Device* device, const std::string& vertFilepath, const std::string& fragFilepath, const PipelineConfigInfo& configInfo)
+void Pipeline::Init(Device* device, const Filepath& vertFilepath, const Filepath& fragFilepath, const PipelineConfigInfo& configInfo)
 {
     mDevice = device;
 
@@ -89,14 +89,14 @@ void Pipeline::DefaultPipelineConfigInfo(PipelineConfigInfo& configInfo, const u
     configInfo.depthStencilCreateInfo.stencilTestEnable         = VK_FALSE;
 }
 
-vector<char> Pipeline::ReadFile(const std::string& filepath)
+vector<char> Pipeline::ReadFile(const Filepath& filepath)
 {
-    std::ifstream fin{ filepath, std::ios::binary | std::ios::ate };
+    std::ifstream fin{ filepath.GetAbsolutePath(), std::ios::binary | std::ios::ate };
 
     if (!fin.is_open())
     {
-        SCARLETT_ELOG("Failed to open file at path: {0}", filepath);
-        throw std::runtime_error("Failed to open file at path: " + filepath);
+        SCARLETT_ELOG("Failed to open file at path: {0}", filepath.GetAbsolutePath());
+        throw std::runtime_error("Failed to open file at path: " + filepath.GetAbsolutePath());
     }
 
     size_t fileSize = fin.tellg();
@@ -111,13 +111,16 @@ vector<char> Pipeline::ReadFile(const std::string& filepath)
     return fileBuffer;
 }
 
-void Pipeline::CreateGraphicsPipeline(const std::string& vertFilepath, const std::string& fragFilepath, const PipelineConfigInfo& configInfo)
+void Pipeline::CreateGraphicsPipeline(const Filepath& vertFilepath, const Filepath& fragFilepath, const PipelineConfigInfo& configInfo)
 {
     const vector<char> vert = ReadFile(vertFilepath);
     const vector<char> frag = ReadFile(fragFilepath);
 
-    CreateShaderModule(vert, &mVertexShaderModule);
-    CreateShaderModule(frag, &mFragmentShaderModule);
+    VkShaderModule  vertexShaderModule;
+    VkShaderModule  fragmentShaderModule;
+
+    CreateShaderModule(vert, &vertexShaderModule);
+    CreateShaderModule(frag, &fragmentShaderModule);
 
     VkPipelineShaderStageCreateInfo shaderStages[2]
     {
@@ -126,7 +129,7 @@ void Pipeline::CreateGraphicsPipeline(const std::string& vertFilepath, const std
             .sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
             .flags  = 0,
             .stage  = VK_SHADER_STAGE_VERTEX_BIT,
-            .module = mVertexShaderModule,
+            .module = vertexShaderModule,
             .pName  = "main"
         },
         // Fragment Shader.
@@ -134,15 +137,15 @@ void Pipeline::CreateGraphicsPipeline(const std::string& vertFilepath, const std
             .sType = VK_STRUCTURE_TYPE_PIPELINE_SHADER_STAGE_CREATE_INFO,
             .flags  = 0,
             .stage  = VK_SHADER_STAGE_FRAGMENT_BIT,
-            .module = mFragmentShaderModule,
+            .module = fragmentShaderModule,
             .pName  = "main"
         }
     };
 
-    auto bindingDescriptions = Vertex::GetBindingDescriptions();
-    auto attributeDescriptions = Vertex::GetAttributeDescriptions();
-    VkPipelineVertexInputStateCreateInfo vertexInputInfo
-    { 
+    vector<VkVertexInputBindingDescription> bindingDescriptions         = VulkanVertex::GetBindingDescriptions();
+    vector<VkVertexInputAttributeDescription> attributeDescriptions     = VulkanVertex::GetAttributeDescriptions();
+    const VkPipelineVertexInputStateCreateInfo vertexInputInfo
+    {
         .sType = VK_STRUCTURE_TYPE_PIPELINE_VERTEX_INPUT_STATE_CREATE_INFO,
         .vertexBindingDescriptionCount      = static_cast<uint32>(bindingDescriptions.size()),
         .pVertexBindingDescriptions         = bindingDescriptions.data(),
@@ -150,7 +153,7 @@ void Pipeline::CreateGraphicsPipeline(const std::string& vertFilepath, const std
         .pVertexAttributeDescriptions       = attributeDescriptions.data()
     };
 
-    VkPipelineViewportStateCreateInfo viewportCreateInfo
+    const VkPipelineViewportStateCreateInfo viewportCreateInfo
     {
         .sType = VK_STRUCTURE_TYPE_PIPELINE_VIEWPORT_STATE_CREATE_INFO,
         .viewportCount      = 1,
@@ -181,10 +184,8 @@ void Pipeline::CreateGraphicsPipeline(const std::string& vertFilepath, const std
 
     VK_CHECK(vkCreateGraphicsPipelines(mDevice->GetDevice(), VK_NULL_HANDLE, 1, &graphicsPipelineCreateInfo, nullptr, &mGraphicsPipeline), "Failed to create a vulkan graphics pipeline.");
 
-    // Todo Christian Can I not destroy the shader modules here?
-    // Todo Christian remove from being member variables.
-    vkDestroyShaderModule(mDevice->GetDevice(), mFragmentShaderModule, nullptr);
-    vkDestroyShaderModule(mDevice->GetDevice(), mVertexShaderModule, nullptr);
+    vkDestroyShaderModule(mDevice->GetDevice(), fragmentShaderModule, nullptr);
+    vkDestroyShaderModule(mDevice->GetDevice(), vertexShaderModule, nullptr);
 }
 
 void Pipeline::CreateShaderModule(const vector<char>& code, VkShaderModule* shaderModule) const

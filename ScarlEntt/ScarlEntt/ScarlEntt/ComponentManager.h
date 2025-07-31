@@ -146,6 +146,7 @@ inline ComponentArray<ComponentType>& ComponentManager::GetComponentArray()
     return *static_cast<ComponentArray<ComponentType>*>(mComponents[typeName]);
 }
 
+#ifdef DEV_CONFIGURATION
 template <typename ComponentType>
 void ComponentManager::AddComponentViewToMap(const EntityId entityId, const ComponentType& component)
 {
@@ -153,6 +154,7 @@ void ComponentManager::AddComponentViewToMap(const EntityId entityId, const Comp
 
     mEntityToComponentViewMap[entityId].emplace_back(ComponentTypeId{ GetComponentTypeId<ComponentType>() }, [componentRef]() { return componentRef->GetProperties(); });
 }
+#endif // DEV_CONFIGURATION.
 
 template <typename ComponentType, typename... Args>
 inline ComponentType* ComponentManager::AddComponent(const EntityId entityId, Args&&... args)

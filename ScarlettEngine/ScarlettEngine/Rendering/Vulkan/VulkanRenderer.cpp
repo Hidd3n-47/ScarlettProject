@@ -10,8 +10,10 @@
 
 #include <Components/Camera.h>
 
-#include "Mesh.h"
 #include "VulkanUtils.h"
+#include "VulkanMesh.h"
+#include "VulkanTexture.h"
+
 #include "Core/Window/Window.h"
 #include "Rendering/SpriteInfoStruct.h"
 
@@ -29,6 +31,78 @@ void VulkanRenderer::Init(const Window* windowRef)
     try
     {
         mDevice.Init(windowRef);
+
+        // Todo this is a part of ImGui set up so should somehow be restricted only for editor mode.
+        // -----------------------------------------------------------------------------------
+        const VkDescriptorPoolSize poolSizes[] =
+        {
+            { VK_DESCRIPTOR_TYPE_SAMPLER,                   1000 },
+            { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,    1000 },
+            { VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,             1000 },
+            { VK_DESCRIPTOR_TYPE_STORAGE_IMAGE,             1000 },
+            { VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER,      1000 },
+            { VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER,      1000 },
+            { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,            1000 },
+            { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,            1000 },
+            { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC,    1000 },
+            { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC,    1000 },
+            { VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT,          1000 }
+        };
+
+        VkDescriptorPoolCreateInfo imGuiDescriptorPoolInfo = {};
+        imGuiDescriptorPoolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
+        imGuiDescriptorPoolInfo.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
+        imGuiDescriptorPoolInfo.maxSets = 1000;
+        imGuiDescriptorPoolInfo.poolSizeCount = std::size(poolSizes);
+        imGuiDescriptorPoolInfo.pPoolSizes = poolSizes;
+
+        vkCreateDescriptorPool(mDevice.mDevice, &imGuiDescriptorPoolInfo, nullptr, &mDescriptorSetPool);
+        // -----------------------------------------------------------------------------------
+
+        mTexture = new VulkanTexture();
+        mTexture->SetDevice(&mDevice);
+        //constexpr std::array<uint8, 4> color = { 0xff, 0xff, 0xff, 0xff };
+        //mTexture->Create(color.data(), 1, 1);
+        mTexture->Create(Filepath{"Assets/TextureUV.png"});
+
+        constexpr VkDescriptorSetLayoutBinding textureDescriptorSet
+        {
+            .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+            .descriptorCount    = 1,
+            .stageFlags         = VK_SHADER_STAGE_FRAGMENT_BIT,
+            //.pImmutableSamplers = sampler
+        };
+
+        const VkDescriptorSetLayoutCreateInfo textureDescriptorSetInfo
+        {
+            .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
+            .bindingCount   = 1,
+            .pBindings      = &textureDescriptorSet
+        };
+        VK_CHECK(vkCreateDescriptorSetLayout(mDevice.GetDevice(), &textureDescriptorSetInfo, nullptr, &mTextureDescriptorSetLayout), "Failed to create Vulkan Descriptor Set for Texture.");
+
+        const VkDescriptorSetAllocateInfo descriptorSetAllocateInfo
+        {
+            .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO,
+            .descriptorPool     = mDescriptorSetPool,
+            .descriptorSetCount = 1,
+            .pSetLayouts        = &mTextureDescriptorSetLayout
+        };
+
+        vkAllocateDescriptorSets(mDevice.GetDevice(), &descriptorSetAllocateInfo, &mTextureDescriptorSet);
+
+        const VkWriteDescriptorSet wds
+        {
+            .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
+            .dstSet             = mTextureDescriptorSet,
+            .dstBinding         = 0,
+            .descriptorCount    = 1,
+            .descriptorType     = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+            .pImageInfo         = &mTexture->GetImageInfo()
+        };
+
+        vkUpdateDescriptorSets(mDevice.GetDevice(), 1, &wds, 0, nullptr);
+
         CreatePipelineLayout();
 
         RecreateSwapChain(mWindowRef->GetWidth(), mWindowRef->GetHeight());
@@ -36,21 +110,8 @@ void VulkanRenderer::Init(const Window* windowRef)
 
         CreateCommandBuffers();
 
-        const vector<Vertex> verts
-        {
-            {{ -0.5f, -0.5f, 0.0f } },
-            {{ -0.5f,  0.5f, 0.0f } },
-            {{  0.5f,  0.5f, 0.0f } },
-            {{  0.5f, -0.5f, 0.0f } },
-        };
-        const vector<uint32> indices
-        {
-            0, 1, 2,
-            2, 3, 0
-        };
-        mSquare = new Mesh(&mDevice, verts, indices);
-
-        mLine = new Mesh(&mDevice, "E:/Programming/ScarlettProject/Assets/Mesh/CylinderLowPoly.obj");
+        mSquare = new VulkanMesh(&mDevice, Filepath{ "Assets/Mesh/Plane.obj" });
+        mLine = new VulkanMesh(&mDevice, Filepath{ "Assets/Mesh/CylinderLowPoly.obj" });
     }
     catch(const std::runtime_error& e)
     {
@@ -61,6 +122,9 @@ void VulkanRenderer::Init(const Window* windowRef)
 void VulkanRenderer::Destroy()
 {
     vkDeviceWaitIdle(mDevice.mDevice);
+
+    delete mTexture;
+    vkDestroyDescriptorSetLayout(mDevice.GetDevice(), mTextureDescriptorSetLayout, nullptr);
 
     delete mLine;
     delete mSquare;
@@ -151,6 +215,7 @@ void VulkanRenderer::EndRender()
             .model = translation * command.transform->rotation.GetRotationMatrix() * scale
         };
 
+        vkCmdBindDescriptorSets(mCommandBuffers[mNextImageIndex], VK_PIPELINE_BIND_POINT_GRAPHICS, mPipelineLayout, 0, 1, &mTextureDescriptorSet, 0, nullptr);
         vkCmdPushConstants(mCommandBuffers[mNextImageIndex], mPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SpriteInfoStruct), &info);
 
         mSquare->Bind(mCommandBuffers[mNextImageIndex]);
@@ -174,6 +239,7 @@ void VulkanRenderer::EndRender()
             .model = translation * command.transform->rotation.GetRotationMatrix() * scale
         };
 
+        vkCmdBindDescriptorSets(mCommandBuffers[mNextImageIndex], VK_PIPELINE_BIND_POINT_GRAPHICS, mPipelineLayout, 0, 1, &mTextureDescriptorSet, 0, nullptr);
         vkCmdPushConstants(mCommandBuffers[mNextImageIndex], mPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SpriteInfoStruct), &info);
 
         mLine->Bind(mCommandBuffers[mNextImageIndex]);
@@ -214,8 +280,8 @@ void VulkanRenderer::CreatePipelineLayout()
         .sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,
         .pNext                      = VK_NULL_HANDLE,
         .flags                      = 0,
-        .setLayoutCount             = 0,
-        .pSetLayouts                = nullptr,
+        .setLayoutCount             = 1,
+        .pSetLayouts                = &mTextureDescriptorSetLayout,
         .pushConstantRangeCount     = 1,
         .pPushConstantRanges        = &pushConstantRange,
     };
@@ -228,8 +294,8 @@ void VulkanRenderer::CreatePipeline()
     PipelineConfigInfo pipelineConfig{};
     Pipeline::DefaultPipelineConfigInfo(pipelineConfig, mSwapChain->GetWidth(), mSwapChain->GetHeight());
 
-    pipelineConfig.renderPass = mSwapChain->GetRenderPass();
-    pipelineConfig.pipelineLayout = mPipelineLayout;
+    pipelineConfig.renderPass       = mSwapChain->GetRenderPass();
+    pipelineConfig.pipelineLayout   = mPipelineLayout;
 
     if(mPipeline)
     {
@@ -238,7 +304,7 @@ void VulkanRenderer::CreatePipeline()
     }
     mPipeline = new Pipeline();
 
-    mPipeline->Init(&mDevice, "E:/Programming/ScarlettProject/ScarlettEngine/ScarlettEngine/Rendering/Shaders/vert.spv", "E:/Programming/ScarlettProject/ScarlettEngine/ScarlettEngine/Rendering/Shaders/frag.spv", pipelineConfig);
+    mPipeline->Init(&mDevice, Filepath{ "ScarlettEngine/ScarlettEngine/Rendering/Shaders/vert.spv" }, Filepath{ "ScarlettEngine/ScarlettEngine/Rendering/Shaders/frag.spv" }, pipelineConfig);
 }
 
 void VulkanRenderer::CreateCommandBuffers()

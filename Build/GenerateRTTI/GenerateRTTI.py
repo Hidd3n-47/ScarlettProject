@@ -57,6 +57,8 @@ def generate_rtti_for_component(struct_name, member_variables):
 namespace Scarlett::Component
 {{
 
+#ifdef DEV_CONFIGURATION
+
 void {struct_name}::GenerateProperties()
 {{
     mProperties.clear();
@@ -66,11 +68,11 @@ void {struct_name}::GenerateProperties()
             if variable[0] in types:
                 f.write('''\
 
-    mProperties["{property_name}"] = ScarlEntt::Property {{ 
-        ScarlEntt::PropertyType::{type_enum}, 
+    mProperties["{property_name}"] = ScarlEntt::Property {{
+        ScarlEntt::PropertyType::{type_enum},
         ScarlEntt::ComponentManager::GetComponentTypeId<{struct_name}>(),
         [this]() {{ return ScarlEntt::TypeReflection::GetStringFromValue(this->{property_name}); }},
-        [this](const std::string_view& stringValue) {{ ScarlEntt::TypeReflection::SetValueFromString(this->{property_name}, stringValue); }} 
+        [this](const std::string_view& stringValue) {{ ScarlEntt::TypeReflection::SetValueFromString(this->{property_name}, stringValue); }}
     }};
 '''.format(struct_name=struct_name, type=variable[0], type_enum=types[variable[0]], property_name=variable[1]))
             else:
@@ -78,6 +80,8 @@ void {struct_name}::GenerateProperties()
 
         f.write('''\
 }};
+
+#endif // DEV_CONFIGURATION.
 
 }} // Namespace Scarlett::Component.
 '''.format(struct_name=struct_name))

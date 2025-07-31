@@ -10,7 +10,8 @@
 namespace Scarlett
 {
 
-class Mesh;
+class VulkanMesh;
+class VulkanTexture;
 
 class VulkanRenderer : public Renderer
 {
@@ -32,6 +33,8 @@ public:
     void EndRender()    override;
 
     void OnWindowResize(const uint32 width, const uint32 height) override;
+protected:
+    VkDescriptorPool        mDescriptorSetPool;
 private:
     void CreatePipelineLayout();
     void CreatePipeline();
@@ -50,11 +53,14 @@ private:
 
     uint32 mNextImageIndex;
 
-    Mesh* mSquare;
-    Mesh* mLine;
+    VulkanMesh* mSquare;
+    VulkanMesh* mLine;
 
-    // Temp.
+    // Todo: Temp.
     float mClearColor[3] = { 0.1f, 0.1f, 0.1f };
+    VkDescriptorSetLayout mTextureDescriptorSetLayout;
+    VkDescriptorSet mTextureDescriptorSet;
+    VulkanTexture* mTexture;
 };
 
 } // Namespace Scarlett.

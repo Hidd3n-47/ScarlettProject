@@ -16,13 +16,14 @@ ComponentManager::~ComponentManager()
 
 void ComponentManager::AddComponentFromXml(const EntityId entityId, const XmlNode* node)
 {
+#ifdef DEV_CONFIGURATION
     const std::string TYPE_ID_ATTRIBUTE = "typeId";
     const ComponentTypeId componentTypeId{ node->GetAttribute(TYPE_ID_ATTRIBUTE) };
 
     assert(mComponentTypeToDeserializeFunctionMap.contains(componentTypeId) && "Trying to deserialize a component type that has not been registered.");
 
     mComponentTypeToDeserializeFunctionMap[componentTypeId](entityId, node);
-
+#endif // DEV_CONFIGURATION.
 }
 
 } // Namespace ScarlEntt.

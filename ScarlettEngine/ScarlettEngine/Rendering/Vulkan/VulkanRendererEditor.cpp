@@ -30,30 +30,6 @@ void VulkanRendererEditor::Init(const Window* windowRef)
         CreateCommandBuffers();
     }*/
 
-    const VkDescriptorPoolSize poolSizes[] =
-    {
-        { VK_DESCRIPTOR_TYPE_SAMPLER,                   1000 },
-        { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,    1000 },
-        { VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,             1000 },
-        { VK_DESCRIPTOR_TYPE_STORAGE_IMAGE,             1000 },
-        { VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER,      1000 },
-        { VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER,      1000 },
-        { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,            1000 },
-        { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,            1000 },
-        { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC,    1000 },
-        { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC,    1000 },
-        { VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT,          1000 }
-    };
-
-    VkDescriptorPoolCreateInfo imGuiDescriptorPoolInfo = {};
-    imGuiDescriptorPoolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-    imGuiDescriptorPoolInfo.flags             = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
-    imGuiDescriptorPoolInfo.maxSets           = 1000;
-    imGuiDescriptorPoolInfo.poolSizeCount     = std::size(poolSizes);
-    imGuiDescriptorPoolInfo.pPoolSizes        = poolSizes;
-
-    vkCreateDescriptorPool(mDevice.mDevice, &imGuiDescriptorPoolInfo, nullptr, &mImGuiPool);
-
     ImGui::CreateContext();
 
     ImGuiIO& io = ImGui::GetIO();
@@ -70,7 +46,7 @@ void VulkanRendererEditor::Init(const Window* windowRef)
     initInfo.QueueFamily            = mDevice.mQueueFamilyIndices.graphicsFamily;
     initInfo.Queue                  = mDevice.mGraphicsQueue;
     initInfo.PipelineCache          = VK_NULL_HANDLE;
-    initInfo.DescriptorPool         = mImGuiPool;
+    initInfo.DescriptorPool         = mDescriptorSetPool;
     initInfo.Subpass                = 0;
     initInfo.MinImageCount          = 2;
     initInfo.ImageCount             = 2;
@@ -122,7 +98,7 @@ void VulkanRendererEditor::Destroy()
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
 
-    vkDestroyDescriptorPool(mDevice.mDevice, mImGuiPool, nullptr);
+    vkDestroyDescriptorPool(mDevice.mDevice, mDescriptorSetPool, nullptr);
 
     VulkanRenderer::Destroy();
 }

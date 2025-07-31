@@ -13,12 +13,12 @@
 #include "UI/UiControls.h"
 #include "Views/Editor/View/EditorView.h"
 
-
 namespace ScarlettEditor
 {
 
 void PropertiesPanel::Render()
 {
+#ifdef DEV_CONFIGURATION
     const ScarlEntt::EntityHandle* selectedEntity = dynamic_cast<EditorView*>(mView)->GetSelectionManager().GetSelectedEntity();
 
     if (selectedEntity)
@@ -67,6 +67,7 @@ void PropertiesPanel::Render()
             }
         }
     }
+#endif // DEV_CONFIGURATION.
 }
 
 void PropertiesPanel::RenderContextMenu()

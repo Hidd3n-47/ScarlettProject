@@ -20,7 +20,7 @@ public:
 
 #else // DEV_CONFIGURATION.
 
-#define SCARLETT_COMPONENT()
+#define SCARLETT_COMPONENT(X)
 
 #define COMPONENT_SERIALIZATION(...)
 

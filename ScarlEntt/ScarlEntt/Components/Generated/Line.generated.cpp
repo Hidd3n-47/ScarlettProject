@@ -7,30 +7,34 @@
 namespace Scarlett::Component
 {
 
+#ifdef DEV_CONFIGURATION
+
 void Line::GenerateProperties()
 {
     mProperties.clear();
 
-    mProperties["start"] = ScarlEntt::Property { 
-        ScarlEntt::PropertyType::VEC3, 
+    mProperties["start"] = ScarlEntt::Property {
+        ScarlEntt::PropertyType::VEC3,
         ScarlEntt::ComponentManager::GetComponentTypeId<Line>(),
         [this]() { return ScarlEntt::TypeReflection::GetStringFromValue(this->start); },
-        [this](const std::string_view& stringValue) { ScarlEntt::TypeReflection::SetValueFromString(this->start, stringValue); } 
+        [this](const std::string_view& stringValue) { ScarlEntt::TypeReflection::SetValueFromString(this->start, stringValue); }
     };
 
-    mProperties["end"] = ScarlEntt::Property { 
-        ScarlEntt::PropertyType::VEC3, 
+    mProperties["end"] = ScarlEntt::Property {
+        ScarlEntt::PropertyType::VEC3,
         ScarlEntt::ComponentManager::GetComponentTypeId<Line>(),
         [this]() { return ScarlEntt::TypeReflection::GetStringFromValue(this->end); },
-        [this](const std::string_view& stringValue) { ScarlEntt::TypeReflection::SetValueFromString(this->end, stringValue); } 
+        [this](const std::string_view& stringValue) { ScarlEntt::TypeReflection::SetValueFromString(this->end, stringValue); }
     };
 
-    mProperties["color"] = ScarlEntt::Property { 
-        ScarlEntt::PropertyType::VEC4, 
+    mProperties["color"] = ScarlEntt::Property {
+        ScarlEntt::PropertyType::VEC4,
         ScarlEntt::ComponentManager::GetComponentTypeId<Line>(),
         [this]() { return ScarlEntt::TypeReflection::GetStringFromValue(this->color); },
-        [this](const std::string_view& stringValue) { ScarlEntt::TypeReflection::SetValueFromString(this->color, stringValue); } 
+        [this](const std::string_view& stringValue) { ScarlEntt::TypeReflection::SetValueFromString(this->color, stringValue); }
     };
 };
+
+#endif // DEV_CONFIGURATION.
 
 } // Namespace Scarlett::Component.

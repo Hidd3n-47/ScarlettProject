@@ -897,10 +897,10 @@
 		</Component>
 		<Component typeId="struct Scarlett::Component::Transform">
 			<translation type="vec3">
-				6.393305,3.848380,6.442317
+				4.268072,2.978650,4.317292
 			</translation>
 			<rotation type="quat">
-				-0.892822,0.216120,-0.384070,-0.092974
+				-0.932763,0.193940,-0.297500,-0.061860
 			</rotation>
 			<scale type="vec3">
 				1.000000,1.000000,1.000000
@@ -908,13 +908,13 @@
 		</Component>
 		<Component typeId="struct Scarlett::Component::Camera">
 			<mUpVector type="vec3">
-				-0.332029,0.889289,-0.314496
+				-0.230796,0.917114,-0.324993
 			</mUpVector>
 			<mForwardVector type="vec3">
-				-0.645625,-0.457330,-0.611558
+				-0.531000,-0.398607,-0.747754
 			</mForwardVector>
 			<mRightVector type="vec3">
-				0.687685,0.000008,-0.725999
+				0.815327,0.000007,-0.578988
 			</mRightVector>
 			<mAspectRatio type="float">
 				1.777778
@@ -1154,7 +1154,7 @@
 		</Component>
 		<Component typeId="struct Scarlett::Component::Transform">
 			<translation type="vec3">
-				2.500000,2.250000,0.000000
+				2.500000,2.250000,0.350000
 			</translation>
 			<rotation type="quat">
 				1.000000,0.000000,0.000000,0.000000
