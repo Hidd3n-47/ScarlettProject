@@ -10,7 +10,7 @@ class Device;
 class IndexBuffer
 {
 public:
-    explicit IndexBuffer(Device* device, const uint32 indexCount, const void* data);
+    explicit IndexBuffer(const WeakRef<Device> device, const uint32 indexCount, const void* data);
     ~IndexBuffer();
 
     IndexBuffer(const IndexBuffer&)               = delete;
@@ -22,7 +22,7 @@ public:
 
     [[nodiscard]] inline uint32 GetNumberOfIndices() const { return mIndexCount; }
 private:
-    Device* mDevice;
+    WeakRef<Device> mDevice;
 
     VkBuffer        mIndexBuffer;
     VkDeviceMemory  mIndexBufferMemory;

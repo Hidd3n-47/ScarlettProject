@@ -1,7 +1,7 @@
 #include "ScarlEnttpch.h"
 #include "ComponentManager.h"
 
-#include "Serialization/Xml/XmlDocument.h"
+#include <ScarlettUtils/Xml/XmlDocument.h>
 
 namespace ScarlEntt
 {
@@ -14,11 +14,11 @@ ComponentManager::~ComponentManager()
     }
 }
 
-void ComponentManager::AddComponentFromXml(const EntityId entityId, const XmlNode* node)
+void ComponentManager::AddComponentFromXml(const EntityId entityId, const ScarlettUtils::XmlElement* node)
 {
 #ifdef DEV_CONFIGURATION
     const std::string TYPE_ID_ATTRIBUTE = "typeId";
-    const ComponentTypeId componentTypeId{ node->GetAttribute(TYPE_ID_ATTRIBUTE) };
+    const ComponentTypeId componentTypeId{ node->GetAttributeValue(TYPE_ID_ATTRIBUTE) };
 
     assert(mComponentTypeToDeserializeFunctionMap.contains(componentTypeId) && "Trying to deserialize a component type that has not been registered.");
 

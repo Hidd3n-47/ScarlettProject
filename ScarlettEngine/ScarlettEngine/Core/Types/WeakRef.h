@@ -15,7 +15,7 @@ public:
     WeakRef()      = default;
     ~WeakRef()     = default;
 
-    WeakRef(const WeakRef&)             = delete;
+    WeakRef(const WeakRef&)             = default;
     WeakRef(WeakRef&&)                  = delete;
     WeakRef& operator=(WeakRef&&)       = default;
     WeakRef& operator=(const WeakRef&)  = default;
@@ -33,6 +33,8 @@ public:
      * A method used to invalidate a pointer.
      */
     inline void Invalidate() { mReferencePtr = nullptr;  }
+
+    inline T* GetRawPtr() const { return mReferencePtr; }
 
     inline T* operator->()              { return mReferencePtr; }
     inline const T* operator->() const  { return mReferencePtr; }

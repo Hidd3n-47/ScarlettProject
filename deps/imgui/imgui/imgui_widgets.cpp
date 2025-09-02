@@ -4522,7 +4522,7 @@ bool ImGui::InputTextEx(const char* label, const char* hint, char* buf, int buf_
 
     const bool init_reload_from_user_buf = (state != NULL && state->WantReloadUserBuf);
     const bool init_changed_specs = (state != NULL && state->Stb->single_line != !is_multiline); // state != NULL means its our state.
-    const bool init_make_active = (user_clicked || user_scroll_finish || input_requested_by_nav);
+    const bool init_make_active = (user_clicked || user_scroll_finish || input_requested_by_nav) || (flags & ImGuiInputTextFlags_EditOnCreate);
     const bool init_state = (init_make_active || user_scroll_active);
     if (init_reload_from_user_buf)
     {

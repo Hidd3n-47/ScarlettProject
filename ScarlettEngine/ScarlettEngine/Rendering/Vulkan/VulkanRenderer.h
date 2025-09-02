@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Rendering/Renderer.h"
-#include "Utilities.h"
 
 #include "Device.h"
 #include "Pipeline.h"
@@ -12,6 +11,7 @@ namespace Scarlett
 
 class VulkanMesh;
 class VulkanTexture;
+class MaterialManager;
 
 class VulkanRenderer : public Renderer
 {
@@ -33,6 +33,9 @@ public:
     void EndRender()    override;
 
     void OnWindowResize(const uint32 width, const uint32 height) override;
+
+    [[nodiscard]] inline WeakRef<Device>            GetDevice()         { return WeakRef{ &mDevice }; }
+    [[nodiscard]] inline VkDescriptorPool*          GetDescriptorPool() { return &mDescriptorSetPool; }
 protected:
     VkDescriptorPool        mDescriptorSetPool;
 private:
@@ -53,14 +56,17 @@ private:
 
     uint32 mNextImageIndex;
 
-    VulkanMesh* mSquare;
-    VulkanMesh* mLine;
-
     // Todo: Temp.
     float mClearColor[3] = { 0.1f, 0.1f, 0.1f };
-    VkDescriptorSetLayout mTextureDescriptorSetLayout;
-    VkDescriptorSet mTextureDescriptorSet;
+    //VkDescriptorSetLayout mTextureDescriptorSetLayout;
+    //VkDescriptorSet mTextureDescriptorSet;
     VulkanTexture* mTexture;
+    //textureId mTexture;
+
+
+    VkDescriptorSetLayout   mDescriptorSetLayout;
+    VkDescriptorSet         mDescriptorSet;
+    VkSampler mImageSampler;
 };
 
 } // Namespace Scarlett.

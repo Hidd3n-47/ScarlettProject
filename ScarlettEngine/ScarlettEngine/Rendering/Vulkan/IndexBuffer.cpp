@@ -4,7 +4,7 @@
 namespace Scarlett
 {
 
-IndexBuffer::IndexBuffer(Device* device, const uint32 indexCount, const void* data)
+IndexBuffer::IndexBuffer(const WeakRef<Device> device, const uint32 indexCount, const void* data)
     : mDevice { device }
     , mIndexCount { indexCount }
 {

@@ -120,6 +120,48 @@ void UiControls::RenderVec4PropertyControl(const ScarlEntt::Property& property, 
     property.SetPropertyValue(ScarlEntt::TypeReflection::GetStringFromValue(value));
 }
 
+void UiControls::RenderMaterialPropertyControl(const ScarlEntt::Property& property, const UiControlProperties& controlProperties /* = {} */)
+{
+    Scarlett::Material material;
+    ScarlEntt::TypeReflection::SetValueFromString(material, property.GetPropertyValue());
+
+    std::string propertyName = controlProperties.propertyName;
+    if (controlProperties.firstLetterUppercase)
+    {
+        propertyName[0] = static_cast<char>(std::toupper(propertyName[0]));
+    }
+
+    const std::string propertyId = controlProperties.propertyName + controlProperties.propertyId;
+    const float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+
+    ImGui::Columns(2, propertyName.c_str());
+
+    // Todo: Let this width be draggable/adjustable.
+    ImGui::SetColumnWidth(0, 100.0f);
+
+    ImGui::SetCursorPosY(ImGui::GetCursorPosY() + lineHeight - ImGui::CalcTextSize(propertyName.c_str()).y - ImGui::GetScrollX() - 2 * ImGui::GetStyle().ItemSpacing.y + 5.0f);
+    ImGui::Text("%s", propertyName.c_str());
+
+    ImGui::NextColumn();
+
+    ImGui::PushMultiItemsWidths(4, ImGui::CalcItemWidth());
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0.0f, 4.0f });
+    ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 4);
+    UiButtonControlProperties buttonProperties{ .buttonSize = {lineHeight + 3.0f, lineHeight} };
+
+    float albedoAsFloat = static_cast<float>(material.albedoTextureIndex);
+
+    buttonProperties.buttonColor = ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f };
+    buttonProperties.buttonHoveredColor = ImVec4{ 0.9f, 0.2f, 0.2f, 1.0f };
+    RenderFloatPropertyControl("X", propertyId, albedoAsFloat, controlProperties, buttonProperties);
+
+    ImGui::PopStyleVar(2);
+    ImGui::PopItemWidth();
+    ImGui::Columns(1);
+
+    property.SetPropertyValue(ScarlEntt::TypeReflection::GetStringFromValue(material));
+}
+
 void UiControls::RenderFloatPropertyControl(const std::string& label, const std::string& propertyId, float& value, const UiControlProperties& controlProperties, const UiButtonControlProperties& buttonProperties)
 {
     ImGui::PushStyleColor(ImGuiCol_Button, buttonProperties.buttonColor);

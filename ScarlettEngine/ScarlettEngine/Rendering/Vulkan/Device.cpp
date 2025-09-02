@@ -281,6 +281,18 @@ void Device::ChoosePhysicalDevice()
             SCARLETT_DLOG("Vendor ID: {0}", properties.vendorID);
             SCARLETT_DLOG("API Version: {0}", properties.apiVersion);
 
+            VkPhysicalDeviceDescriptorIndexingProperties indexingProps{};
+            indexingProps.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_PROPERTIES;
+
+            VkPhysicalDeviceProperties2 props2{};
+            props2.sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_PROPERTIES_2;
+            props2.pNext = &indexingProps;
+
+            vkGetPhysicalDeviceProperties2(device, &props2);
+
+            SCARLETT_DLOG("Descriptor count: {0}", indexingProps.maxDescriptorSetUpdateAfterBindSampledImages);
+
+
             break;
         }
     }
@@ -310,17 +322,34 @@ void Device::CreateLogicalDevice()
         queueCreateInfos.push_back(queueCreateInfo);
     }
 
-    VkPhysicalDeviceFeatures features { .samplerAnisotropy = VK_TRUE };
+    constexpr VkPhysicalDeviceFeatures features { .samplerAnisotropy = VK_TRUE };
 
-    const VkDeviceCreateInfo deviceCreateInfo
+    constexpr VkPhysicalDeviceDescriptorIndexingFeatures indexingFeatures
+    {
+        .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_FEATURES,
+        .shaderSampledImageArrayNonUniformIndexing      = VK_TRUE,
+        .descriptorBindingSampledImageUpdateAfterBind   = VK_TRUE,
+        .descriptorBindingPartiallyBound                = VK_TRUE,
+        .descriptorBindingVariableDescriptorCount       = VK_TRUE,
+        .runtimeDescriptorArray                         = VK_TRUE,
+    };
+
+    const VkPhysicalDeviceFeatures2 features2
+    {
+        .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2,
+        .pNext = (void*)(&indexingFeatures),
+        .features = features
+    };
+
+    VkDeviceCreateInfo deviceCreateInfo
     {
         .sType = VK_STRUCTURE_TYPE_DEVICE_CREATE_INFO,
-        .pNext                      = nullptr,
+        .pNext                      = &features2,
         .queueCreateInfoCount       = static_cast<uint32>(queueCreateInfos.size()),
         .pQueueCreateInfos          = queueCreateInfos.data(),
         .enabledExtensionCount      = static_cast<uint32>(mDeviceExtensions.size()),
         .ppEnabledExtensionNames    = mDeviceExtensions.data(),
-        .pEnabledFeatures           = &features
+        .pEnabledFeatures           = nullptr
     };
 
     VK_CHECK(vkCreateDevice(mPhysicalDevice, &deviceCreateInfo, nullptr, &mDevice), "Failed to create a vulkan logical device.");
@@ -460,14 +489,15 @@ bool Device::CheckDeviceSuitable(const VkPhysicalDevice device) const
     VkPhysicalDeviceFeatures features;
     vkGetPhysicalDeviceFeatures(device, &features);
 
-    QueueFamilyIndices indices = GetQueueFamilyIndices(device);
+    const QueueFamilyIndices indices = GetQueueFamilyIndices(device);
 
-    bool extensionsSupported = CheckDeviceExtensionSupport(device);
+    const bool indexingSupported    = CheckDeviceIndexingSupport(device);
+    const bool extensionsSupported  = CheckDeviceExtensionSupport(device);
 
-    SwapChainDetails swapChainDetails = GetSwapChainDetails(device);
-    bool swapChainValid = !swapChainDetails.formats.empty() && !swapChainDetails.presentationModes.empty();
+    const SwapChainDetails swapChainDetails = GetSwapChainDetails(device);
+    const bool swapChainValid = !swapChainDetails.formats.empty() && !swapChainDetails.presentationModes.empty();
 
-    return indices.IsValid() && extensionsSupported && swapChainValid && features.samplerAnisotropy;
+    return indices.IsValid() && indexingSupported && extensionsSupported && swapChainValid && features.samplerAnisotropy;
 }
 
 bool Device::CheckDeviceExtensionSupport(const VkPhysicalDevice device) const
@@ -500,6 +530,31 @@ bool Device::CheckDeviceExtensionSupport(const VkPhysicalDevice device) const
             SCARLETT_ELOG("Failed to find extension with name: {0}", extension);
             return false;
         }
+    }
+
+    return true;
+}
+
+bool Device::CheckDeviceIndexingSupport(const VkPhysicalDevice device)
+{
+    constexpr VkPhysicalDeviceDescriptorIndexingFeatures indexingFeatures
+    {
+        .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_DESCRIPTOR_INDEXING_FEATURES,
+    };
+
+    VkPhysicalDeviceFeatures2 deviceFeatures
+    {
+        .sType = VK_STRUCTURE_TYPE_PHYSICAL_DEVICE_FEATURES_2,
+        .pNext = (void*)(&indexingFeatures)
+    };
+
+    vkGetPhysicalDeviceFeatures2(device, &deviceFeatures);
+
+    if (!indexingFeatures.runtimeDescriptorArray || !indexingFeatures.shaderSampledImageArrayNonUniformIndexing)
+    {
+        SCARLETT_FLOG("Device does not support required descriptor indexing features.");
+        throw std::runtime_error("Device does not support required descriptor indexing features.");
+        return false;
     }
 
     return true;

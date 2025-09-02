@@ -10,10 +10,15 @@
 #include "ComponentView.h"
 #include "ComponentArray.h"
 
-namespace ScarlEntt
+namespace ScarlettUtils
 {
 
-class XmlNode;
+class XmlElement;
+
+} // Namespace ScarlettUtils.
+
+namespace ScarlEntt
+{
 
 /**
  * @class ComponentManager: The owner of the components and instance used to create/destroy and register components.<br/>
@@ -63,7 +68,7 @@ private:
     unordered_map<ComponentTypeId, IComponentArray*> mComponents;
 
 #ifdef DEV_CONFIGURATION
-    unordered_map <ComponentTypeId, std::function<void(const EntityId, const XmlNode*)>> mComponentTypeToDeserializeFunctionMap;
+    unordered_map <ComponentTypeId, std::function<void(const EntityId, const ScarlettUtils::XmlElement*)>> mComponentTypeToDeserializeFunctionMap;
     unordered_map<EntityId, vector<ComponentView>> mEntityToComponentViewMap;
 
     template <typename ComponentType>
@@ -98,7 +103,7 @@ private:
      * @param entityId: The ID of the entity the component is being added to.
      * @param node: The \c XmlNode of the component. This should be the node starting with the tag "component".
      */
-    void AddComponentFromXml(const EntityId entityId, const XmlNode* node);
+    void AddComponentFromXml(const EntityId entityId, const ScarlettUtils::XmlElement* node);
 
     /**
     * @brief Retrieve a pointer to the component of a specific _entity_.
@@ -130,7 +135,7 @@ inline void ComponentManager::RegisterComponent()
     assert(!mComponents.contains(typeName) && "Registering component type more than once."); // todo remove.
 
 #ifdef DEV_CONFIGURATION
-    mComponentTypeToDeserializeFunctionMap[typeName] = [this](const EntityId entityId, const XmlNode* node) { this->AddComponent(entityId, ComponentType::DeserializeComponent(node)); };
+    mComponentTypeToDeserializeFunctionMap[typeName] = [this](const EntityId entityId, const ScarlettUtils::XmlElement* node) { this->AddComponent(entityId, ComponentType::DeserializeComponent(node)); };
 #endif // DEV_CONFIGURATION.
 
     mComponents[typeName] = new ComponentArray<ComponentType>();

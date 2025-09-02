@@ -16,8 +16,8 @@ struct PipelineConfigInfo
     PipelineConfigInfo& operator=(PipelineConfigInfo&&)         = delete;
     PipelineConfigInfo& operator=(const PipelineConfigInfo&)    = delete;
 
-    VkRect2D    scissor;
-    VkViewport  viewport;
+    VkRect2D    scissor{};
+    VkViewport  viewport{};
 
     VkPipelineInputAssemblyStateCreateInfo  inputAssemblyCreateInfo{};
     VkPipelineRasterizationStateCreateInfo  rasterizationCreateInfo{};

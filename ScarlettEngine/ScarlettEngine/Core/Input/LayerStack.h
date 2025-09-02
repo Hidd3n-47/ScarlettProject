@@ -3,6 +3,7 @@
 #include <stdexcept>
 
 #include "Core/Types/WeakRef.h"
+
 #include "Core/Input/Layer.h"
 #include "Core/Events/Event.h"
 

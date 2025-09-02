@@ -4,6 +4,8 @@
 
 #include <Math/Quat.h>
 
+#include "Components/Material.h"
+
 namespace ScarlEntt
 {
 
@@ -58,6 +60,12 @@ inline std::string TypeReflection::GetStringFromValue<ScarlettMath::Quat>(const 
     return GetStringFromValue<ScarlettMath::Vec4>(value.ToVector4());
 }
 
+template <>
+inline std::string TypeReflection::GetStringFromValue<Scarlett::Material>(const Scarlett::Material value)
+{
+    return std::to_string(value.albedoTextureIndex);
+}
+
 // --------- Sets. ---------
 template <typename T>
 inline void TypeReflection::SetValueFromString(T& value, const std::string_view& stringValue)
@@ -88,7 +96,7 @@ inline void TypeReflection::SetValueFromString<ScarlettMath::Vec3>(ScarlettMath:
     const std::string value2 = std::string{ stringValue.substr(firstCommaPosition + 1, secondCommaPosition - firstCommaPosition - 2) };
     const std::string value3 = std::string{ stringValue.substr(secondCommaPosition + 1) };
 
-    
+
     value = ScarlettMath::Vec3(std::stof(value1), std::stof(value2), std::stof(value3));
 }
 
@@ -114,6 +122,13 @@ inline void TypeReflection::SetValueFromString<ScarlettMath::Quat>(ScarlettMath:
     SetValueFromString(quatAsVec4, stringValue);
 
     value = ScarlettMath::Quat{ quatAsVec4 };
+}
+
+template <>
+inline void TypeReflection::SetValueFromString<Scarlett::Material>(Scarlett::Material& value, const std::string_view& stringValue)
+{
+    const std::string str = std::string{ stringValue };
+    value.albedoTextureIndex = static_cast<uint32>(std::stoul(str));
 }
 
 } // Namespace ScarlEntt.

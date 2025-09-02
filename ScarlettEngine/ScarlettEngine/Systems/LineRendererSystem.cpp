@@ -7,6 +7,9 @@
 
 #include "Rendering/Renderer.h"
 
+#include "Core/Engine.h"
+#include "Resources/Manager/MeshManager.h"
+
 namespace Scarlett
 {
 
@@ -14,6 +17,8 @@ LineRendererSystem::LineRendererSystem(ScarlEntt::Scene* sceneRef, ScarlEntt::Co
 {
     mSceneRef               = sceneRef;
     mComponentManagerRef    = componentManagerRef;
+
+    mLineMesh = Engine::Instance().GetMeshManager()->AddMesh(Filepath{ "Assets/Mesh/CylinderLowPoly.obj"});
 }
 
 void LineRendererSystem::UpdateSystem()
@@ -34,8 +39,7 @@ void LineRendererSystem::UpdateSystem()
         transform->scale = { dVecMag, 0.02f, 0.02f };
         transform->rotation = ScarlettMath::Quat::GetRotationToRotateVectorToVector({ 1.0f, 0.0f, 0.0f }, dVec / dVecMag);
 
-        Renderer::Instance().AddCommand(RenderType::LINE,
-        { components[i].color, ScarlEntt::ComponentRef(entityIds[i], &mComponentManagerRef->GetComponentArray<Component::Transform>()) });
+        Renderer::Instance()->AddCommand(mLineMesh, { components[i].color, ScarlEntt::ComponentRef(entityIds[i], &mComponentManagerRef->GetComponentArray<Component::Transform>()), Material{}});
     }
 }
 

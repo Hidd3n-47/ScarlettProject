@@ -20,6 +20,7 @@ project "ScarlettGameCore"
         "$(SolutionDir)%{prj.name}/",
 
         "$(SolutionDir)deps/include/",
+        "$(SolutionDir)ScarlettUtils/",
         "$(SolutionDir)ScarlettMath/ScarlettMath/",
 
         "$(SolutionDir)ScarlEntt/ScarlEntt/",
@@ -31,6 +32,7 @@ project "ScarlettGameCore"
     {
         "ScarlEntt",
         "ScarlettMath",
+        "ScarlettUtils",
         "ScarlettLogger",
     }
 

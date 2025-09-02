@@ -1,14 +1,44 @@
 ﻿#include "ScarlettEnginePch.h"
 #include "VulkanTexture.h"
 
+#include <stb_image/stb_image.h>
+
 #include "Device.h"
 #include "Utilities.h"
 #include "VulkanUtils.h"
 
-#include <stb_image/stb_image.h>
-
 namespace Scarlett
 {
+
+VulkanTexture::VulkanTexture(const WeakRef<Device> device, const uint8* buffer, const uint32 width, const uint32 height)
+    : mDevice(device)
+{
+    Create(buffer, width, height);
+
+    constexpr VkSamplerCreateInfo samplerInfo
+    {
+        .sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
+        .magFilter = VK_FILTER_LINEAR,
+        .minFilter = VK_FILTER_LINEAR,
+        .mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR,
+        .addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT,
+        .addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT,
+        .addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT,
+        .maxAnisotropy = 1.0f,
+        .minLod = -1000,
+        .maxLod = 1000
+    };
+
+    VK_CHECK(vkCreateSampler(mDevice->GetDevice(), &samplerInfo, nullptr, &mImageSampler), "Failed to create Vulkan Sampler for the texture.");
+
+
+    mImageInfo =
+    {
+        .sampler        = mImageSampler,
+        .imageView      = mImageView,
+        .imageLayout    = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
+    };
+}
 
 VulkanTexture::~VulkanTexture()
 {
@@ -16,17 +46,6 @@ VulkanTexture::~VulkanTexture()
     vkDestroyImageView(mDevice->GetDevice(), mImageView, nullptr);
     vkDestroyImage(mDevice->GetDevice(), mImage, nullptr);
     vkFreeMemory(mDevice->GetDevice(), mMemory, nullptr);
-}
-
-
-void VulkanTexture::Create(const Filepath& filepath)
-{
-    stbi_set_flip_vertically_on_load(1);
-
-    int x, y, n;
-    const uint8* buffer = stbi_load(filepath.GetAbsolutePath().c_str(), &x, &y, &n, 4);
-
-    Create(buffer, x, y);
 }
 
     //todo make it that you can pass in a texture
@@ -84,15 +103,16 @@ void VulkanTexture::Create(const uint8* buffer, const uint32 width, const uint32
 
     VK_CHECK(vkCreateImageView(mDevice->GetDevice(), &viewInfo, nullptr, &mImageView), "Failed to create Vulkan Texture Image View.");
 
-    VkBuffer stagingBuffer;
-    VkDeviceMemory stagingBufferMemory;
+    VkBuffer        stagingBuffer;
+    VkDeviceMemory  stagingBufferMemory;
 
     mDevice->CreateBuffer(uploadSize, VK_BUFFER_USAGE_TRANSFER_SRC_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT, stagingBuffer, stagingBufferMemory);
 
     uint8* map = nullptr;
     VK_CHECK(vkMapMemory(mDevice->GetDevice(), stagingBufferMemory, 0, uploadSize, 0, reinterpret_cast<void**>(&map)), "Filed to map Vulkan Image Memory.");
 
-    memcpy(map, buffer, uploadSize); //todo this is where the buffer should go for the texture "pixels".
+    memcpy(map, buffer, uploadSize);
+
     const VkMappedMemoryRange range =
     {
         .sType = VK_STRUCTURE_TYPE_MAPPED_MEMORY_RANGE,
@@ -145,29 +165,6 @@ void VulkanTexture::Create(const uint8* buffer, const uint32 width, const uint32
 
     vkDestroyBuffer(mDevice->GetDevice(), stagingBuffer, nullptr);
     vkFreeMemory(mDevice->GetDevice(), stagingBufferMemory, nullptr);
-
-    VkSamplerCreateInfo samplerInfo
-    {
-        .sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
-        .magFilter = VK_FILTER_LINEAR,
-        .minFilter = VK_FILTER_LINEAR,
-        .mipmapMode = VK_SAMPLER_MIPMAP_MODE_LINEAR,
-        .addressModeU = VK_SAMPLER_ADDRESS_MODE_REPEAT,
-        .addressModeV = VK_SAMPLER_ADDRESS_MODE_REPEAT,
-        .addressModeW = VK_SAMPLER_ADDRESS_MODE_REPEAT,
-        .maxAnisotropy = 1.0f,
-        .minLod = -1000,
-        .maxLod = 1000
-    };
-
-    VK_CHECK(vkCreateSampler(mDevice->GetDevice(), &samplerInfo, nullptr, &mImageSampler), "Failed to create Vulkan Sampler for the texture.");
-
-    mImageInfo =
-    {
-        .sampler        = mImageSampler,
-        .imageView      = mImageView,
-        .imageLayout    = VK_IMAGE_LAYOUT_SHADER_READ_ONLY_OPTIMAL
-    };
 }
 
 } // Namespace Scarlett.

@@ -9,4 +9,4 @@
             SCARLETT_FLOG("{0}: {1}", y, static_cast<int>(result));     \
             throw std::runtime_error(y);                                \
         }                                                               \
-    } while(false)                                                      
+    } while(false)

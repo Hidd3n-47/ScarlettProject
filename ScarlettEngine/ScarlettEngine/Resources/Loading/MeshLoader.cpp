@@ -1,9 +1,7 @@
 #include "ScarlettEnginePch.h"
 #include "MeshLoader.h"
 
-#include "Resources/Types/Mesh.h"
-
-#include "StaticResources/StaticResources.h"
+#include "Resources/Types/MeshData.h"
 
 namespace Scarlett
 {
@@ -43,7 +41,7 @@ constexpr ObjKeyword StringToObjKeyword(const std::string_view& keyword)
 
 } // Anonymous namespace.
 
-void MeshLoader::LoadMesh(const Filepath& filepath, Resource::Mesh& mesh)
+void MeshLoader::LoadMesh(const Filepath& filepath, Resource::MeshData& mesh)
 {
     if (filepath.GetExtension() != "obj")
     {

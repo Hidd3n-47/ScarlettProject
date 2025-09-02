@@ -68,6 +68,7 @@ private:
     [[nodiscard]] QueueFamilyIndices GetQueueFamilyIndices(VkPhysicalDevice physicalDevice) const;
     [[nodiscard]] bool CheckDeviceSuitable(const VkPhysicalDevice device) const;
     [[nodiscard]] bool CheckDeviceExtensionSupport(const VkPhysicalDevice device) const;
+    [[nodiscard]] static bool CheckDeviceIndexingSupport(const VkPhysicalDevice device);
     [[nodiscard]] SwapChainDetails GetSwapChainDetails(const VkPhysicalDevice device) const;
 
     const Window* mWindowRef;
@@ -87,7 +88,7 @@ private:
     VkCommandPool               mGraphicsCommandPool;
 
     vector<const char *> mValidationLayers;
-    vector<const char *> mDeviceExtensions = { VK_KHR_SWAPCHAIN_EXTENSION_NAME };
+    vector<const char *> mDeviceExtensions = { VK_KHR_SWAPCHAIN_EXTENSION_NAME, VK_EXT_DESCRIPTOR_INDEXING_EXTENSION_NAME };
 };
 
 } // Namespace Scarlett

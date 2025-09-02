@@ -23,6 +23,7 @@ project "ScarlEntt"
     includedirs
     {
         "$(SolutionDir)Scarlett/",
+        "$(SolutionDir)ScarlettUtils/",
         "$(SolutionDir)ScarlEntt/ScarlEntt/",
         "$(SolutionDir)ScarlettMath/ScarlettMath/",
 
@@ -31,7 +32,8 @@ project "ScarlEntt"
 
     links
     {
-        "ScarlettMath"
+        "ScarlettMath",
+        "ScarlettUtils",
     }
 
     filter "system:windows"

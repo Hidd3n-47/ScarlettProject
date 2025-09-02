@@ -14,6 +14,7 @@ namespace ScarlettEditor
 {
 
 class IView;
+class AssetManager;
 
 class EDITOR_API EditorManager
 {
@@ -39,7 +40,8 @@ public:
 
     [[nodiscard]] inline ImTextureID           GetViewportTexture()    const { return mViewportTexture; }
     [[nodiscard]] inline Scarlett::LayerStack* GetLayerStack()         const { return mEditorLayerStack; }
-    [[nodiscard]] inline IView*                GetCurrentView()        const { return mCurrentView;}
+    [[nodiscard]] inline IView*                GetCurrentView()        const { return mCurrentView; }
+    [[nodiscard]] inline AssetManager*         GetAssetManager()       const { return mAssetManager; }
 private:
     static EditorManager*   mInstance;
 
@@ -47,6 +49,8 @@ private:
 
     Scarlett::LayerStack*   mEditorLayerStack   = nullptr;
     IView*                  mCurrentView        = nullptr;
+
+    AssetManager*           mAssetManager       = nullptr;
 };
 
 } // Namespace ScarlettEditor.

@@ -7,7 +7,7 @@ namespace Scarlett {
 class VertexBuffer
 {
 public:
-    explicit VertexBuffer(Device* device, const uint64 bufferSize, const void* data);
+    explicit VertexBuffer(const WeakRef<Device> device, const uint64 bufferSize, const void* data);
     ~VertexBuffer();
 
     VertexBuffer(const VertexBuffer&)               = delete;
@@ -17,7 +17,7 @@ public:
 
     void Bind(const VkCommandBuffer commandBuffer) const;
 private:
-    Device* mDevice;
+    WeakRef<Device> mDevice;
 
     VkBuffer        mVertexBuffer;
     VkDeviceMemory  mVertexBufferMemory;

@@ -7,6 +7,9 @@
 
 #include "Rendering/Renderer.h"
 
+#include "Core/Engine.h"
+#include "Resources/Manager/MeshManager.h"
+
 namespace Scarlett
 {
 
@@ -14,6 +17,8 @@ SquareSpriteSystem::SquareSpriteSystem(ScarlEntt::Scene* sceneRef, ScarlEntt::Co
 {
     mSceneRef               = sceneRef;
     mComponentManagerRef    = componentManagerRef;
+
+    mSquareMesh = Engine::Instance().GetMeshManager()->AddMesh(Filepath{ "Assets/Mesh/Plane.obj" });
 }
 
 void SquareSpriteSystem::UpdateSystem()
@@ -22,8 +27,7 @@ void SquareSpriteSystem::UpdateSystem()
     const auto& entityIds = squareSprites.GetCorrespondingEntityId();
     for (ScarlEntt::ComponentId i{0}; i < squareSprites.Size(); ++i)
     {
-        Renderer::Instance().AddCommand(RenderType::SPRITE,
-            { squareSprites[i].color, ScarlEntt::ComponentRef(entityIds[i], &mComponentManagerRef->GetComponentArray<Component::Transform>()) });
+        Renderer::Instance()->AddCommand(mSquareMesh, { squareSprites[i].color, ScarlEntt::ComponentRef(entityIds[i], &mComponentManagerRef->GetComponentArray<Component::Transform>()), squareSprites[i].material });
     }
 }
 

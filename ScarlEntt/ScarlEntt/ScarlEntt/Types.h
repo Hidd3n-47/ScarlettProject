@@ -1,11 +1,11 @@
 ﻿#pragma once
 
 #include <string>
-#include <unordered_map>
+
+#include <scarlettTypes/Types.h>
 
 namespace ScarlEntt
 {
-typedef uint32_t uint32;
 
 typedef uint32_t EntityId;
 typedef uint32_t ComponentId;
@@ -40,12 +40,6 @@ namespace Entity
 constexpr ScarlEntt::EntityId InvalidEntityId       = static_cast<ScarlEntt::EntityId>(-1);
 constexpr ScarlEntt::EntityId InvalidComponentId    = static_cast<ScarlEntt::ComponentId>(-1);
 } // Namespace Entity
-
-template <typename T, typename W>
-using unordered_map = std::unordered_map<T, W>;
-
-template<typename T>
-using vector = std::vector<T>;
 
 // Hash specialisation for Component Type ID.
 template <>

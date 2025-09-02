@@ -1,7 +1,5 @@
 #pragma once
 
-#include <vulkan/vulkan.h>
-
 #include "Device.h"
 #include "Rendering/Texture.h"
 
@@ -11,20 +9,25 @@ namespace Scarlett
 class VulkanTexture final : public Texture
 {
 public:
+    VulkanTexture(const WeakRef<Device> device, const uint8* buffer, const uint32 width, const uint32 height);
     ~VulkanTexture() override;
 
-    void Create(const Filepath& filepath) override;
-    void Create(const uint8* buffer, const uint32 width, const uint32 height) override;
+    VulkanTexture(const VulkanTexture&)               = delete;
+    VulkanTexture(VulkanTexture&&)                    = delete;
+    VulkanTexture& operator=(VulkanTexture&&)         = delete;
+    VulkanTexture& operator=(const VulkanTexture&)    = delete;
 
     [[nodiscard]] inline const VkDescriptorImageInfo& GetImageInfo() const { return mImageInfo; }
-    inline void SetDevice(Device* device) { mDevice = device; }
+protected:
+    void Create(const uint8* buffer, const uint32 width, const uint32 height) override;
 private:
-    Device* mDevice = nullptr;
+    WeakRef<Device> mDevice;
 
-    VkImage         mImage          = nullptr;
-    VkDeviceMemory  mMemory         = nullptr;
-    VkImageView     mImageView      = nullptr;
-    VkSampler       mImageSampler   = nullptr;
+    VkImage         mImage              = nullptr;
+    VkDeviceMemory  mMemory             = nullptr;
+    VkImageView     mImageView          = nullptr;
+
+    VkSampler mImageSampler;
 
     VkDescriptorImageInfo mImageInfo{};
 };

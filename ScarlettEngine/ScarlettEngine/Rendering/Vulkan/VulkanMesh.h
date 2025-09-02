@@ -4,7 +4,8 @@
 
 #include <vulkan/vulkan.h>
 
-#include "Resources/Types/Mesh.h"
+#include "Rendering/Mesh.h"
+
 #include "Resources/Types/Vertex.h"
 
 namespace Scarlett
@@ -28,12 +29,12 @@ struct Model
     alignas(16) ScarlettMath::Vec3 color;
 };
 
-class VulkanMesh
+class VulkanMesh final : public Mesh
 {
 public:
-    VulkanMesh() = default;
-    VulkanMesh(Device* device, const Filepath& filepath);
-    ~VulkanMesh();
+    //VulkanMesh() = default;
+    VulkanMesh(const WeakRef<Device> device, const Filepath& filepath);
+    ~VulkanMesh() override;
 
     VulkanMesh(const VulkanMesh&)               = delete;
     VulkanMesh(VulkanMesh&&)                    = delete;
@@ -41,9 +42,8 @@ public:
     VulkanMesh& operator=(const VulkanMesh&)    = delete;
 
     void Bind(const VkCommandBuffer commandBuffer) const;
-    void Draw(const VkCommandBuffer commandBuffer) const;
+    void Draw(const VkCommandBuffer commandBuffer, const uint32 instanceCount = 1) const;
 private:
-    Resource::Mesh        mMesh;
     const VertexBuffer*   mVertexBuffer;
     const IndexBuffer*    mIndexBuffer;
 };

@@ -27,6 +27,7 @@ project "ScarlettEngine"
         "$(SolutionDir)ScarlettEditor/",
         "$(SolutionDir)ScarlettEditor/ScarlettEditor/",
 
+        "$(SolutionDir)ScarlettUtils/",
         "$(SolutionDir)ScarlettGameCore/",
         "$(SolutionDir)ScarlEntt/ScarlEntt/",
         "$(SolutionDir)ScarlettMath/ScarlettMath",
@@ -50,6 +51,7 @@ project "ScarlettEngine"
         "ScarlettLogger",
         "ScarlettEditor",
         "ScarlettGameCore",
+        "ScarlettUtils",
         "ScarlettMath",
         "ScarlEntt",
         "ImGui",

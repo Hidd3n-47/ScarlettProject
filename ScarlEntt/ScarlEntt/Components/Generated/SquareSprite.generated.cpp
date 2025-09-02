@@ -19,6 +19,13 @@ void SquareSprite::GenerateProperties()
         [this]() { return ScarlEntt::TypeReflection::GetStringFromValue(this->color); },
         [this](const std::string_view& stringValue) { ScarlEntt::TypeReflection::SetValueFromString(this->color, stringValue); }
     };
+
+    mProperties["material"] = ScarlEntt::Property {
+        ScarlEntt::PropertyType::MATERIAL,
+        ScarlEntt::ComponentManager::GetComponentTypeId<SquareSprite>(),
+        [this]() { return ScarlEntt::TypeReflection::GetStringFromValue(this->material); },
+        [this](const std::string_view& stringValue) { ScarlEntt::TypeReflection::SetValueFromString(this->material, stringValue); }
+    };
 };
 
 #endif // DEV_CONFIGURATION.

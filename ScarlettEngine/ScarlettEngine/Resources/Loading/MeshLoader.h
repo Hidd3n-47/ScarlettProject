@@ -7,7 +7,7 @@ namespace Scarlett
 
 namespace Resource
 {
-struct Mesh;
+struct MeshData;
 } // Namespace Scarlett::Resource.
 
 /**
@@ -23,7 +23,7 @@ public:
      * @param filepath: The relative filepath of the asset.
      * @param mesh: The output of the loaded mesh. This will be a default mesh if the mesh fails to load.
      */
-    static void LoadMesh(const Filepath& filepath, Resource::Mesh& mesh);
+    static void LoadMesh(const Filepath& filepath, Resource::MeshData& mesh);
 };
 
 } // Namespace Scarlett.

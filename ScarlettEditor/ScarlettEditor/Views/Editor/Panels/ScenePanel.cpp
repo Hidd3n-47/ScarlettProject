@@ -71,7 +71,7 @@ void ScenePanel::Render()
     ImGui::TreePop();
     ImGui::PopStyleVar();
 
-    ImGui::GetStyle().IndentSpacing     = indentSpacing;
+    ImGui::GetStyle().IndentSpacing = indentSpacing;
 }
 
 } // Namespace ScarlettEditor

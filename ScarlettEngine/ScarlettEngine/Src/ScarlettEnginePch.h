@@ -18,7 +18,10 @@
 
 #include <cstdint>
 
+#include <filesystem>
+
 #include "Src/PrimitiveTypes.h"
 #include "Src/ScarlettEngineDefines.h"
 
+#include "Core/Types/WeakRef.h"
 #include "Core/FileIO/Filepath.h"

@@ -8,6 +8,7 @@
 #include "Views/Editor/Panels/ScenePanel.h"
 #include "Views/Editor/Panels/ViewportPanel.h"
 #include "Views/Editor/Panels/PropertiesPanel.h"
+#include "Views/Editor/Panels/AssetBrowserPanel.h"
 
 #include "Views/Editor/Input/EditorViewInputLayer.h"
 
@@ -21,6 +22,7 @@ EditorView::EditorView()
     AddPanel<ScenePanel>();
     AddPanel<ViewportPanel>();
     AddPanel<PropertiesPanel>();
+    AddPanel<AssetBrowserPanel>();
 
     mEditorViewOverlay = EditorManager::Instance().GetLayerStack()->PushOverlay<EditorViewInputLayer>(this);
 }

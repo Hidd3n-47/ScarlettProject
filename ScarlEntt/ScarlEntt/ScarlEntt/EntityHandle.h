@@ -46,7 +46,7 @@ public:
     * @brief Deserialize the component from XML and add it to the entity.
     * @param node: The XML of the component to be deserialized.
     */
-    void AddComponentFromXml(const XmlNode* node) const;
+    void AddComponentFromXml(const ScarlettUtils::XmlElement* node) const;
 
     /**
     * @breif Remove a component (if found) from the _entity_.
@@ -108,7 +108,7 @@ inline ComponentType* EntityHandle::AddComponent(const ComponentType& component)
     return mComponentManagerRef->AddComponent<ComponentType>(mEntityId, component);
 }
 
-inline void EntityHandle::AddComponentFromXml(const XmlNode* node) const
+inline void EntityHandle::AddComponentFromXml(const ScarlettUtils::XmlElement* node) const
 {
     mComponentManagerRef->AddComponentFromXml(mEntityId, node);
 }

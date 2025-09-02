@@ -10,6 +10,7 @@ enum class PropertyType : uint8_t
     VEC3,
     VEC4,
     QUAT,
+    MATERIAL,
 };
 
 } // Namespace ScarlEntt.

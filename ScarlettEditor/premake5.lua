@@ -31,13 +31,18 @@ project "ScarlettEditor"
         "$(SolutionDir)deps/imgui/",
         "$(SolutionDir)deps/include/",
 
+        "$(SolutionDir)ScarlettUtils",
         "$(SolutionDir)ScarlettGameCore",
         "$(SolutionDir)ScarlEntt/ScarlEntt/",
         "$(SolutionDir)ScarlettMath/ScarlettMath/",
+        "$(SolutionDir)ScarlettUtils/ScarlettUtils",
+
+        "%{VulkanPath}/Include/"
     }
 
     links
     {
+        "ScarlettUtils",
         "ScarlettLogger",
         "ScarlettGameCore",
         "ScarlettMath",

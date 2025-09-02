@@ -1,0 +1,11 @@
+<fooTag attribute="document">
+	<childFoo first="first" second="second">childFooValue</childFoo>
+	<child2>
+		<grandchild1 a="a" b="b" c="c">value</grandchild1>
+		<grandchild2>
+			<GreatGrandChild>cool</GreatGrandChild>
+		</grandchild2>
+		<grandchild3>someOtherValue</grandchild3>
+	</child2>
+	<child3 this="child" is="the" coolest="!" />
+</fooTag>

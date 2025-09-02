@@ -18,6 +18,10 @@
 #include "Systems/LineRendererSystem.h"
 #include "Systems/SquareSpriteSystem.h"
 
+#include "Resources/Manager/MeshManager.h"
+#include "Resources/Manager/TextureManager.h"
+#include "Resources/Manager/MaterialManager.h"
+
 namespace Scarlett
 {
 
@@ -52,11 +56,15 @@ void Engine::InitEngine()
 
     ScarlettGame::GameCore::Instance().Init();
 
+    mTextureManager     = new TextureManager();
+    mMaterialManager    = new MaterialManager();
+
+    Renderer::Instance()->Init(mMainWindow);
+
+    mMeshManager    = new MeshManager();
+
     ScarlettGame::GameCore::Instance().GetActiveScene()->RegisterSystem<SquareSpriteSystem>();
     ScarlettGame::GameCore::Instance().GetActiveScene()->RegisterSystem<LineRendererSystem>();
-
-    Renderer::Instance().Init(mMainWindow);
-
     ScarlettGame::GameCore::Instance().GetActiveScene()->RegisterSystem<CameraSystem>();
 
     SCARLETT_DLOG("Engine Initialized");
@@ -71,12 +79,12 @@ void Engine::Run() const
     {
         mMainWindow->Update();
 
-        Renderer::Instance().BeginRender();
-        Renderer::Instance().Render();
+        Renderer::Instance()->BeginRender();
+        Renderer::Instance()->Render();
         // Todo restructure renderer BeginRender and EndRender so systems can update pre-render.
         // Probably will happen when changing to command based rendering.
         ScarlettGame::GameCore::Instance().GetActiveScene()->Update();
-        Renderer::Instance().EndRender();
+        Renderer::Instance()->EndRender();
 
         // Trigger OnUpdate Event.
         OnUpdateEvent event;
@@ -86,7 +94,10 @@ void Engine::Run() const
 
 void Engine::DestroyEngine()
 {
-    Renderer::Instance().Destroy();
+    delete mMaterialManager;
+    delete mTextureManager;
+    delete mMeshManager;
+    Renderer::Instance()->Destroy();
 
     ScarlettGame::GameCore::Destroy();
 

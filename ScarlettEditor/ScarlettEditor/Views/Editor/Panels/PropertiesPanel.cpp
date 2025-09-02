@@ -59,6 +59,9 @@ void PropertiesPanel::Render()
                         //ImGui::DragFloat4((propertyName + "##" + entityName).c_str(), &value.x, 0.05f);
                         break;
                     }
+                    case ScarlEntt::PropertyType::MATERIAL:
+                        UiControls::RenderMaterialPropertyControl(property, { .propertyName = propertyName, .propertyId = entityName });
+                        break;
                     default:
                         // todo add logging or debug assert/breakpoint here.
                         break;

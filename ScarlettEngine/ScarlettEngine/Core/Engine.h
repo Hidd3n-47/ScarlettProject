@@ -10,8 +10,13 @@ class Layer;
 class Window;
 class LayerStack;
 class WindowLayer;
+
 class VulkanRenderer;
 class VulkanRendererEditor;
+
+class MeshManager;
+class TextureManager;
+class MaterialManager;
 
 class Engine
 {
@@ -31,6 +36,9 @@ public:
     void DestroyEngine();
 
     inline void WindowClosed() { mRunning = false; }
+
+    [[nodiscard]] inline WeakRef<MeshManager>       GetMeshManager()    const { return WeakRef{ mMeshManager }; }
+    [[nodiscard]] inline WeakRef<TextureManager>    GetTextureManager() const { return WeakRef{ mTextureManager }; }
 private:
     static Engine* mInstance;
 
@@ -38,6 +46,10 @@ private:
     LayerStack* mLayerStack = nullptr;
 
     WeakRef<Layer> mWindowLayer;
+
+    MeshManager*        mMeshManager;
+    TextureManager*     mTextureManager;
+    MaterialManager*    mMaterialManager;
 
     bool mRunning;
 

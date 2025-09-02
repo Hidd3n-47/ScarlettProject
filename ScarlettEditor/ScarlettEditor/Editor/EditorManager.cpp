@@ -7,6 +7,8 @@
 
 #include "Views/Editor/View/EditorView.h"
 
+#include "Core/AssetManagement/AssetManager.h"
+
 namespace ScarlettEditor
 {
 
@@ -28,6 +30,7 @@ EditorManager::~EditorManager()
 {
     EDITOR_ILOG("Editor Destroyed.");
 
+    delete mAssetManager;
     delete mCurrentView;
     delete mEditorLayerStack;
 }
@@ -120,8 +123,9 @@ void EditorManager::DestroyInstance()
 
 void EditorManager::Init()
 {
-    mEditorLayerStack = new Scarlett::LayerStack();
-    mCurrentView = new EditorView();
+    mEditorLayerStack   = new Scarlett::LayerStack();
+    mCurrentView        = new EditorView();
+    mAssetManager       = new AssetManager();
 
     EDITOR_ILOG("Editor Initialized.");
 }

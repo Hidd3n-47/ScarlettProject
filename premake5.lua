@@ -24,6 +24,7 @@ include "ScarlettGameCore/"
 include "Scarlett/"
 include "ScarlEntt/"
 include "ScarlettMath/"
+include "ScarlettUtils/"
 
 -- Dependencies directories.
 include "deps/ImGui/"
@@ -32,5 +33,6 @@ include "deps/scarlettLogger/"
 -- Test Directories.
 include "Tests/ScarlettTestProject/"
 include "Tests/ScarlettEngineTests/"
+include "Tests/ScarlettUtilsTests/"
 include "Tests/ScarlettMathTests"
 include "Tests/ScarlEnttTests/"

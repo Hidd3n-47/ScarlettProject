@@ -4,7 +4,7 @@
 namespace Scarlett
 {
 
-VertexBuffer::VertexBuffer(Device* device, const uint64 bufferSize, const void* data)
+VertexBuffer::VertexBuffer(const WeakRef<Device> device, const uint64 bufferSize, const void* data)
     : mDevice { device }
 {
     mDevice->CreateBuffer(bufferSize, VK_BUFFER_USAGE_VERTEX_BUFFER_BIT, VK_MEMORY_PROPERTY_HOST_VISIBLE_BIT | VK_MEMORY_PROPERTY_HOST_COHERENT_BIT, mVertexBuffer, mVertexBufferMemory);

@@ -2,6 +2,8 @@
 
 #include <ScarlEntt/ISystem.h>
 
+#include <Rendering/Mesh.h>
+
 namespace Scarlett
 {
 
@@ -11,6 +13,8 @@ public:
     SquareSpriteSystem(ScarlEntt::Scene* sceneRef, ScarlEntt::ComponentManager* componentManagerRef);
 
     void UpdateSystem() override;
+private:
+    WeakRef<Mesh> mSquareMesh;
 };
 
 } // Scarlett.

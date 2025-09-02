@@ -4,6 +4,8 @@
 #include <memory>
 #include <string>
 #include <fstream>
+#include <filesystem>
+#include <unordered_map>
 
 #include "Src/ScarlettEditorDefines.h"
 

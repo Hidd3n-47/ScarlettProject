@@ -30,6 +30,36 @@ void VulkanRendererEditor::Init(const Window* windowRef)
         CreateCommandBuffers();
     }*/
 
+    // Todo this is a part of ImGui set up so should somehow be restricted only for editor mode.
+    // -----------------------------------------------------------------------------------
+    constexpr uint32 MAX_COUNT = 1000;
+    constexpr VkDescriptorPoolSize poolSizes[] =
+    {
+        { VK_DESCRIPTOR_TYPE_SAMPLER,                   MAX_COUNT },
+        { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,    MAX_COUNT },
+        { VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,             MAX_COUNT },
+        { VK_DESCRIPTOR_TYPE_STORAGE_IMAGE,             MAX_COUNT },
+        { VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER,      MAX_COUNT },
+        { VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER,      MAX_COUNT },
+        { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,            MAX_COUNT },
+        { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,            MAX_COUNT },
+        { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC,    MAX_COUNT },
+        { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC,    MAX_COUNT },
+        { VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT,          MAX_COUNT }
+    };
+
+    const VkDescriptorPoolCreateInfo imGuiDescriptorPoolInfo
+    {
+        .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
+        .flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT,
+        .maxSets = MAX_COUNT,
+        .poolSizeCount = std::size(poolSizes),
+        .pPoolSizes = poolSizes
+    };
+
+    vkCreateDescriptorPool(mDevice.mDevice, &imGuiDescriptorPoolInfo, nullptr, &mImGuiDescriptorSetPool);
+    // -----------------------------------------------------------------------------------
+
     ImGui::CreateContext();
 
     ImGuiIO& io = ImGui::GetIO();
@@ -46,7 +76,7 @@ void VulkanRendererEditor::Init(const Window* windowRef)
     initInfo.QueueFamily            = mDevice.mQueueFamilyIndices.graphicsFamily;
     initInfo.Queue                  = mDevice.mGraphicsQueue;
     initInfo.PipelineCache          = VK_NULL_HANDLE;
-    initInfo.DescriptorPool         = mDescriptorSetPool;
+    initInfo.DescriptorPool         = mImGuiDescriptorSetPool;
     initInfo.Subpass                = 0;
     initInfo.MinImageCount          = 2;
     initInfo.ImageCount             = 2;
@@ -60,20 +90,22 @@ void VulkanRendererEditor::Init(const Window* windowRef)
     ImGui_ImplVulkan_Init(&initInfo);
     ImGui_ImplVulkan_CreateFontsTexture();
 
-    VkSamplerCreateInfo samplerCreateInfo = {};
-    samplerCreateInfo.sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO;
-    samplerCreateInfo.magFilter                 = VK_FILTER_LINEAR;
-    samplerCreateInfo.minFilter                 = VK_FILTER_LINEAR;
-    samplerCreateInfo.addressModeU              = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-    samplerCreateInfo.addressModeV              = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-    samplerCreateInfo.addressModeW              = VK_SAMPLER_ADDRESS_MODE_REPEAT;
-    samplerCreateInfo.anisotropyEnable          = VK_FALSE;
-    samplerCreateInfo.maxAnisotropy             = 1.0f;
-    samplerCreateInfo.borderColor               = VK_BORDER_COLOR_INT_OPAQUE_BLACK;
-    samplerCreateInfo.unnormalizedCoordinates   = VK_FALSE;
-    samplerCreateInfo.compareEnable             = VK_FALSE;
-    samplerCreateInfo.compareOp                 = VK_COMPARE_OP_ALWAYS;
-    samplerCreateInfo.mipmapMode                = VK_SAMPLER_MIPMAP_MODE_LINEAR;
+    constexpr VkSamplerCreateInfo samplerCreateInfo
+    {
+        .sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
+        .magFilter                 = VK_FILTER_LINEAR,
+        .minFilter                 = VK_FILTER_LINEAR,
+        .mipmapMode                = VK_SAMPLER_MIPMAP_MODE_LINEAR,
+        .addressModeU              = VK_SAMPLER_ADDRESS_MODE_REPEAT,
+        .addressModeV              = VK_SAMPLER_ADDRESS_MODE_REPEAT,
+        .addressModeW              = VK_SAMPLER_ADDRESS_MODE_REPEAT,
+        .anisotropyEnable          = VK_FALSE,
+        .maxAnisotropy             = 1.0f,
+        .compareEnable             = VK_FALSE,
+        .compareOp                 = VK_COMPARE_OP_ALWAYS,
+        .borderColor               = VK_BORDER_COLOR_INT_OPAQUE_BLACK,
+        .unnormalizedCoordinates   = VK_FALSE,
+    };
 
     vkCreateSampler(mDevice.mDevice, &samplerCreateInfo, nullptr, &mSampler);
 
@@ -98,7 +130,7 @@ void VulkanRendererEditor::Destroy()
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
 
-    vkDestroyDescriptorPool(mDevice.mDevice, mDescriptorSetPool, nullptr);
+    vkDestroyDescriptorPool(mDevice.mDevice, mImGuiDescriptorSetPool, nullptr);
 
     VulkanRenderer::Destroy();
 }

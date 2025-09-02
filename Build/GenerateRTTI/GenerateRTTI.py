@@ -8,11 +8,13 @@ GENERATED_RTTI_OUTPUT_DIR   = ROOT_SEARCH_DIR + "Generated/"
 COMPONENT_MACRO = "SCARLETT_COMPONENT("
 
 types = {
+     "uint32_t"             : "UINT32"  ,
      "float"                : "FLOAT"   ,
      "std::string"          : "STRING"  ,
      "ScarlettMath::Vec3"   : "VEC3"    ,
      "ScarlettMath::Vec4"   : "VEC4"    ,
-     "ScarlettMath::Quat"   : "QUAT"
+     "ScarlettMath::Quat"   : "QUAT"    ,
+     "Material"             : "MATERIAL",
 }
 
 # Function used to find all files that are considered "Components"

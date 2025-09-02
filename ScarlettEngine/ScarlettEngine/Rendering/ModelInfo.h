@@ -2,15 +2,19 @@
 
 #include <Math/Math.h>
 
+#include <Components/Material.h>
+
 namespace Scarlett {
 
-struct SpriteInfoStruct
+struct alignas(16) ModelInfo
 {
-    ScarlettMath::Vec4 color     = ScarlettMath::Vec4{ 1.0f };
-
     ScarlettMath::Mat4 view      = ScarlettMath::Mat4{ 1.0f };
     ScarlettMath::Mat4 proj      = ScarlettMath::Mat4{ 1.0f };
     ScarlettMath::Mat4 model     = ScarlettMath::Mat4{ 1.0f };
+
+    ScarlettMath::Vec4 color = ScarlettMath::Vec4{ 1.0f };
+
+    Material material;
 };
 
 } // Namespace Scarlett.

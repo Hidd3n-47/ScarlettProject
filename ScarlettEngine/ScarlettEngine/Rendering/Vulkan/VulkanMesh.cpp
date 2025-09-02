@@ -47,7 +47,7 @@ vector<VkVertexInputAttributeDescription> VulkanVertex::GetAttributeDescriptions
     return bindingAttributes;
 }
 
-VulkanMesh::VulkanMesh(Device* device, const Filepath& filepath)
+VulkanMesh::VulkanMesh(const WeakRef<Device> device, const Filepath& filepath)
 {
     MeshLoader::LoadMesh(filepath, mMesh);
 
@@ -67,9 +67,9 @@ void VulkanMesh::Bind(const VkCommandBuffer commandBuffer) const
     mIndexBuffer->Bind(commandBuffer);
 }
 
-void VulkanMesh::Draw(const VkCommandBuffer commandBuffer) const
+void VulkanMesh::Draw(const VkCommandBuffer commandBuffer, const uint32 instanceCount /*= 1*/) const
 {
-    vkCmdDrawIndexed(commandBuffer, mIndexBuffer->GetNumberOfIndices(), 1, 0, 0, 0);
+    vkCmdDrawIndexed(commandBuffer, mIndexBuffer->GetNumberOfIndices(), instanceCount, 0, 0, 0);
 }
 
 } // Namespace Scarlett.

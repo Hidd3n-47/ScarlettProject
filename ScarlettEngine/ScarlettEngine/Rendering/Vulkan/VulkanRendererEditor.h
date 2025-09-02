@@ -32,6 +32,8 @@ private:
     VkSampler               mSampler;
     VkDescriptorSet         mViewportTexture[3]; //todo remove hardcoded 3
     uint32                  mCurrentTextureIndex;
+
+    VkDescriptorPool mImGuiDescriptorSetPool;
 };
 
 #endif // SCARLETT_EDITOR_ENABLED.

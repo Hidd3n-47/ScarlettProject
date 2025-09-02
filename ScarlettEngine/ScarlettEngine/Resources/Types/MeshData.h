@@ -5,7 +5,7 @@
 namespace Scarlett::Resource
 {
 
-struct Mesh
+struct MeshData
 {
     vector<Vertex> vertices;
     vector<uint32> indices;

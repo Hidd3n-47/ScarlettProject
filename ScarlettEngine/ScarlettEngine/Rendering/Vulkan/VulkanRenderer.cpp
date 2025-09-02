@@ -10,12 +10,16 @@
 
 #include <Components/Camera.h>
 
-#include "VulkanUtils.h"
 #include "VulkanMesh.h"
+#include "VulkanUtils.h"
 #include "VulkanTexture.h"
+#include "Core/Engine.h"
 
 #include "Core/Window/Window.h"
-#include "Rendering/SpriteInfoStruct.h"
+#include "Rendering/ModelInfo.h"
+#include "Resources/Manager/TextureManager.h"
+
+#include "Resources/Manager/MaterialManager.h"
 
 namespace Scarlett
 {
@@ -34,74 +38,240 @@ void VulkanRenderer::Init(const Window* windowRef)
 
         // Todo this is a part of ImGui set up so should somehow be restricted only for editor mode.
         // -----------------------------------------------------------------------------------
-        const VkDescriptorPoolSize poolSizes[] =
+        /*constexpr uint32 MAX_COUNT = 1000;
+        constexpr VkDescriptorPoolSize poolSizes[] =
         {
-            { VK_DESCRIPTOR_TYPE_SAMPLER,                   1000 },
-            { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,    1000 },
-            { VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,             1000 },
-            { VK_DESCRIPTOR_TYPE_STORAGE_IMAGE,             1000 },
-            { VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER,      1000 },
-            { VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER,      1000 },
-            { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,            1000 },
-            { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,            1000 },
-            { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC,    1000 },
-            { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC,    1000 },
-            { VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT,          1000 }
+            { VK_DESCRIPTOR_TYPE_SAMPLER,                   MAX_COUNT },
+            { VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,    MAX_COUNT },
+            { VK_DESCRIPTOR_TYPE_SAMPLED_IMAGE,             MAX_COUNT },
+            { VK_DESCRIPTOR_TYPE_STORAGE_IMAGE,             MAX_COUNT },
+            { VK_DESCRIPTOR_TYPE_UNIFORM_TEXEL_BUFFER,      MAX_COUNT },
+            { VK_DESCRIPTOR_TYPE_STORAGE_TEXEL_BUFFER,      MAX_COUNT },
+            { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER,            MAX_COUNT },
+            { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER,            MAX_COUNT },
+            { VK_DESCRIPTOR_TYPE_UNIFORM_BUFFER_DYNAMIC,    MAX_COUNT },
+            { VK_DESCRIPTOR_TYPE_STORAGE_BUFFER_DYNAMIC,    MAX_COUNT },
+            { VK_DESCRIPTOR_TYPE_INPUT_ATTACHMENT,          MAX_COUNT }
         };
 
-        VkDescriptorPoolCreateInfo imGuiDescriptorPoolInfo = {};
-        imGuiDescriptorPoolInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO;
-        imGuiDescriptorPoolInfo.flags = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT;
-        imGuiDescriptorPoolInfo.maxSets = 1000;
-        imGuiDescriptorPoolInfo.poolSizeCount = std::size(poolSizes);
-        imGuiDescriptorPoolInfo.pPoolSizes = poolSizes;
-
-        vkCreateDescriptorPool(mDevice.mDevice, &imGuiDescriptorPoolInfo, nullptr, &mDescriptorSetPool);
-        // -----------------------------------------------------------------------------------
-
-        mTexture = new VulkanTexture();
-        mTexture->SetDevice(&mDevice);
-        //constexpr std::array<uint8, 4> color = { 0xff, 0xff, 0xff, 0xff };
-        //mTexture->Create(color.data(), 1, 1);
-        mTexture->Create(Filepath{"Assets/TextureUV.png"});
-
-        constexpr VkDescriptorSetLayoutBinding textureDescriptorSet
+        const VkDescriptorPoolCreateInfo descriptorPoolInfo
         {
+            .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
+            .flags          = VK_DESCRIPTOR_POOL_CREATE_FREE_DESCRIPTOR_SET_BIT,
+            .maxSets        = MAX_COUNT,
+            .poolSizeCount  = std::size(poolSizes),
+            .pPoolSizes     = poolSizes
+        };*/
+
+        Engine::Instance().GetTextureManager()->Init(WeakRef{ &mDevice });
+
+        constexpr uint32 MAX_TEXTURES = 2048;
+        constexpr uint32 NUM_TEXTURE_BINDINGS = 1; // normal, albeido, metallic
+
+        /*constexpr VkSamplerCreateInfo samplerInfo
+        {
+            .sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
+            .magFilter      = VK_FILTER_LINEAR,
+            .minFilter      = VK_FILTER_LINEAR,
+            .mipmapMode     = VK_SAMPLER_MIPMAP_MODE_LINEAR,
+            .addressModeU   = VK_SAMPLER_ADDRESS_MODE_REPEAT,
+            .addressModeV   = VK_SAMPLER_ADDRESS_MODE_REPEAT,
+            .addressModeW   = VK_SAMPLER_ADDRESS_MODE_REPEAT,
+            .maxAnisotropy  = 1.0f,
+            .minLod         = -1000,
+            .maxLod         = 1000
+        };
+
+        VK_CHECK(vkCreateSampler(mDevice.GetDevice(), &samplerInfo, nullptr, &mImageSampler), "Failed to create Vulkan Sampler for the texture.");*/
+
+        //std::vector<VkSampler> samplers(MAX_TEXTURES, mImageSampler);
+
+        const VkDescriptorSetLayoutBinding binding
+        {
+            .binding = 0,
             .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-            .descriptorCount    = 1,
-            .stageFlags         = VK_SHADER_STAGE_FRAGMENT_BIT,
-            //.pImmutableSamplers = sampler
+            .descriptorCount = MAX_TEXTURES, // max possible descriptors you might bind
+            .stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT,
+            .pImmutableSamplers = nullptr
         };
 
-        const VkDescriptorSetLayoutCreateInfo textureDescriptorSetInfo
+        VkDescriptorBindingFlags bindingFlags = VK_DESCRIPTOR_BINDING_VARIABLE_DESCRIPTOR_COUNT_BIT | VK_DESCRIPTOR_BINDING_PARTIALLY_BOUND_BIT;
+
+        VkDescriptorSetLayoutBindingFlagsCreateInfo bindingFlagsInfo
         {
-            .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
-            .bindingCount   = 1,
-            .pBindings      = &textureDescriptorSet
+            .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_BINDING_FLAGS_CREATE_INFO,
+            .bindingCount = 1,
+            .pBindingFlags = &bindingFlags
         };
-        VK_CHECK(vkCreateDescriptorSetLayout(mDevice.GetDevice(), &textureDescriptorSetInfo, nullptr, &mTextureDescriptorSetLayout), "Failed to create Vulkan Descriptor Set for Texture.");
 
-        const VkDescriptorSetAllocateInfo descriptorSetAllocateInfo
+        VkDescriptorSetLayoutCreateInfo layoutInfo = {
+            .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
+            .pNext = &bindingFlagsInfo,
+            .bindingCount = 1,
+            .pBindings = &binding
+        };
+
+        VK_CHECK(vkCreateDescriptorSetLayout(mDevice.GetDevice(), &layoutInfo, nullptr, &mDescriptorSetLayout), "Failed to create vulkan descriptor set layout");
+
+
+        VkDescriptorPoolSize poolSize
+        {
+            .type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+            .descriptorCount = MAX_TEXTURES
+        };
+
+        VkDescriptorPoolCreateInfo poolInfo = {
+            .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
+            .flags = 0,
+            .maxSets = 1,
+            .poolSizeCount = 1,
+            .pPoolSizes = &poolSize,
+        };
+
+        VK_CHECK(vkCreateDescriptorPool(mDevice.GetDevice(), &poolInfo, nullptr, &mDescriptorSetPool), "Failed to create vulkan descriptor set pool");
+
+        uint32 actualCount = static_cast<uint32>(Engine::Instance().GetTextureManager()->mLoadedTextures.size());
+
+        VkDescriptorSetVariableDescriptorCountAllocateInfo countInfo
+        {
+            .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_ALLOCATE_INFO,
+            .descriptorSetCount = 1,
+            .pDescriptorCounts = &actualCount
+        };
+
+        VkDescriptorSetAllocateInfo allocInfo
         {
             .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO,
-            .descriptorPool     = mDescriptorSetPool,
+            .pNext = &countInfo,
+            .descriptorPool = mDescriptorSetPool,
             .descriptorSetCount = 1,
-            .pSetLayouts        = &mTextureDescriptorSetLayout
+            .pSetLayouts = &mDescriptorSetLayout
         };
 
-        vkAllocateDescriptorSets(mDevice.GetDevice(), &descriptorSetAllocateInfo, &mTextureDescriptorSet);
+        VK_CHECK(vkAllocateDescriptorSets(mDevice.GetDevice(), &allocInfo, &mDescriptorSet), "Failed to allocate descriptor sets");
 
-        const VkWriteDescriptorSet wds
+
+        // Gather all VkDescriptorImageInfo from TextureManager for the textures you want to bind
+        std::vector<VkDescriptorImageInfo> imageInfos;
+        for (Texture* texture : Engine::Instance().GetTextureManager()->mLoadedTextures)
         {
+            VulkanTexture* tex = dynamic_cast<VulkanTexture*>(texture);
+            imageInfos.push_back(tex->GetImageInfo());
+        }
+
+        VkWriteDescriptorSet write = {
             .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
-            .dstSet             = mTextureDescriptorSet,
-            .dstBinding         = 0,
-            .descriptorCount    = 1,
-            .descriptorType     = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-            .pImageInfo         = &mTexture->GetImageInfo()
+            .dstSet = mDescriptorSet,
+            .dstBinding = 0,
+            .descriptorCount = actualCount,
+            .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+            .pImageInfo = imageInfos.data()
         };
 
-        vkUpdateDescriptorSets(mDevice.GetDevice(), 1, &wds, 0, nullptr);
+        vkUpdateDescriptorSets(mDevice.GetDevice(), 1, &write, 0, nullptr);
+
+        //constexpr uint32 MAX_TEXTURES = 2048;
+        //constexpr uint32 NUM_TEXTURE_BINDINGS = 1; // normal, albeido, metallic
+
+        //constexpr VkDescriptorPoolSize poolSize
+        //{
+        //    .type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
+        //    .descriptorCount = MAX_TEXTURES * NUM_TEXTURE_BINDINGS // e.g., 2048 * 3
+        //};
+
+        //VkDescriptorPoolCreateInfo poolInfo
+        //{
+        //    .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
+        //    .flags          = VK_DESCRIPTOR_POOL_CREATE_UPDATE_AFTER_BIND_BIT,
+        //    .maxSets        = 1,
+        //    .poolSizeCount  = 1,
+        //    .pPoolSizes     = &poolSize
+        //};
+
+        //VK_CHECK(vkCreateDescriptorPool(mDevice.GetDevice(), &poolInfo, nullptr, &mDescriptorSetPool), "Failed to create descriptor pool");
+
+        //// Example for 3 bindings: albedo, normal, roughness
+        //std::vector<VkDescriptorSetLayoutBinding> bindings = {
+        //    {0, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, MAX_TEXTURES, VK_SHADER_STAGE_FRAGMENT_BIT, nullptr}, // albedo
+        //    //{1, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, MAX_TEXTURES, VK_SHADER_STAGE_FRAGMENT_BIT, nullptr}, // normal
+        //    //{2, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, MAX_TEXTURES, VK_SHADER_STAGE_FRAGMENT_BIT, nullptr}, // roughness
+        //};
+
+        //constexpr VkDescriptorBindingFlags bindingFlags = VK_DESCRIPTOR_BINDING_PARTIALLY_BOUND_BIT | VK_DESCRIPTOR_BINDING_VARIABLE_DESCRIPTOR_COUNT_BIT | VK_DESCRIPTOR_BINDING_UPDATE_AFTER_BIND_BIT;
+
+        //const VkDescriptorSetLayoutBindingFlagsCreateInfo bindingFlagsInfo
+        //{
+        //    .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_BINDING_FLAGS_CREATE_INFO,
+        //    .bindingCount   = 1,
+        //    .pBindingFlags  = &bindingFlags,
+        //};
+
+        //const VkDescriptorSetLayoutCreateInfo layoutInfo
+        //{
+        //    .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
+        //    .pNext          = &bindingFlagsInfo,
+        //    .flags          = VK_DESCRIPTOR_SET_LAYOUT_CREATE_UPDATE_AFTER_BIND_POOL_BIT,
+        //    .bindingCount   = static_cast<uint32_t>(bindings.size()),
+        //    .pBindings      = bindings.data(),
+        //};
+
+        //vkCreateDescriptorSetLayout(mDevice.GetDevice(), &layoutInfo, nullptr, &textureSetLayout);
+
+        //uint32 actualAlbedoCount = MAX_TEXTURES;//, actualNormalCount = 0, actualRoughnessCount = 0;
+        //uint32_t variableDescriptorCounts[] =
+        //{
+        //    actualAlbedoCount,
+        //    //actualNormalCount,
+        //    //actualRoughnessCount,
+        //};
+
+        //VkDescriptorSetVariableDescriptorCountAllocateInfo variableDescriptorCountAllocInfo{};
+        //variableDescriptorCountAllocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_ALLOCATE_INFO;
+        //variableDescriptorCountAllocInfo.descriptorSetCount = 1;
+        //variableDescriptorCountAllocInfo.pDescriptorCounts = variableDescriptorCounts;
+
+        //VkDescriptorSetAllocateInfo allocInfo{};
+        //allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
+        //allocInfo.descriptorPool = mDescriptorSetPool;
+        //allocInfo.descriptorSetCount = 1;
+        //allocInfo.pSetLayouts = &textureSetLayout;
+        //allocInfo.pNext = &variableDescriptorCountAllocInfo;
+
+        //vkAllocateDescriptorSets(mDevice.GetDevice(), &allocInfo, &textureDescriptorSetF);
+
+        //constexpr VkSamplerCreateInfo samplerInfo
+        //{
+        //    .sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
+        //    .magFilter      = VK_FILTER_LINEAR,
+        //    .minFilter      = VK_FILTER_LINEAR,
+        //    .mipmapMode     = VK_SAMPLER_MIPMAP_MODE_LINEAR,
+        //    .addressModeU   = VK_SAMPLER_ADDRESS_MODE_REPEAT,
+        //    .addressModeV   = VK_SAMPLER_ADDRESS_MODE_REPEAT,
+        //    .addressModeW   = VK_SAMPLER_ADDRESS_MODE_REPEAT,
+        //    .maxAnisotropy  = 1.0f,
+        //    .minLod         = -1000,
+        //    .maxLod         = 1000
+        //};
+
+        //VK_CHECK(vkCreateSampler(mDevice.GetDevice(), &samplerInfo, nullptr, &mImageSampler), "Failed to create Vulkan Sampler for the texture.");
+
+        //VkDescriptorSetVariableDescriptorCountAllocateInfo variableCountInfo
+        //{
+        //    .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_ALLOCATE_INFO,
+        //    .descriptorSetCount = 1,
+        //    .pDescriptorCounts = &MAX_TEXTURES
+        //};
+
+        //VkDescriptorSetAllocateInfo allocInfoSet
+        //{
+        //    .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO,
+        //    .pNext = nullptr,
+        //    .descriptorPool = mDescriptorSetPool,
+        //    .descriptorSetCount = 1,
+        //    .pSetLayouts = &textureSetLayout
+        //};
+
+        //vkAllocateDescriptorSets(mDevice.GetDevice(), &allocInfoSet, &textureDescriptorSetF);
 
         CreatePipelineLayout();
 
@@ -109,9 +279,6 @@ void VulkanRenderer::Init(const Window* windowRef)
         CreatePipeline();
 
         CreateCommandBuffers();
-
-        mSquare = new VulkanMesh(&mDevice, Filepath{ "Assets/Mesh/Plane.obj" });
-        mLine = new VulkanMesh(&mDevice, Filepath{ "Assets/Mesh/CylinderLowPoly.obj" });
     }
     catch(const std::runtime_error& e)
     {
@@ -124,10 +291,9 @@ void VulkanRenderer::Destroy()
     vkDeviceWaitIdle(mDevice.mDevice);
 
     delete mTexture;
-    vkDestroyDescriptorSetLayout(mDevice.GetDevice(), mTextureDescriptorSetLayout, nullptr);
+    vkDestroyDescriptorSetLayout(mDevice.GetDevice(), mDescriptorSetLayout, nullptr);
 
-    delete mLine;
-    delete mSquare;
+    vkDestroyDescriptorPool(mDevice.GetDevice(), mDescriptorSetPool, nullptr);
 
     FreeCommandBuffers();
 
@@ -200,52 +366,33 @@ void VulkanRenderer::EndRender()
     // todo move towards a vertex and index buffer to batch/instance render.
     //vector<Vertex> mVertexBuffer;
     //vector<uint32> mIndexBuffer;
-    for (size_t i{ 0 }; i < mCommands[RenderType::SPRITE].size(); ++i)
+
+    for (auto& [mesh, commands] : mCommands)
     {
-        const RenderCommand command = mCommands[RenderType::SPRITE][i];
-
-        const ScarlettMath::Mat4 scale = ScarlettMath::ScaleMatrix(command.transform->scale);
-        ScarlettMath::Mat4 translation = ScarlettMath::TranslateMatrix(command.transform->translation);
-
-        const SpriteInfoStruct info
+        const VulkanMesh* vulkanMesh = reinterpret_cast<VulkanMesh*>(mesh);
+        vulkanMesh->Bind(mCommandBuffers[mNextImageIndex]);
+        for (const auto& command : commands)
         {
-            .color = command.color,
-            .view  = camera->GetViewMatrix(),
-            .proj  = camera->GetProjectionMatrix(),
-            .model = translation * command.transform->rotation.GetRotationMatrix() * scale
-        };
+            const ScarlettMath::Mat4 scale = ScarlettMath::ScaleMatrix(command.transform->scale);
+            ScarlettMath::Mat4 translation = ScarlettMath::TranslateMatrix(command.transform->translation);
 
-        vkCmdBindDescriptorSets(mCommandBuffers[mNextImageIndex], VK_PIPELINE_BIND_POINT_GRAPHICS, mPipelineLayout, 0, 1, &mTextureDescriptorSet, 0, nullptr);
-        vkCmdPushConstants(mCommandBuffers[mNextImageIndex], mPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SpriteInfoStruct), &info);
+            const ModelInfo info
+            {
+                .view = camera->GetViewMatrix(),
+                .proj = camera->GetProjectionMatrix(),
+                .model = translation * command.transform->rotation.GetRotationMatrix() * scale,
 
-        mSquare->Bind(mCommandBuffers[mNextImageIndex]);
-        mSquare->Draw(mCommandBuffers[mNextImageIndex]);
+                .color = command.color,
+                .material = command.material
+            };
+
+            vkCmdBindDescriptorSets(mCommandBuffers[mNextImageIndex], VK_PIPELINE_BIND_POINT_GRAPHICS, mPipelineLayout, 0, 1, &mDescriptorSet, 0, nullptr);
+            vkCmdPushConstants(mCommandBuffers[mNextImageIndex], mPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(ModelInfo), &info);
+
+            vulkanMesh->Draw(mCommandBuffers[mNextImageIndex]);
+        }
+        commands.clear();
     }
-    mCommands[RenderType::SPRITE].clear();
-
-    //Lines.
-    for (size_t i{ 0 }; i < mCommands[RenderType::LINE].size(); ++i)
-    {
-        const RenderCommand command = mCommands[RenderType::LINE][i];
-
-        const ScarlettMath::Mat4 scale = ScarlettMath::ScaleMatrix(command.transform->scale);
-        ScarlettMath::Mat4 translation = ScarlettMath::TranslateMatrix(command.transform->translation);
-
-        const SpriteInfoStruct info
-        {
-            .color = command.color,
-            .view  = camera->GetViewMatrix(),
-            .proj  = camera->GetProjectionMatrix(),
-            .model = translation * command.transform->rotation.GetRotationMatrix() * scale
-        };
-
-        vkCmdBindDescriptorSets(mCommandBuffers[mNextImageIndex], VK_PIPELINE_BIND_POINT_GRAPHICS, mPipelineLayout, 0, 1, &mTextureDescriptorSet, 0, nullptr);
-        vkCmdPushConstants(mCommandBuffers[mNextImageIndex], mPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(SpriteInfoStruct), &info);
-
-        mLine->Bind(mCommandBuffers[mNextImageIndex]);
-        mLine->Draw(mCommandBuffers[mNextImageIndex]);
-    }
-    mCommands[RenderType::LINE].clear();
 
     vkCmdEndRenderPass(mCommandBuffers[mNextImageIndex]);
 
@@ -271,7 +418,12 @@ void VulkanRenderer::CreatePipelineLayout()
     {
         .stageFlags = VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT,
         .offset = 0,
-        .size = sizeof(SpriteInfoStruct)
+        .size = sizeof(ModelInfo)
+    };
+
+    vector<VkDescriptorSetLayout> setLayouts = {
+    //existingSetLayout,   // maybe for uniforms, materials, etc.
+    mDescriptorSetLayout     // your big texture array descriptor set
     };
 
     // ReSharper disable once CppVariableCanBeMadeConstexpr
@@ -281,7 +433,7 @@ void VulkanRenderer::CreatePipelineLayout()
         .pNext                      = VK_NULL_HANDLE,
         .flags                      = 0,
         .setLayoutCount             = 1,
-        .pSetLayouts                = &mTextureDescriptorSetLayout,
+        .pSetLayouts                = &mDescriptorSetLayout,
         .pushConstantRangeCount     = 1,
         .pPushConstantRanges        = &pushConstantRange,
     };
