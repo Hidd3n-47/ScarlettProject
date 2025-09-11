@@ -4,6 +4,7 @@
 #include <imgui/imgui_internal.h>
 
 #include "Core/DirectoryCache.h"
+#include "Core/AssetManagement/AssetManager.h"
 
 namespace ScarlettEditor
 {
@@ -11,13 +12,12 @@ AssetBrowserPanel::AssetBrowserPanel(IView* view) : Panel { view, { .title = "As
 {
     // Create the directory.
     // Todo change it to use the directory cache instead of querying the os for the directories every frame.
-    mDirectory = new DirectoryCache{ "E:/Programming/ScarlettProject/Assets/" };
+    mDirectory = new DirectoryCache{ AssetManager::ASSET_PATH };
 }
 
 void AssetBrowserPanel::Render()
 {
 #ifdef DEV_CONFIGURATION
-    const std::string path = "E:/Programming/ScarlettProject/Assets/";
     // ------------- Tree -------------------
     const float indentSpacing = ImGui::GetStyle().IndentSpacing;
     ImGui::GetStyle().IndentSpacing = 0.0f;
@@ -25,13 +25,42 @@ void AssetBrowserPanel::Render()
     ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(10, 10));
     ImGui::TreePush("Scene");
 
-    DrawDirectoryTree(path);
+    DrawDirectoryTree(AssetManager::ASSET_PATH);
 
     ImGui::TreePop();
     ImGui::PopStyleVar();
 
     ImGui::GetStyle().IndentSpacing = indentSpacing;
 #endif // DEV_CONFIGURATION.
+}
+
+void AssetBrowserPanel::RenderContextMenu()
+{
+    if (ImGui::BeginPopupContextWindow("AssetBrowserRightClick"))
+    {
+        mContextOpen = true;
+        if (ImGui::MenuItem("New Folder"))
+        {
+            mCreateFolder = true;
+        }
+        if (ImGui::BeginMenu("Create Asset"))
+        {
+            for (uint32 i{ 0 }; i < static_cast<uint32>(AssetTypes::COUNT); ++i)
+            {
+                if (const AssetTypes type = static_cast<AssetTypes>(i); ImGui::MenuItem(AssetManager::AssetTypeToString(type).c_str()))
+                {
+                    mCreateFile = true;
+                    mAssetTypeToCreate = type;
+                }
+            }
+            ImGui::EndMenu();
+        }
+        ImGui::EndPopup();
+    }
+    else
+    {
+        mContextOpen = false;
+    }
 }
 
 bool AssetBrowserPanel::DrawDirectoryTree(const std::filesystem::path& directoryPath, const uint32 indentAmount)
@@ -87,16 +116,8 @@ bool AssetBrowserPanel::DrawDirectoryTree(const std::filesystem::path& directory
                     }
                     else if (mCreateFile)
                     {
-                        std::string fileName{ std::filesystem::path{path / buffer}.string() };
+                        CreateAssetFromSelectedType(std::filesystem::path{ path / buffer });
 
-                        // Ensure that the file has an extension, and if not, add '.txt'.
-                        if (fileName.find('.') == std::string::npos)
-                        {
-                            fileName += ".txt";
-                        }
-
-                        std::ofstream of{ fileName, std::ios::out };
-                        of.close();
                         mCreateFile = false;
                     }
                 }
@@ -120,25 +141,24 @@ bool AssetBrowserPanel::DrawDirectoryTree(const std::filesystem::path& directory
     return false;
 }
 
-void AssetBrowserPanel::RenderContextMenu()
+void AssetBrowserPanel::CreateAssetFromSelectedType(const std::filesystem::path& path) const
 {
-    if (ImGui::BeginPopupContextWindow("AssetBrowserRightClick"))
+    const std::string fileName{ path.string() };
+    std::string extension;
+
+    switch (mAssetTypeToCreate)
     {
-        mContextOpen = true;
-        if (ImGui::MenuItem("New File"))
-        {
-            mCreateFile = true;
-        }
-        if (ImGui::MenuItem("New Folder"))
-        {
-            mCreateFolder = true;
-        }
-        ImGui::EndPopup();
+    case AssetTypes::MATERIAL_FILE:
+        extension = AssetManager::SCARLETT_ASSET_EXTENSION;
+        break;
+    default:
+    case AssetTypes::TEXT_FILE:
+        extension = ".txt";
+        break;
     }
-    else
-    {
-        mContextOpen = false;
-    }
+
+    std::ofstream of{ fileName + extension, std::ios::out };
+    of.close();
 }
 
 } // Namespace ScarlettEditor.

@@ -43,7 +43,7 @@ constexpr ObjKeyword StringToObjKeyword(const std::string_view& keyword)
 
 void MeshLoader::LoadMesh(const Filepath& filepath, Resource::MeshData& mesh)
 {
-    if (filepath.GetExtension() != "obj")
+    if (filepath.GetExtension() != ".obj")
     {
         SCARLETT_ELOG("Meshes have to be of type '.obj' extension, and hence failed to load given mesh at path: {0}", filepath.GetAbsolutePath());
         // return error.

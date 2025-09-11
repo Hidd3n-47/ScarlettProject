@@ -68,7 +68,6 @@ void SceneSerialization::DeserializeCurrentGameScene()
             tag->entity = ScarlEntt::EntityHandle{ entity };
         }
     }
-
 #endif // DEV_CONFIGURATION.
 }
 

@@ -463,14 +463,14 @@
 			<localMaximum type="vec3">0.500000,0.500000,0.010000</localMaximum>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Transform">
-			<translation type="vec3">1.939231,3.034080,5.447841</translation>
-			<rotation type="quat">-0.975958,0.211850,-0.050050,-0.010866</rotation>
+			<translation type="vec3">-5.586744,2.028430,3.456234</translation>
+			<rotation type="quat">0.892805,-0.132650,-0.425790,-0.063265</rotation>
 			<scale type="vec3">1.000000,1.000000,1.000000</scale>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Camera">
-			<mUpVector type="vec3">-0.042416,0.910001,-0.412426</mUpVector>
-			<mForwardVector type="vec3">-0.093089,-0.414601,-0.905227</mForwardVector>
-			<mRightVector type="vec3">0.994751,0.000003,-0.102297</mRightVector>
+			<mUpVector type="vec3">0.225929,0.956799,-0.182986</mUpVector>
+			<mForwardVector type="vec3">0.743511,-0.290736,-0.602210</mForwardVector>
+			<mRightVector type="vec3">0.629397,-0.000005,0.777079</mRightVector>
 			<mAspectRatio type="float">1.777778</mAspectRatio>
 		</Component>
 	</Entity>
@@ -488,7 +488,7 @@
 			<scale type="vec3">1.000000,1.000000,1.000000</scale>
 		</Component>
 		<Component typeId="struct Scarlett::Component::SquareSprite">
-			<material type="material">3</material>
+			<material type="material">0</material>
 			<color type="vec4">1.000000,0.000000,0.000000,1.000000</color>
 		</Component>
 	</Entity>
@@ -614,7 +614,7 @@
 			<scale type="vec3">1.000000,1.000000,1.000000</scale>
 		</Component>
 		<Component typeId="struct Scarlett::Component::SquareSprite">
-			<material type="material">2</material>
+			<material type="material">0</material>
 			<color type="vec4">0.700000,0.910000,1.000000,1.000000</color>
 		</Component>
 	</Entity>

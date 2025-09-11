@@ -10,6 +10,8 @@
 #include <map>
 #include <unordered_map>
 
+#include <ScarlettUtils/Core/Ulid.h>
+
 #include "Types.h"
 #include "Debug.h"
 

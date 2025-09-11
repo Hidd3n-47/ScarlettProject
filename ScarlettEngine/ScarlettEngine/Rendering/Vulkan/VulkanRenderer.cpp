@@ -65,214 +65,6 @@ void VulkanRenderer::Init(const Window* windowRef)
 
         Engine::Instance().GetTextureManager()->Init(WeakRef{ &mDevice });
 
-        constexpr uint32 MAX_TEXTURES = 2048;
-        constexpr uint32 NUM_TEXTURE_BINDINGS = 1; // normal, albeido, metallic
-
-        /*constexpr VkSamplerCreateInfo samplerInfo
-        {
-            .sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
-            .magFilter      = VK_FILTER_LINEAR,
-            .minFilter      = VK_FILTER_LINEAR,
-            .mipmapMode     = VK_SAMPLER_MIPMAP_MODE_LINEAR,
-            .addressModeU   = VK_SAMPLER_ADDRESS_MODE_REPEAT,
-            .addressModeV   = VK_SAMPLER_ADDRESS_MODE_REPEAT,
-            .addressModeW   = VK_SAMPLER_ADDRESS_MODE_REPEAT,
-            .maxAnisotropy  = 1.0f,
-            .minLod         = -1000,
-            .maxLod         = 1000
-        };
-
-        VK_CHECK(vkCreateSampler(mDevice.GetDevice(), &samplerInfo, nullptr, &mImageSampler), "Failed to create Vulkan Sampler for the texture.");*/
-
-        //std::vector<VkSampler> samplers(MAX_TEXTURES, mImageSampler);
-
-        const VkDescriptorSetLayoutBinding binding
-        {
-            .binding = 0,
-            .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-            .descriptorCount = MAX_TEXTURES, // max possible descriptors you might bind
-            .stageFlags = VK_SHADER_STAGE_FRAGMENT_BIT,
-            .pImmutableSamplers = nullptr
-        };
-
-        VkDescriptorBindingFlags bindingFlags = VK_DESCRIPTOR_BINDING_VARIABLE_DESCRIPTOR_COUNT_BIT | VK_DESCRIPTOR_BINDING_PARTIALLY_BOUND_BIT;
-
-        VkDescriptorSetLayoutBindingFlagsCreateInfo bindingFlagsInfo
-        {
-            .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_BINDING_FLAGS_CREATE_INFO,
-            .bindingCount = 1,
-            .pBindingFlags = &bindingFlags
-        };
-
-        VkDescriptorSetLayoutCreateInfo layoutInfo = {
-            .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
-            .pNext = &bindingFlagsInfo,
-            .bindingCount = 1,
-            .pBindings = &binding
-        };
-
-        VK_CHECK(vkCreateDescriptorSetLayout(mDevice.GetDevice(), &layoutInfo, nullptr, &mDescriptorSetLayout), "Failed to create vulkan descriptor set layout");
-
-
-        VkDescriptorPoolSize poolSize
-        {
-            .type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-            .descriptorCount = MAX_TEXTURES
-        };
-
-        VkDescriptorPoolCreateInfo poolInfo = {
-            .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
-            .flags = 0,
-            .maxSets = 1,
-            .poolSizeCount = 1,
-            .pPoolSizes = &poolSize,
-        };
-
-        VK_CHECK(vkCreateDescriptorPool(mDevice.GetDevice(), &poolInfo, nullptr, &mDescriptorSetPool), "Failed to create vulkan descriptor set pool");
-
-        uint32 actualCount = static_cast<uint32>(Engine::Instance().GetTextureManager()->mLoadedTextures.size());
-
-        VkDescriptorSetVariableDescriptorCountAllocateInfo countInfo
-        {
-            .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_ALLOCATE_INFO,
-            .descriptorSetCount = 1,
-            .pDescriptorCounts = &actualCount
-        };
-
-        VkDescriptorSetAllocateInfo allocInfo
-        {
-            .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO,
-            .pNext = &countInfo,
-            .descriptorPool = mDescriptorSetPool,
-            .descriptorSetCount = 1,
-            .pSetLayouts = &mDescriptorSetLayout
-        };
-
-        VK_CHECK(vkAllocateDescriptorSets(mDevice.GetDevice(), &allocInfo, &mDescriptorSet), "Failed to allocate descriptor sets");
-
-
-        // Gather all VkDescriptorImageInfo from TextureManager for the textures you want to bind
-        std::vector<VkDescriptorImageInfo> imageInfos;
-        for (Texture* texture : Engine::Instance().GetTextureManager()->mLoadedTextures)
-        {
-            VulkanTexture* tex = dynamic_cast<VulkanTexture*>(texture);
-            imageInfos.push_back(tex->GetImageInfo());
-        }
-
-        VkWriteDescriptorSet write = {
-            .sType = VK_STRUCTURE_TYPE_WRITE_DESCRIPTOR_SET,
-            .dstSet = mDescriptorSet,
-            .dstBinding = 0,
-            .descriptorCount = actualCount,
-            .descriptorType = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-            .pImageInfo = imageInfos.data()
-        };
-
-        vkUpdateDescriptorSets(mDevice.GetDevice(), 1, &write, 0, nullptr);
-
-        //constexpr uint32 MAX_TEXTURES = 2048;
-        //constexpr uint32 NUM_TEXTURE_BINDINGS = 1; // normal, albeido, metallic
-
-        //constexpr VkDescriptorPoolSize poolSize
-        //{
-        //    .type = VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER,
-        //    .descriptorCount = MAX_TEXTURES * NUM_TEXTURE_BINDINGS // e.g., 2048 * 3
-        //};
-
-        //VkDescriptorPoolCreateInfo poolInfo
-        //{
-        //    .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_POOL_CREATE_INFO,
-        //    .flags          = VK_DESCRIPTOR_POOL_CREATE_UPDATE_AFTER_BIND_BIT,
-        //    .maxSets        = 1,
-        //    .poolSizeCount  = 1,
-        //    .pPoolSizes     = &poolSize
-        //};
-
-        //VK_CHECK(vkCreateDescriptorPool(mDevice.GetDevice(), &poolInfo, nullptr, &mDescriptorSetPool), "Failed to create descriptor pool");
-
-        //// Example for 3 bindings: albedo, normal, roughness
-        //std::vector<VkDescriptorSetLayoutBinding> bindings = {
-        //    {0, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, MAX_TEXTURES, VK_SHADER_STAGE_FRAGMENT_BIT, nullptr}, // albedo
-        //    //{1, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, MAX_TEXTURES, VK_SHADER_STAGE_FRAGMENT_BIT, nullptr}, // normal
-        //    //{2, VK_DESCRIPTOR_TYPE_COMBINED_IMAGE_SAMPLER, MAX_TEXTURES, VK_SHADER_STAGE_FRAGMENT_BIT, nullptr}, // roughness
-        //};
-
-        //constexpr VkDescriptorBindingFlags bindingFlags = VK_DESCRIPTOR_BINDING_PARTIALLY_BOUND_BIT | VK_DESCRIPTOR_BINDING_VARIABLE_DESCRIPTOR_COUNT_BIT | VK_DESCRIPTOR_BINDING_UPDATE_AFTER_BIND_BIT;
-
-        //const VkDescriptorSetLayoutBindingFlagsCreateInfo bindingFlagsInfo
-        //{
-        //    .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_BINDING_FLAGS_CREATE_INFO,
-        //    .bindingCount   = 1,
-        //    .pBindingFlags  = &bindingFlags,
-        //};
-
-        //const VkDescriptorSetLayoutCreateInfo layoutInfo
-        //{
-        //    .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_LAYOUT_CREATE_INFO,
-        //    .pNext          = &bindingFlagsInfo,
-        //    .flags          = VK_DESCRIPTOR_SET_LAYOUT_CREATE_UPDATE_AFTER_BIND_POOL_BIT,
-        //    .bindingCount   = static_cast<uint32_t>(bindings.size()),
-        //    .pBindings      = bindings.data(),
-        //};
-
-        //vkCreateDescriptorSetLayout(mDevice.GetDevice(), &layoutInfo, nullptr, &textureSetLayout);
-
-        //uint32 actualAlbedoCount = MAX_TEXTURES;//, actualNormalCount = 0, actualRoughnessCount = 0;
-        //uint32_t variableDescriptorCounts[] =
-        //{
-        //    actualAlbedoCount,
-        //    //actualNormalCount,
-        //    //actualRoughnessCount,
-        //};
-
-        //VkDescriptorSetVariableDescriptorCountAllocateInfo variableDescriptorCountAllocInfo{};
-        //variableDescriptorCountAllocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_ALLOCATE_INFO;
-        //variableDescriptorCountAllocInfo.descriptorSetCount = 1;
-        //variableDescriptorCountAllocInfo.pDescriptorCounts = variableDescriptorCounts;
-
-        //VkDescriptorSetAllocateInfo allocInfo{};
-        //allocInfo.sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO;
-        //allocInfo.descriptorPool = mDescriptorSetPool;
-        //allocInfo.descriptorSetCount = 1;
-        //allocInfo.pSetLayouts = &textureSetLayout;
-        //allocInfo.pNext = &variableDescriptorCountAllocInfo;
-
-        //vkAllocateDescriptorSets(mDevice.GetDevice(), &allocInfo, &textureDescriptorSetF);
-
-        //constexpr VkSamplerCreateInfo samplerInfo
-        //{
-        //    .sType = VK_STRUCTURE_TYPE_SAMPLER_CREATE_INFO,
-        //    .magFilter      = VK_FILTER_LINEAR,
-        //    .minFilter      = VK_FILTER_LINEAR,
-        //    .mipmapMode     = VK_SAMPLER_MIPMAP_MODE_LINEAR,
-        //    .addressModeU   = VK_SAMPLER_ADDRESS_MODE_REPEAT,
-        //    .addressModeV   = VK_SAMPLER_ADDRESS_MODE_REPEAT,
-        //    .addressModeW   = VK_SAMPLER_ADDRESS_MODE_REPEAT,
-        //    .maxAnisotropy  = 1.0f,
-        //    .minLod         = -1000,
-        //    .maxLod         = 1000
-        //};
-
-        //VK_CHECK(vkCreateSampler(mDevice.GetDevice(), &samplerInfo, nullptr, &mImageSampler), "Failed to create Vulkan Sampler for the texture.");
-
-        //VkDescriptorSetVariableDescriptorCountAllocateInfo variableCountInfo
-        //{
-        //    .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_VARIABLE_DESCRIPTOR_COUNT_ALLOCATE_INFO,
-        //    .descriptorSetCount = 1,
-        //    .pDescriptorCounts = &MAX_TEXTURES
-        //};
-
-        //VkDescriptorSetAllocateInfo allocInfoSet
-        //{
-        //    .sType = VK_STRUCTURE_TYPE_DESCRIPTOR_SET_ALLOCATE_INFO,
-        //    .pNext = nullptr,
-        //    .descriptorPool = mDescriptorSetPool,
-        //    .descriptorSetCount = 1,
-        //    .pSetLayouts = &textureSetLayout
-        //};
-
-        //vkAllocateDescriptorSets(mDevice.GetDevice(), &allocInfoSet, &textureDescriptorSetF);
-
         CreatePipelineLayout();
 
         RecreateSwapChain(mWindowRef->GetWidth(), mWindowRef->GetHeight());
@@ -290,10 +82,7 @@ void VulkanRenderer::Destroy()
 {
     vkDeviceWaitIdle(mDevice.mDevice);
 
-    delete mTexture;
-    vkDestroyDescriptorSetLayout(mDevice.GetDevice(), mDescriptorSetLayout, nullptr);
-
-    vkDestroyDescriptorPool(mDevice.GetDevice(), mDescriptorSetPool, nullptr);
+    Engine::Instance().GetTextureManager()->Destroy();
 
     FreeCommandBuffers();
 
@@ -302,7 +91,7 @@ void VulkanRenderer::Destroy()
     mPipeline = nullptr;
     vkDestroyPipelineLayout(mDevice.GetDevice(), mPipelineLayout, nullptr);
 
-    SCARLETT_ASSERT(mSwapChain && "Trying to destroy a swapchain that was not created.");
+    SCARLETT_ASSERT(mSwapChain && "Trying to destroy a swap chain that was not created.");
     delete mSwapChain;
     mSwapChain= nullptr;
 
@@ -311,6 +100,9 @@ void VulkanRenderer::Destroy()
 
 void VulkanRenderer::BeginRender()
 {
+    // First thing we need to do is create the materials if needed.
+    Engine::Instance().GetMaterialManager()->UpdateMaterials();
+
     const VkResult result = mSwapChain->AcquireNextImage(&mNextImageIndex);
 
     if (result != VK_SUCCESS && result != VK_SUBOPTIMAL_KHR)
@@ -350,10 +142,7 @@ void VulkanRenderer::BeginRender()
     };
 
     vkCmdBeginRenderPass(mCommandBuffers[mNextImageIndex], &renderPassInfo, VK_SUBPASS_CONTENTS_INLINE);
-}
 
-void VulkanRenderer::Render()
-{
     mPipeline->Bind(mCommandBuffers[mNextImageIndex]);
     RecordCommandBuffer(mNextImageIndex);
 }
@@ -376,17 +165,19 @@ void VulkanRenderer::EndRender()
             const ScarlettMath::Mat4 scale = ScarlettMath::ScaleMatrix(command.transform->scale);
             ScarlettMath::Mat4 translation = ScarlettMath::TranslateMatrix(command.transform->translation);
 
+            const auto& materialInfo = Engine::Instance().GetMaterialManager()->GetMaterialUploadInfo(command.material);
+
             const ModelInfo info
             {
-                .view = camera->GetViewMatrix(),
-                .proj = camera->GetProjectionMatrix(),
-                .model = translation * command.transform->rotation.GetRotationMatrix() * scale,
+                .view       = camera->GetViewMatrix(),
+                .proj       = camera->GetProjectionMatrix(),
+                .model      = translation * command.transform->rotation.GetRotationMatrix() * scale,
 
-                .color = command.color,
-                .material = command.material
+                .color      = command.color,
+                .material   = materialInfo
             };
 
-            vkCmdBindDescriptorSets(mCommandBuffers[mNextImageIndex], VK_PIPELINE_BIND_POINT_GRAPHICS, mPipelineLayout, 0, 1, &mDescriptorSet, 0, nullptr);
+            vkCmdBindDescriptorSets(mCommandBuffers[mNextImageIndex], VK_PIPELINE_BIND_POINT_GRAPHICS, mPipelineLayout, 0, 1, &Engine::Instance().GetTextureManager()->mDescriptorSet, 0, nullptr);
             vkCmdPushConstants(mCommandBuffers[mNextImageIndex], mPipelineLayout, VK_SHADER_STAGE_VERTEX_BIT | VK_SHADER_STAGE_FRAGMENT_BIT, 0, sizeof(ModelInfo), &info);
 
             vulkanMesh->Draw(mCommandBuffers[mNextImageIndex]);
@@ -421,19 +212,19 @@ void VulkanRenderer::CreatePipelineLayout()
         .size = sizeof(ModelInfo)
     };
 
-    vector<VkDescriptorSetLayout> setLayouts = {
-    //existingSetLayout,   // maybe for uniforms, materials, etc.
-    mDescriptorSetLayout     // your big texture array descriptor set
+    const vector<VkDescriptorSetLayout> setLayouts =
+    {
+        //existingSetLayout,   // maybe for uniforms, materials, etc.
+        Engine::Instance().GetTextureManager()->mDescriptorSetLayout
     };
 
-    // ReSharper disable once CppVariableCanBeMadeConstexpr
     const VkPipelineLayoutCreateInfo pipelineLayoutCreateInfo
     {
         .sType = VK_STRUCTURE_TYPE_PIPELINE_LAYOUT_CREATE_INFO,
         .pNext                      = VK_NULL_HANDLE,
         .flags                      = 0,
         .setLayoutCount             = 1,
-        .pSetLayouts                = &mDescriptorSetLayout,
+        .pSetLayouts                = setLayouts.data(),
         .pushConstantRangeCount     = 1,
         .pPushConstantRanges        = &pushConstantRange,
     };

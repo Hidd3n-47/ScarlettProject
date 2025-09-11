@@ -1,11 +1,11 @@
 #pragma once
 
-#include "IAssetDeserializer.h"
+#include <ScarlettUtils/Xml/XmlDocument.h>
 
 namespace ScarlettEditor
 {
 
-class MaterialDeserializer //final : public IAssetDeserializer
+class MaterialDeserializer
 {
 public:
     MaterialDeserializer()              = delete;
@@ -16,7 +16,7 @@ public:
     MaterialDeserializer& operator=(MaterialDeserializer&&)         = delete;
     MaterialDeserializer& operator=(const MaterialDeserializer&)    = delete;
 
-    void Deserialize(const ScarlettUtils::XmlDocument& document);
+    static void Deserialize(const std::string& materialName, const ScarlettUtils::XmlDocument& document);
 };
 
 } // Namespace ScarlettEditor.

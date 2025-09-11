@@ -36,6 +36,14 @@ public:
 
     inline T* GetRawPtr() const { return mReferencePtr; }
 
+    /**
+     * @brief Cast a \c WeakRef to be a \c WeakRef of a different class. Useful when trying to cast for inheritance.
+     * @tparam CastType The class that the reference is being cast to.
+     * @return A \c WeakRef that has been cast to the type \c CastType. Note, this \c WeakRef could be invalid if the cast failed, and hence should be checked if its is valid before use.
+     */
+    template <typename CastType>
+    [[nodiscard]] inline WeakRef<CastType> Cast() { return WeakRef<CastType>{ dynamic_cast<CastType*>(mReferencePtr) }; }
+
     inline T* operator->()              { return mReferencePtr; }
     inline const T* operator->() const  { return mReferencePtr; }
 private:

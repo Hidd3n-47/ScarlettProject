@@ -26,10 +26,8 @@ public:
     virtual void Destroy()                      = 0;
 
     virtual void BeginRender()  = 0;
-    virtual void Render()       = 0;
     virtual void EndRender()    = 0;
 
-    //inline void AddCommand(const RenderType renderType, const RenderCommand& command) { mCommands[renderType].emplace_back(command); }
     inline void AddCommand(const WeakRef<Mesh> mesh, const RenderCommand& command) { mCommands[mesh.GetRawPtr()].emplace_back(command); }
 
     virtual void OnWindowResize(const uint32 width, const uint32 height) = 0;
@@ -39,7 +37,6 @@ protected:
     const Window* mWindowRef;
 
     std::unordered_map<Mesh*, vector<RenderCommand>> mCommands;
-    //std::unordered_map<RenderType, vector<RenderCommand>> mCommands;
 };
 
 } // Namespace Scarlett.

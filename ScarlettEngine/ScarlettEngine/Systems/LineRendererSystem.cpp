@@ -9,6 +9,7 @@
 
 #include "Core/Engine.h"
 #include "Resources/Manager/MeshManager.h"
+#include "Resources/Manager/MaterialManager.h"
 
 namespace Scarlett
 {
@@ -39,7 +40,7 @@ void LineRendererSystem::UpdateSystem()
         transform->scale = { dVecMag, 0.02f, 0.02f };
         transform->rotation = ScarlettMath::Quat::GetRotationToRotateVectorToVector({ 1.0f, 0.0f, 0.0f }, dVec / dVecMag);
 
-        Renderer::Instance()->AddCommand(mLineMesh, { components[i].color, ScarlEntt::ComponentRef(entityIds[i], &mComponentManagerRef->GetComponentArray<Component::Transform>()), Material{}});
+        Renderer::Instance()->AddCommand(mLineMesh, { components[i].color, ScarlEntt::ComponentRef(entityIds[i], &mComponentManagerRef->GetComponentArray<Component::Transform>()), Material{ MaterialManager::DEFAULT_MATERIAL_ULID } });
     }
 }
 

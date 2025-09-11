@@ -14,7 +14,7 @@ struct alignas(16) ModelInfo
 
     ScarlettMath::Vec4 color = ScarlettMath::Vec4{ 1.0f };
 
-    Material material;
+    MaterialUploadInfo material;
 };
 
 } // Namespace Scarlett.

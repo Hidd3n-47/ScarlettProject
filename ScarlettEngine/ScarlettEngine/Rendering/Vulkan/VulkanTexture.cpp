@@ -31,7 +31,6 @@ VulkanTexture::VulkanTexture(const WeakRef<Device> device, const uint8* buffer, 
 
     VK_CHECK(vkCreateSampler(mDevice->GetDevice(), &samplerInfo, nullptr, &mImageSampler), "Failed to create Vulkan Sampler for the texture.");
 
-
     mImageInfo =
     {
         .sampler        = mImageSampler,
@@ -61,9 +60,9 @@ void VulkanTexture::Create(const uint8* buffer, const uint32 width, const uint32
 
     const VkExtent3D imageExtent
     {
-        .width = width,
+        .width  = width,
         .height = height,
-        .depth = 1
+        .depth  = 1
     };
 
     const VkImageCreateInfo info
@@ -103,6 +102,7 @@ void VulkanTexture::Create(const uint8* buffer, const uint32 width, const uint32
 
     VK_CHECK(vkCreateImageView(mDevice->GetDevice(), &viewInfo, nullptr, &mImageView), "Failed to create Vulkan Texture Image View.");
 
+    // Todo move staging buffer and moving memory into the device.
     VkBuffer        stagingBuffer;
     VkDeviceMemory  stagingBufferMemory;
 
@@ -140,10 +140,10 @@ void VulkanTexture::Create(const uint8* buffer, const uint32 width, const uint32
         .layerCount = 1
     };
 
-    VkBufferImageCopy region
+    const VkBufferImageCopy region
     {
-        .imageSubresource = imageSubResource,
-        .imageExtent = imageExtent
+        .imageSubresource   = imageSubResource,
+        .imageExtent        = imageExtent
     };
     vkCmdCopyBufferToImage(commandBuffer, stagingBuffer, mImage, VK_IMAGE_LAYOUT_TRANSFER_DST_OPTIMAL, 1, &region);
 

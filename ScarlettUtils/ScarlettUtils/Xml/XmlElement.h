@@ -78,7 +78,7 @@ public:
      * @brief Add a new child element to this element.
      * @param element A reference to the element being moved into the child elements vector.
      */
-    inline void AddChild(const XmlElement& element) { mChildElements.emplace_back(std::move(element)); }
+    inline void AddChild(XmlElement& element) { mChildElements.emplace_back(std::move(element)); }
 
     /**
      * @brief Add a new child element to this element.

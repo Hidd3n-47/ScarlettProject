@@ -10,6 +10,8 @@
 
 #include "UiControlProperties.h"
 #include "UiButtonControlProperties.h"
+#include "Core/MaterialManager/EditorMaterialManager.h"
+#include "Editor/EditorManager.h"
 
 namespace ScarlettEditor
 {
@@ -144,19 +146,29 @@ void UiControls::RenderMaterialPropertyControl(const ScarlEntt::Property& proper
 
     ImGui::NextColumn();
 
-    ImGui::PushMultiItemsWidths(4, ImGui::CalcItemWidth());
-    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0.0f, 4.0f });
-    ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 4);
-    UiButtonControlProperties buttonProperties{ .buttonSize = {lineHeight + 3.0f, lineHeight} };
+    ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 3);
 
-    float albedoAsFloat = static_cast<float>(material.albedoTextureIndex);
+    const std::string currentMaterialName = EditorManager::Instance().GetMaterialManager()->GetMaterialCreateInfo(material.GetUlid()).friendlyName;
+    if (ImGui::BeginCombo("##combo 1", currentMaterialName.c_str(), 0))
+    {
+        for (const auto& [materialUlid, materialInfo] : EditorManager::Instance().GetMaterialManager()->GetProcessedMaterialMap())
+        {
+            const bool selected = materialUlid == material.GetUlid();
 
-    buttonProperties.buttonColor = ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f };
-    buttonProperties.buttonHoveredColor = ImVec4{ 0.9f, 0.2f, 0.2f, 1.0f };
-    RenderFloatPropertyControl("X", propertyId, albedoAsFloat, controlProperties, buttonProperties);
+            if (ImGui::Selectable(materialInfo.friendlyName.c_str(), selected) && materialInfo.ulid != material.GetUlid())
+            {
+                material.SetUlid(materialInfo.ulid);
+            }
 
-    ImGui::PopStyleVar(2);
-    ImGui::PopItemWidth();
+            if (selected)
+            {
+                ImGui::SetItemDefaultFocus();
+            }
+        }
+        ImGui::EndCombo();
+    }
+
+    ImGui::PopStyleVar();
     ImGui::Columns(1);
 
     property.SetPropertyValue(ScarlEntt::TypeReflection::GetStringFromValue(material));

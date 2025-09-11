@@ -1,5 +1,12 @@
 #pragma once
 
+#include "AssetTypes.h"
+
+namespace ScarlettUtils
+{
+class XmlDocument;
+}
+
 namespace ScarlettEditor
 {
 
@@ -17,6 +24,9 @@ public:
     AssetManager& operator=(const AssetManager&)    = delete;
 
     void RefreshDirectoryCache();
+
+    static std::string AssetTypeToString(const AssetTypes type);
+    static AssetTypes  StringToAssetType(const std::string& typeString);
 
     static constexpr std::string_view ASSET_PATH{ "E:/Programming/ScarlettProject/Assets/" };
     static constexpr std::string_view SCARLETT_ASSET_EXTENSION{ ".scarlett_asset" };

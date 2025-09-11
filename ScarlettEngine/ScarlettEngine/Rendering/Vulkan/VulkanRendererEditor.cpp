@@ -10,6 +10,7 @@
 
 #include <ScarlettEditor/Editor/EditorManager.h>
 
+#include "Core/Engine.h"
 #include "VulkanUtils.h"
 #include "Core/Window/Window.h"
 
@@ -115,7 +116,7 @@ void VulkanRendererEditor::Init(const Window* windowRef)
     void* data;
     ImGui::GetAllocatorFunctions(&allocateFunction, &freeFunction, &data);
     ScarlettEditor::EditorManager::CreateInstance(ImGui::GetCurrentContext(), &allocateFunction, &freeFunction, data);
-    ScarlettEditor::EditorManager::Instance().Init();
+    ScarlettEditor::EditorManager::Instance().Init(Engine::Instance().GetMaterialManager().Cast<ScarlettEditor::EditorMaterialManager>());
 }
 
 void VulkanRendererEditor::Destroy()
@@ -138,11 +139,6 @@ void VulkanRendererEditor::Destroy()
 void VulkanRendererEditor::BeginRender()
 {
     VulkanRenderer::BeginRender();
-}
-
-void VulkanRendererEditor::Render()
-{
-    VulkanRenderer::Render();
 }
 
 void VulkanRendererEditor::EndRender()

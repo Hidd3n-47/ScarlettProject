@@ -2,7 +2,10 @@
 
 #include <imgui/imgui.h>
 
+#include <Core/Types/WeakRef.h>
+
 #include "Src/ScarlettEditor.h"
+#include "Core/MaterialManager/EditorMaterialManager.h"
 
 namespace Scarlett
 {
@@ -32,7 +35,7 @@ public:
     static void CreateInstance(ImGuiContext* uiContext, ImGuiMemAllocFunc* allocateFunction, ImGuiMemFreeFunc* freeFunction, void* data);
     static void DestroyInstance();
 
-    void Init();
+    void Init(const Scarlett::WeakRef<EditorMaterialManager> materialManagerRef);
 
     void OnEvent(Scarlett::Event& e) const;
 
@@ -42,6 +45,8 @@ public:
     [[nodiscard]] inline Scarlett::LayerStack* GetLayerStack()         const { return mEditorLayerStack; }
     [[nodiscard]] inline IView*                GetCurrentView()        const { return mCurrentView; }
     [[nodiscard]] inline AssetManager*         GetAssetManager()       const { return mAssetManager; }
+
+    [[nodiscard]] inline Scarlett::WeakRef<EditorMaterialManager> GetMaterialManager() const { return mMaterialManagerRef; }
 private:
     static EditorManager*   mInstance;
 
@@ -51,6 +56,8 @@ private:
     IView*                  mCurrentView        = nullptr;
 
     AssetManager*           mAssetManager       = nullptr;
+
+    Scarlett::WeakRef<EditorMaterialManager> mMaterialManagerRef;
 };
 
 } // Namespace ScarlettEditor.

@@ -37,8 +37,9 @@ public:
 
     inline void WindowClosed() { mRunning = false; }
 
-    [[nodiscard]] inline WeakRef<MeshManager>       GetMeshManager()    const { return WeakRef{ mMeshManager }; }
-    [[nodiscard]] inline WeakRef<TextureManager>    GetTextureManager() const { return WeakRef{ mTextureManager }; }
+    [[nodiscard]] inline WeakRef<MeshManager>       GetMeshManager()        const { return WeakRef{ mMeshManager }; }
+    [[nodiscard]] inline WeakRef<TextureManager>    GetTextureManager()     const { return WeakRef{ mTextureManager }; }
+    [[nodiscard]] inline WeakRef<MaterialManager>   GetMaterialManager()    const { return WeakRef{ mMaterialManager }; }
 private:
     static Engine* mInstance;
 

@@ -20,6 +20,8 @@
 
 #include <filesystem>
 
+#include <ScarlettUtils/Core/Ulid.h>
+
 #include "Src/PrimitiveTypes.h"
 #include "Src/ScarlettEngineDefines.h"
 

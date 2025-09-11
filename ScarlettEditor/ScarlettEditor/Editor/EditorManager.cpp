@@ -4,15 +4,13 @@
 #include <Core/Input/LayerStack.h>
 
 #include "Src/ScarlettEditorDefines.h"
-
 #include "Views/Editor/View/EditorView.h"
-
 #include "Core/AssetManagement/AssetManager.h"
 
 namespace ScarlettEditor
 {
 
-EditorManager* EditorManager::mInstance     = nullptr;
+EditorManager* EditorManager::mInstance = nullptr;
 
 static ImVec4 HexToRgba(const int a, const int b, const int c)
 {
@@ -121,8 +119,10 @@ void EditorManager::DestroyInstance()
     EDITOR_ILOG("Editor Instance Destroyed.");
 }
 
-void EditorManager::Init()
+void EditorManager::Init(const Scarlett::WeakRef<EditorMaterialManager> materialManagerRef)
 {
+    mMaterialManagerRef = materialManagerRef;
+
     mEditorLayerStack   = new Scarlett::LayerStack();
     mCurrentView        = new EditorView();
     mAssetManager       = new AssetManager();

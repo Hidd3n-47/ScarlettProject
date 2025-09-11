@@ -22,7 +22,6 @@ public:
     void Destroy() override;
 
     void BeginRender() override;
-    void Render() override;
     void EndRender() override;
 
     void BeginRenderEditor() const;

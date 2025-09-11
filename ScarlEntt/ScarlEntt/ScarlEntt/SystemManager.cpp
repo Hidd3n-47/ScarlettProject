@@ -1,12 +1,14 @@
 ﻿#include "ScarlEnttpch.h"
 #include "SystemManager.h"
 
+#include <ranges>
+
 namespace ScarlEntt
 {
 
 SystemManager::~SystemManager()
 {
-    for (auto& [priority, systemArray] : mSystems)
+    for (auto& systemArray : mSystems | std::views::values)
     {
         for (ISystem* system : systemArray)
         {
@@ -18,7 +20,7 @@ SystemManager::~SystemManager()
 
 void ScarlEntt::SystemManager::UpdateSystems() const
 {
-    for (auto& [priority, systemArray] : mSystems)
+    for (const auto& systemArray : mSystems | std::views::values)
     {
         for (ISystem* system : systemArray)
         {

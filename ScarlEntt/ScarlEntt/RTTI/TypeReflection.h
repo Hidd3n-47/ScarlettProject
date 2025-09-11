@@ -63,7 +63,7 @@ inline std::string TypeReflection::GetStringFromValue<ScarlettMath::Quat>(const 
 template <>
 inline std::string TypeReflection::GetStringFromValue<Scarlett::Material>(const Scarlett::Material value)
 {
-    return std::to_string(value.albedoTextureIndex);
+    return std::to_string(value.GetUlid());
 }
 
 // --------- Sets. ---------
@@ -128,7 +128,7 @@ template <>
 inline void TypeReflection::SetValueFromString<Scarlett::Material>(Scarlett::Material& value, const std::string_view& stringValue)
 {
     const std::string str = std::string{ stringValue };
-    value.albedoTextureIndex = static_cast<uint32>(std::stoul(str));
+    value.SetUlid(ScarlettUtils::Ulid{std::stoull(str)});
 }
 
 } // Namespace ScarlEntt.

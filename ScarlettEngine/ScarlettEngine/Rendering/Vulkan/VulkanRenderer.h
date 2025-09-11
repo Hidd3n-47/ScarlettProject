@@ -17,8 +17,8 @@ class VulkanRenderer : public Renderer
 {
     friend class VulkanRendererEditor;
 public:
-    VulkanRenderer() = default;
-    ~VulkanRenderer() override = default;
+    VulkanRenderer()            = default;
+    ~VulkanRenderer() override  = default;
 
     VulkanRenderer(const VulkanRenderer&)               = delete;
     VulkanRenderer(VulkanRenderer&&)                    = delete;
@@ -29,15 +29,11 @@ public:
     void Destroy() override;
 
     void BeginRender()  override;
-    void Render()       override;
     void EndRender()    override;
 
     void OnWindowResize(const uint32 width, const uint32 height) override;
 
-    [[nodiscard]] inline WeakRef<Device>            GetDevice()         { return WeakRef{ &mDevice }; }
-    [[nodiscard]] inline VkDescriptorPool*          GetDescriptorPool() { return &mDescriptorSetPool; }
-protected:
-    VkDescriptorPool        mDescriptorSetPool;
+    [[nodiscard]] inline WeakRef<Device> GetDevice() { return WeakRef{ &mDevice }; }
 private:
     void CreatePipelineLayout();
     void CreatePipeline();
@@ -48,8 +44,8 @@ private:
     void FreeCommandBuffers();
 
     Device      mDevice;
-    SwapChain*  mSwapChain;
-    Pipeline*   mPipeline = nullptr;
+    SwapChain*  mSwapChain  = nullptr;
+    Pipeline*   mPipeline   = nullptr;
 
     VkPipelineLayout            mPipelineLayout;
     vector<VkCommandBuffer>     mCommandBuffers;
@@ -58,15 +54,6 @@ private:
 
     // Todo: Temp.
     float mClearColor[3] = { 0.1f, 0.1f, 0.1f };
-    //VkDescriptorSetLayout mTextureDescriptorSetLayout;
-    //VkDescriptorSet mTextureDescriptorSet;
-    VulkanTexture* mTexture;
-    //textureId mTexture;
-
-
-    VkDescriptorSetLayout   mDescriptorSetLayout;
-    VkDescriptorSet         mDescriptorSet;
-    VkSampler mImageSampler;
 };
 
 } // Namespace Scarlett.
