@@ -19,7 +19,7 @@ LineRendererSystem::LineRendererSystem(ScarlEntt::Scene* sceneRef, ScarlEntt::Co
     mSceneRef               = sceneRef;
     mComponentManagerRef    = componentManagerRef;
 
-    mLineMesh = Engine::Instance().GetMeshManager()->AddMesh(Filepath{ "Assets/Mesh/CylinderLowPoly.obj"});
+    mLineMesh = Engine::Instance().GetMeshManager()->AddMesh(Filepath{ "EngineAssets/Mesh/CylinderLowPoly.obj"});
 }
 
 void LineRendererSystem::UpdateSystem()

@@ -9,12 +9,61 @@
 #include <RTTI/TypeReflection.h>
 
 #include "UiControlProperties.h"
+#include "Editor/EditorManager.h"
 #include "UiButtonControlProperties.h"
 #include "Core/MaterialManager/EditorMaterialManager.h"
-#include "Editor/EditorManager.h"
 
 namespace ScarlettEditor
 {
+
+// Todo merge with the quaternion. Additionally, make it possible to set angles. Some of this comes from vec3 so could look at abstracting into different methods as well.
+void UiControls::RenderAngle(const ScarlEntt::Property& property, const UiControlProperties& controlProperties)
+{
+    ScarlettMath::Quat value;
+    ScarlEntt::TypeReflection::SetValueFromString(value, property.GetPropertyValue());
+
+    double yaw, pitch, roll;
+    value.GetYawPitchRoll(yaw, pitch, roll);
+
+    ScarlettMath::Vec3 angle{ ScarlettMath::Degrees(roll), ScarlettMath::Degrees(pitch), ScarlettMath::Degrees(yaw) };
+
+    const std::string propertyId = controlProperties.propertyName + controlProperties.propertyId;
+    const float lineHeight = GImGui->Font->FontSize + GImGui->Style.FramePadding.y * 2.0f;
+
+    ImGui::Columns(2, controlProperties.propertyName.c_str());
+
+    // Todo: Let this width be draggable/adjustable.
+    ImGui::SetColumnWidth(0, 100.0f);
+
+    ImGui::SetCursorPosY(ImGui::GetCursorPosY() + lineHeight - ImGui::CalcTextSize(controlProperties.propertyName.c_str()).y - ImGui::GetScrollX() - 2 * ImGui::GetStyle().ItemSpacing.y + 5.0f);
+    ImGui::Text("%s", controlProperties.propertyName.c_str());
+
+    ImGui::NextColumn();
+
+    ImGui::PushMultiItemsWidths(3, ImGui::CalcItemWidth());
+    ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2{ 0.0f, 4.0f });
+    ImGui::PushStyleVar(ImGuiStyleVar_FrameRounding, 4);
+    UiButtonControlProperties buttonProperties{ .buttonSize = {lineHeight + 3.0f, lineHeight} };
+
+    buttonProperties.buttonColor = ImVec4{ 0.8f, 0.1f, 0.15f, 1.0f };
+    buttonProperties.buttonHoveredColor = ImVec4{ 0.9f, 0.2f, 0.2f, 1.0f };
+    RenderFloatPropertyControl("X", propertyId, angle.x, controlProperties, buttonProperties);
+    ImGui::SameLine();
+
+    buttonProperties.buttonColor = ImVec4{ 0.2f, 0.7f, 0.2f, 1.0f };
+    buttonProperties.buttonHoveredColor = ImVec4{ 0.3f, 0.8f, 0.3f, 1.0f };
+    RenderFloatPropertyControl("Y", propertyId, angle.y, controlProperties, buttonProperties);
+    ImGui::SameLine();
+
+    buttonProperties.buttonColor = ImVec4{ 0.1f, 0.25f, 0.8f, 1.0f };
+    buttonProperties.buttonHoveredColor = ImVec4{ 0.2f, 0.35f, 0.9f, 1.0f };
+    RenderFloatPropertyControl("Z", propertyId, angle.z, controlProperties, buttonProperties);
+
+    ImGui::PopStyleVar(2);
+    ImGui::PopItemWidth();
+    ImGui::Columns(1);
+
+}
 
 void UiControls::RenderVec3PropertyControl(const ScarlEntt::Property& property, const UiControlProperties& controlProperties /* = {} */)
 {

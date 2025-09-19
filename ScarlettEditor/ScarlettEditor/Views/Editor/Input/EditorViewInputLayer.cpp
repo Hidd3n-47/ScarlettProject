@@ -113,18 +113,19 @@ bool EditorViewInputLayer::OnMouseMoved(const Scarlett::MouseMovedEvent& e)
         ScarlEntt::EntityHandle entity{ entityIds[0], ScarlettGame::GameCore::Instance().GetActiveScene() };
         const ScarlEntt::ComponentRef<Scarlett::Component::Transform> transform = entity.GetComponent<Scarlett::Component::Transform>();
 
-        constexpr float SPEED_SCALING_FACTOR = 0.0025f;
+        constexpr float SPEED_SCALING_FACTOR_YAW    = 0.0040f;
+        constexpr float SPEED_SCALING_FACTOR_PITCH  = 0.0025f;
         const ScarlettMath::Vec2 moveDelta = mousePosition - mPreviousMousePosition;
 
-        float yaw, pitch, roll;
-        //todo this is causing a bug with the camera movement with deserialization as we can't extract the yaw, pitch and roll yet.
-        // so first movement means we have a rotation of 0 in all 3.
-        transform->rotation.GetYawPitchRoll(yaw, pitch, roll);
+        const double yaw    = moveDelta.x * SPEED_SCALING_FACTOR_YAW;
+        const double pitch  = moveDelta.y * SPEED_SCALING_FACTOR_PITCH;
 
-        yaw    -= moveDelta.x * SPEED_SCALING_FACTOR;
-        pitch  -= moveDelta.y * SPEED_SCALING_FACTOR;
+        const ScarlettMath::Quat yawQuat{ yaw, { 0.0, 0.0, 1.0 } };
 
-        transform->rotation.SetYawPitchRoll(yaw, pitch, roll);
+        const ScarlettMath::Vec3 localRight = ScarlettMath::Quat::RotatePoint({ 1.0, 0.0, 0.0 }, transform->rotation);
+        const ScarlettMath::Quat pitchQuat{ pitch, localRight };
+
+        transform->rotation = yawQuat * pitchQuat * transform->rotation;
 
         viewportCamera[0].SetDirty();
     }

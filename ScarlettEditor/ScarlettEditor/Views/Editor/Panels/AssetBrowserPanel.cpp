@@ -8,7 +8,7 @@
 
 namespace ScarlettEditor
 {
-AssetBrowserPanel::AssetBrowserPanel(IView* view) : Panel { view, { .title = "Asset Browser" } }//, mDirectory { "E:/Programming/ScarlettProject/Assets/" }
+AssetBrowserPanel::AssetBrowserPanel(IView* view) : Panel { view, { .title = "Asset Browser" } }
 {
     // Create the directory.
     // Todo change it to use the directory cache instead of querying the os for the directories every frame.

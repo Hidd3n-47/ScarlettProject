@@ -13,6 +13,7 @@ public:
     IView()             = default;
     virtual ~IView()    = default;
 
+    virtual void RenderMainMenuBar() const { }
     void Render() const;
 
     template <typename T>
@@ -27,6 +28,8 @@ protected:
 inline void IView::Render() const
 {
     ImGui::DockSpaceOverViewport();
+
+    RenderMainMenuBar();
 
     bool show = true;
     ImGui::ShowDemoWindow(&show);

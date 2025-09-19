@@ -34,6 +34,22 @@ EditorView::~EditorView()
     EditorManager::Instance().GetLayerStack()->PopOverlay(mEditorViewOverlay);
 }
 
+void EditorView::RenderMainMenuBar() const
+{
+    if (ImGui::BeginMainMenuBar())
+    {
+        if (ImGui::BeginMenu("File"))
+        {
+            if (ImGui::MenuItem("Open Project"))
+            {
+                /* handle open */
+            }
+            ImGui::EndMenu();
+        }
+
+        ImGui::EndMainMenuBar();
+    }
+}
 } // ScarlettEditor.
 
 

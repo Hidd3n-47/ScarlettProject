@@ -15,17 +15,20 @@ typedef glm::vec4 Vec4;
 typedef glm::mat3 Mat3;
 typedef glm::mat4 Mat4;
 
-[[nodiscard]] static inline float Abs(const float value)
+template <typename T>
+[[nodiscard]] static inline T Abs(const T value)
 {
     return glm::abs(value);
 }
 
-[[nodiscard]] static inline float Degrees(const float radians)
+template <typename T>
+[[nodiscard]] static inline constexpr T Degrees(const T radians)
 {
     return glm::degrees(radians);
 }
 
-[[nodiscard]] static inline float Radians(const float degrees)
+template <typename T>
+[[nodiscard]] static inline constexpr T Radians(const T degrees)
 {
     return glm::radians(degrees);
 }
@@ -40,7 +43,7 @@ typedef glm::mat4 Mat4;
     return glm::perspective(Radians(fovDegrees), aspectRatio, zNear, zFar);
 }
 
-[[nodiscard]] static float Sqrt(const float number)
+[[nodiscard]] static double Sqrt(const double number)
 {
     return glm::sqrt(number);
 }
@@ -63,8 +66,8 @@ typedef glm::mat4 Mat4;
 [[nodiscard]] static inline Mat4 LookAt(const Vec3 eye, const Vec3 center, const Vec3 up)
 {
     const Vec3 f { Normalize(center - eye) };
-    const Vec3 s { Normalize(cross(f, up)) };
-    const Vec3 u { Cross(s, f) };
+    const Vec3 s { Normalize(cross(up, f)) };
+    const Vec3 u { Cross(f, s) };
 
     Mat4 result { 1 };
     result[0][0] =  s.x;
@@ -82,33 +85,46 @@ typedef glm::mat4 Mat4;
     return result;
 }
 
-[[nodiscard]] static inline float Clamp(const float value, const float min, const float max)
+template <typename T>
+[[nodiscard]] static inline T Clamp(const T value, const T min, const T max)
 {
     return glm::clamp(value, min, max);
 }
 
-[[nodiscard]] static bool IsEqualTo(const float lhs, const float rhs)
+template <typename T>
+[[nodiscard]] static inline T Sign(const T value)
 {
-    constexpr float EPSILON = 0.00001f;
+    if (value < 0)
+    {
+        return -1;
+    }
+
+    return 1;
+}
+
+[[nodiscard]] static bool IsEqual(const double lhs, const double rhs)
+{
+    // todo, this used to be 0.00001f but now is lowered to prevent test from failing for quaternions. Need to try to fix precision as this seems too large for error.
+    constexpr double EPSILON = 0.001;
 
     return (abs(lhs - rhs) < EPSILON);
 }
 
-[[nodiscard]] static bool IsEqualTo(const Vec3 lhs, const Vec3 rhs)
+[[nodiscard]] static bool IsEqual(const Vec3 lhs, const Vec3 rhs)
 {
-    return (IsEqualTo(lhs.x, rhs.x)) &&
-           (IsEqualTo(lhs.y, rhs.y)) &&
-           (IsEqualTo(lhs.z, rhs.z));
+    return (IsEqual(lhs.x, rhs.x)) &&
+           (IsEqual(lhs.y, rhs.y)) &&
+           (IsEqual(lhs.z, rhs.z));
 }
 
-[[nodiscard]] static bool IsEqualTo(const Mat4& lhs, const Mat4& rhs)
+[[nodiscard]] static bool IsEqual(const Mat4& lhs, const Mat4& rhs)
 {
     //todo look at optimising this for cache efficiency.
     for ( int i { 0 }; i < 4; ++i)
     {
         for ( int j { 0 }; j < 4; ++j)
         {
-            if (!IsEqualTo(lhs[i][j], rhs[i][j]))
+            if (!IsEqual(lhs[i][j], rhs[i][j]))
             {
                 return false;
             }

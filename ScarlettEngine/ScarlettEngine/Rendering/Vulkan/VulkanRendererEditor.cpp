@@ -86,7 +86,8 @@ void VulkanRendererEditor::Init(const Window* windowRef)
     initInfo.CheckVkResultFn        = nullptr;
     initInfo.RenderPass             = mSwapChain->GetEditorRenderPass();
 
-    io.FontDefault = io.Fonts->AddFontFromFileTTF("E:/Programming/ScarlettProject/Assets/Fonts/Roboto/Roboto-Medium.ttf", 15);
+    const Filepath fontFilepath{ "EngineAssets/Fonts/Roboto/Roboto-Medium.ttf" };
+    io.FontDefault = io.Fonts->AddFontFromFileTTF(fontFilepath.GetAbsolutePath().c_str(), 15);
 
     ImGui_ImplVulkan_Init(&initInfo);
     ImGui_ImplVulkan_CreateFontsTexture();

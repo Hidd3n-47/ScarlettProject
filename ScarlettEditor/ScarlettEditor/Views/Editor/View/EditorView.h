@@ -28,6 +28,8 @@ public:
     EditorView& operator=(EditorView&&)         = delete;
     EditorView& operator=(const EditorView&)    = delete;
 
+    void RenderMainMenuBar() const override;
+
     [[nodiscard]] inline SelectionManager& GetSelectionManager() { return mSelectionManager; }
 private:
     SelectionManager mSelectionManager;

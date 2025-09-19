@@ -8,8 +8,8 @@
 			<localMaximum type="vec3">0.500000,0.500000,0.010000</localMaximum>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Transform">
-			<translation type="vec3">0.000000,0.000000,-0.500000</translation>
-			<rotation type="quat">1.000000,0.000000,0.000000,0.000000</rotation>
+			<translation type="vec3">0.000000,-0.500000,0.000000</translation>
+			<rotation type="quat">0.707107,0.707100,0.000000,0.000000</rotation>
 			<scale type="vec3">100.000000,100.000000,0.000000</scale>
 		</Component>
 		<Component typeId="struct Scarlett::Component::SquareSprite">
@@ -217,7 +217,7 @@
 		</Component>
 		<Component typeId="struct Scarlett::Component::Transform">
 			<translation type="vec3">0.500000,0.500000,-0.500000</translation>
-			<rotation type="quat">0.000000,0.000000,0.000000,-1.000000</rotation>
+			<rotation type="quat">-0.000000,0.000000,0.000000,-1.000000</rotation>
 			<scale type="vec3">1.000000,0.020000,0.020000</scale>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Line">
@@ -236,7 +236,7 @@
 		</Component>
 		<Component typeId="struct Scarlett::Component::Transform">
 			<translation type="vec3">0.500000,-0.500000,-0.500000</translation>
-			<rotation type="quat">0.000000,0.000000,0.000000,-1.000000</rotation>
+			<rotation type="quat">-0.000000,0.000000,0.000000,-1.000000</rotation>
 			<scale type="vec3">1.000000,0.020000,0.020000</scale>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Line">
@@ -463,14 +463,14 @@
 			<localMaximum type="vec3">0.500000,0.500000,0.010000</localMaximum>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Transform">
-			<translation type="vec3">4.644199,6.556698,3.793514</translation>
-			<rotation type="quat">1.292799,0.262758,-0.063123,-0.310581</rotation>
+			<translation type="vec3">-5.491117,3.009910,4.115192</translation>
+			<rotation type="quat">0.852016,-0.126590,-0.502460,-0.074657</rotation>
 			<scale type="vec3">1.000000,1.000000,1.000000</scale>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Camera">
-			<mUpVector type="vec3">-0.177326,-0.347769,0.920659</mUpVector>
-			<mForwardVector type="vec3">-0.418219,-0.820186,-0.390369</mForwardVector>
-			<mRightVector type="vec3">0.890869,-0.454260,-0.000003</mRightVector>
+			<mUpVector type="vec3">0.254431,0.956799,-0.140689</mUpVector>
+			<mForwardVector type="vec3">0.837306,-0.290738,-0.463014</mForwardVector>
+			<mRightVector type="vec3">0.483916,-0.000005,0.875110</mRightVector>
 			<mAspectRatio type="float">1.777778</mAspectRatio>
 		</Component>
 	</Entity>
@@ -555,8 +555,8 @@
 			<localMaximum type="vec3">0.500000,0.500000,0.010000</localMaximum>
 		</Component>
 		<Component typeId="struct Scarlett::Component::Transform">
-			<translation type="vec3">0.050000,0.950000,0.800000</translation>
-			<rotation type="quat">1.950000,0.000000,0.000000,0.000000</rotation>
+			<translation type="vec3">0.000000,0.000000,0.500000</translation>
+			<rotation type="quat">1.000000,0.000000,0.000000,0.000000</rotation>
 			<scale type="vec3">1.000000,1.000000,1.000000</scale>
 		</Component>
 		<Component typeId="struct Scarlett::Component::SquareSprite">

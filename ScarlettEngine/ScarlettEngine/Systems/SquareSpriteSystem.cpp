@@ -18,7 +18,7 @@ SquareSpriteSystem::SquareSpriteSystem(ScarlEntt::Scene* sceneRef, ScarlEntt::Co
     mSceneRef               = sceneRef;
     mComponentManagerRef    = componentManagerRef;
 
-    mSquareMesh = Engine::Instance().GetMeshManager()->AddMesh(Filepath{ "Assets/Mesh/Plane.obj" });
+    mSquareMesh = Engine::Instance().GetMeshManager()->AddMesh(Filepath{ "EngineAssets/Mesh/Plane.obj" });
 }
 
 void SquareSpriteSystem::UpdateSystem()

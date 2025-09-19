@@ -138,7 +138,6 @@ void EditorManager::OnEvent(Scarlett::Event& e) const
 void EditorManager::RenderUi(const ImTextureID viewportTexture)
 {
     mViewportTexture = viewportTexture;
-
     mCurrentView->Render();
 }
 

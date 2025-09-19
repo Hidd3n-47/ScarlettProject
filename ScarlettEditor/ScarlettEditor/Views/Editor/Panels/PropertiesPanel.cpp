@@ -53,7 +53,9 @@ void PropertiesPanel::Render()
                     case ScarlEntt::PropertyType::QUAT:
                     {
                         // Todo Change this to render as a vec 3.
-                        UiControls::RenderVec4PropertyControl(property, { .propertyName = propertyName, .propertyId = entityName });
+                        UiControls::RenderAngle(property, { .propertyName = propertyName, .propertyId = entityName });
+
+                        //UiControls::RenderVec4PropertyControl(property, { .propertyName = propertyName, .propertyId = entityName });
                         //ScarlettMath::Vec4 value;
                         //ScarlEntt::TypeReflection::SetValueFromString(value, property.GetPropertyValue());
                         //ImGui::DragFloat4((propertyName + "##" + entityName).c_str(), &value.x, 0.05f);

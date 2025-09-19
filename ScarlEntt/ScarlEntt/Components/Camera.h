@@ -46,9 +46,9 @@ private:
     ScarlettMath::Mat4 mViewMatrix{ 1.0f };
     ScarlettMath::Mat4 mProjectionMatrix{ 1.0f };
 
-    ScarlettMath::Vec3 mForwardVector  { 0.0f, 0.0f, -1.0f };
-    ScarlettMath::Vec3 mRightVector    { 1.0f, 0.0f,  0.0f };
-    ScarlettMath::Vec3 mUpVector       { 0.0f, 1.0f,  0.0f };
+    ScarlettMath::Vec3 mForwardVector  { 0.0f, -1.0f, 0.0f };
+    ScarlettMath::Vec3 mRightVector    { 1.0f,  0.0f, 0.0f };
+    ScarlettMath::Vec3 mUpVector       { 0.0f,  0.0f, 1.0f };
 
     float mAspectRatio = 16.0f / 9.0f;
 };

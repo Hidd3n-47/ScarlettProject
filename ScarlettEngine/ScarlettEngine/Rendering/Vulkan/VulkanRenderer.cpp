@@ -247,7 +247,7 @@ void VulkanRenderer::CreatePipeline()
     }
     mPipeline = new Pipeline();
 
-    mPipeline->Init(&mDevice, Filepath{ "ScarlettEngine/ScarlettEngine/Rendering/Shaders/vert.spv" }, Filepath{ "ScarlettEngine/ScarlettEngine/Rendering/Shaders/frag.spv" }, pipelineConfig);
+    mPipeline->Init(&mDevice, Filepath{ "EngineAssets/Shaders/vert.spv" }, Filepath{ "EngineAssets/Shaders/frag.spv" }, pipelineConfig);
 }
 
 void VulkanRenderer::CreateCommandBuffers()

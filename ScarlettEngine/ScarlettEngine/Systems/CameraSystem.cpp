@@ -27,15 +27,17 @@ void CameraSystem::UpdateSystem()
 
     if (camera->IsDirty())
     {
-        constexpr ScarlettMath::Vec3 xAxis { 1.0f, 0.0f,  0.0f };
-        constexpr ScarlettMath::Vec3 yAxis { 0.0f, 1.0f,  0.0f };
-        constexpr ScarlettMath::Vec3 zAxis { 0.0f, 0.0f, -1.0f };
+        constexpr ScarlettMath::Vec3 xAxis { 1.0f, 0.0f, 0.0f };
+        constexpr ScarlettMath::Vec3 yAxis { 0.0f, 1.0f, 0.0f };
+        constexpr ScarlettMath::Vec3 zAxis { 0.0f, 0.0f, 1.0f };
 
-        camera->SetForwardVector(ScarlettMath::Quat::RotatePoint(zAxis, transform->rotation));
-        camera->SetRightVector(ScarlettMath::Quat::RotatePoint(xAxis, transform->rotation));
-        camera->SetUpVector(ScarlettMath::Quat::RotatePoint(yAxis, transform->rotation));
+        camera->SetForwardVector(ScarlettMath::Normalize(ScarlettMath::Quat::RotatePoint(-yAxis, transform->rotation)));
+        camera->SetRightVector(ScarlettMath::Normalize(ScarlettMath::Quat::RotatePoint(xAxis, transform->rotation)));
+        camera->SetUpVector(ScarlettMath::Normalize(ScarlettMath::Quat::RotatePoint(zAxis, transform->rotation)));
 
         camera->UpdateViewAndProjectionMatrix(transform->translation);
+
+        camera->SetClean();
     }
 }
 

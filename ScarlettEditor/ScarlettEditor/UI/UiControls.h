@@ -15,6 +15,7 @@ struct UiButtonControlProperties;
 class UiControls
 {
 public:
+    static void RenderAngle(const ScarlEntt::Property& property, const UiControlProperties& controlProperties = {});
     static void RenderVec3PropertyControl(const ScarlEntt::Property& property, const UiControlProperties& controlProperties = {});
     static void RenderVec4PropertyControl(const ScarlEntt::Property& property, const UiControlProperties& controlProperties = {});
     static void RenderMaterialPropertyControl(const ScarlEntt::Property& property, const UiControlProperties& controlProperties = {});

@@ -3,52 +3,47 @@
 #include <cmath>
 #include <numbers>
 
+#include "Math.h"
+
 namespace ScarlettMath
 {
 
 class Trig
 {
 public:
-    [[nodiscard]] inline static float Sin(const float angleRadians)
+    [[nodiscard]] inline static double Sin(const double angleRadians)
     {
         return std::sin(angleRadians);
     }
 
-    [[nodiscard]] inline static float Cos(const float angleRadians)
+    [[nodiscard]] inline static double Cos(const double angleRadians)
     {
         return std::cos(angleRadians);
     }
 
-    [[nodiscard]] inline static float Asin(const float value)
+    [[nodiscard]] inline static double Asin(const double value)
     {
-        return std::asin(value);
+        return std::asin(Clamp(value, -1.0, 1.0));
     }
 
-    [[nodiscard]] inline static float Acos(const float value)
+    [[nodiscard]] inline static double Acos(const double value)
     {
-        return std::acos(value);
+        return std::acos(Clamp(value, -1.0, 1.0));
     }
 
-    [[nodiscard]] inline static float Atan(const float value)
+    [[nodiscard]] inline static double Atan(const double value)
     {
-        return std::atan(value);
+        return std::atan(Clamp(value, -1.0, 1.0));
     }
 
-    [[nodiscard]] inline static float CorrectAngleTo0To2PiRange(float angle)
+    [[nodiscard]] inline static double Atan2(const double y, const double x)
     {
-        while (angle < 0.0f || angle >= 2 * std::numbers::pi_v<float>)
-        {
-            if (angle >= 2 * std::numbers::pi_v<float>)
-            {
-                angle -= 2 * std::numbers::pi_v<float>;
-            }
-            else if (angle < 0.0f)
-            {
-                angle += 2 * std::numbers::pi_v<float>;
-            }
-        }
+        return std::atan2(y, x);
+    }
 
-        return angle;
+    [[nodiscard]] inline static double CorrectAngleTo0To2PiRange(double angle)
+    {
+        return glm::mod(angle, 2 * std::numbers::pi);
     }
 };
 
